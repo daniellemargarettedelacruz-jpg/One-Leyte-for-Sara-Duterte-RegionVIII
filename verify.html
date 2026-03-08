@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Verification - One Leyte for Sara Duterte</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="verify-page">
+    <div class="container narrow card">
+      <h1>One Leyte Member Verification</h1>
+      <p class="verify-text">
+        This member QR code belongs to:
+      </p>
+
+      <div class="member-box">
+        <p><strong>Member ID:</strong> <span id="memberId">Loading...</span></p>
+      </div>
+
+      <p class="note">
+        Full live verification details will be connected in the next phase.
+      </p>
+
+      <a href="index.html" class="btn secondary">Back to Home</a>
+    </div>
+  </section>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const member = params.get("member");
+    document.getElementById("memberId").textContent = member || "No Member ID Found";
+  </script>
+</body>
+</html>
