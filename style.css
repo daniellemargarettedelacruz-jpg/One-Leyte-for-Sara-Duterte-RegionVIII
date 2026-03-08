@@ -1,0 +1,52 @@
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg,#1B3A2B,#12271D,#0B1A14);
+  color: #ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+}
+
+.hero h1{
+  font-size:3.2rem;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+.tagline{
+  font-size:1.3rem;
+  font-weight:600;
+  color:#D4AF37;
+  margin-bottom:18px;
+}
+
+.intro{
+  font-size:1rem;
+  max-width:700px;
+  margin:0 auto 28px;
+}
+
+.btn.primary{
+  background:#D4AF37;
+  color:#12271D;
+}
+
+.btn.primary:hover{
+  background:#e3c354;
+}
+
+.btn.secondary{
+  background:#1B3A2B;
+  color:#ffffff;
+}
+
+.btn.secondary:hover{
+  background:#0B1A14;
+}
+
+.about h2{
+  color:#1B3A2B;
+}
