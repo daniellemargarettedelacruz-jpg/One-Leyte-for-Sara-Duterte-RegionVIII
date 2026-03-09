@@ -1,43 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Claim My ID - One Leyte for Sara Duterte Region VIII</title>
-  <link rel="stylesheet" href="style.css" />
+<title>Claim My Membership ID</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f5f5f5;
+padding:40px;
+text-align:center;
+}
+
+.container{
+background:white;
+padding:30px;
+max-width:500px;
+margin:auto;
+border-radius:8px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:90%;
+padding:10px;
+margin:10px;
+font-size:16px;
+}
+
+button{
+padding:12px 25px;
+font-size:16px;
+background:#1c5fd4;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1346a5;
+}
+
+.result{
+margin-top:20px;
+text-align:left;
+}
+</style>
+
 </head>
+
 <body>
-  <section class="verify-page">
-    <div class="container narrow card">
-      <h1>Claim My Membership ID</h1>
 
-      <p class="verify-text">
-        Thank you for registering with One Leyte for Sara Duterte Region VIII.
-      </p>
+<div class="container">
 
-      <div class="member-box">
-        <p>
-          Your membership record, QR verification, and digital ID are processed
-          through our official membership system.
-        </p>
-      </div>
+<h2>Claim Your Membership ID</h2>
 
-      <p class="note">
-        If you have already registered and need your digital ID soft copy,
-        please prepare your full name and municipality when contacting your
-        local coordinator or admin.
-      </p>
+<p>Enter your Full Name and Birthdate.</p>
 
-      <p class="note">
-        You may also verify your membership anytime through the official
-        verification page.
-      </p>
+<input id="fullname" placeholder="Full Name">
 
-      <div class="cta-group">
-        <a class="btn primary" href="verify.html">Go to Verification Page</a>
-        <a class="btn secondary" href="index.html">Back to Home</a>
-      </div>
-    </div>
-  </section>
+<input id="birthdate" type="date">
+
+<br>
+
+<button onclick="searchMember()">Search</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxWK3ZIdd4o5Gn1Xh22MzvrvashfzvJ1FugxYbmv7c-vEatdGCtQ6mu6UQa1mzNpNkL/exec";
+
+function searchMember(){
+
+const name = document.getElementById("fullname").value;
+const birthdate = document.getElementById("birthdate").value;
+
+const url = API_URL + "?action=claim&fullName=" + encodeURIComponent(name) + "&birthdate=" + birthdate;
+
+fetch(url)
+.then(res => res.json())
+.then(data => {
+
+if(!data.success){
+
+document.getElementById("result").innerHTML =
+"<p style='color:red'>" + data.message + "</p>";
+
+return;
+}
+
+const m = data.member;
+
+document.getElementById("result").innerHTML = `
+<h3>Member Found</h3>
+
+<p><b>Name:</b> ${m.fullName}</p>
+<p><b>Member ID:</b> ${m.memberId}</p>
+<p><b>Municipality:</b> ${m.municipality}</p>
+<p><b>Province:</b> ${m.province}</p>
+
+<p><a href="${m.verifyUrl}" target="_blank">Verify Membership</a></p>
+
+<p><a href="${m.idCardLink}" target="_blank">Download Digital ID</a></p>
+
+<p><a href="${m.qrCodeLink}" target="_blank">View QR Code</a></p>
+`;
+});
+
+}
+
+</script>
+
 </body>
 </html>
