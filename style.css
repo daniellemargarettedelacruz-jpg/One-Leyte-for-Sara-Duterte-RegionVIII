@@ -400,3 +400,19 @@ body {
 .btn.secondary:hover {
   background: #0b1a14;
 }
+
+.buildframe-credit{
+  margin-top: 8px;
+  font-size: 11px;
+  text-align: center;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  color: #bfe7ff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 6px rgba(120,210,255,0.6);
+  opacity: 0.95;
+}
+
+.buildframe-credit strong{
+  color: #e6f7ff;
+  font-weight: 600;
+}
