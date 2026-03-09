@@ -312,12 +312,49 @@ body {
 }
 
 /* FOOTER */
-.footer {
-  background: #050b08;
-  color: #ffffff;
-  text-align: center;
-  padding: 22px 12px;
-  border-top: 1px solid rgba(212, 175, 55, 0.15);
+.site-footer{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px 10px;
+  border-top:1px solid rgba(255,255,255,0.15);
+  margin-top:40px;
+  box-sizing:border-box;
+}
+
+.site-footer-inner{
+  width:100%;
+  text-align:center;
+}
+
+.footer-copyright{
+  display:block;
+  width:100%;
+  text-align:center;
+  margin:0 0 6px 0;
+  font-size:13px;
+  color:#e6e6e6;
+}
+
+.buildframe-credit{
+  display:block;
+  width:100%;
+  text-align:center;
+  font-size:11px;
+  font-family:"Segoe UI","Trebuchet MS",sans-serif;
+  color:#bfe7ff;
+  letter-spacing:0.5px;
+  text-shadow:0 0 6px rgba(120,210,255,0.6);
+}
+
+.buildframe-credit a{
+  color:#d8f3ff;
+  text-decoration:none;
+}
+
+.buildframe-credit strong{
+  color:#e6f7ff;
 }
 
 /* RESPONSIVE */
