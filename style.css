@@ -416,3 +416,32 @@ body {
   color: #e6f7ff;
   font-weight: 600;
 }
+
+.site-footer{
+  text-align:center;
+  padding:20px 10px;
+  font-size:13px;
+  color:#e6e6e6;
+}
+
+.footer-copyright{
+  margin-bottom:6px;
+  font-size:13px;
+}
+
+.buildframe-credit{
+  font-size:11px;
+  font-family:"Segoe UI","Trebuchet MS",sans-serif;
+  color:#bfe7ff;
+  letter-spacing:0.5px;
+  text-shadow:0 0 6px rgba(120,210,255,0.6);
+}
+
+.buildframe-credit a{
+  color:#d8f3ff;
+  text-decoration:none;
+}
+
+.buildframe-credit strong{
+  color:#e6f7ff;
+}
