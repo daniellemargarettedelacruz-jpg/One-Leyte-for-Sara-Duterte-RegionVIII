@@ -1,107 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Freedom Wall | One Leyte for Sara Duterte</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f3f6fb;
-      color: #1f2937;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 30px 20px;
-    }
-    h1 {
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      color: #6b7280;
-      margin-bottom: 30px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    }
-    .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-    .name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-    .place {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 12px;
-    }
-    .message {
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-    .loading, .empty {
-      text-align: center;
-      padding: 40px 20px;
-      color: #666;
-    }
-  </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Freedom Wall | One Leyte</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.page-header{
+text-align:center;
+padding:70px 20px 40px 20px;
+background:#08110c;
+color:white;
+}
+
+.page-header h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+.page-header p{
+color:#cfd7d2;
+max-width:700px;
+margin:auto;
+}
+
+.freedom-container{
+padding:60px 20px;
+background:#f4f4f4;
+}
+
+.freedom-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+max-width:1100px;
+margin:auto;
+}
+
+.freedom-card{
+background:white;
+border-radius:12px;
+padding:20px;
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+.freedom-name{
+font-weight:700;
+margin-bottom:8px;
+color:#0a6b3f;
+}
+
+.freedom-location{
+font-size:13px;
+color:#777;
+margin-bottom:12px;
+}
+
+.freedom-message{
+font-size:15px;
+color:#333;
+line-height:1.5;
+}
+
+.submit-section{
+text-align:center;
+padding:50px 20px;
+background:white;
+}
+
+.submit-btn{
+display:inline-block;
+padding:14px 26px;
+background:#0a6b3f;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+}
+
+.submit-btn:hover{
+background:#084c2c;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="container">
-    <h1>Freedom Wall</h1>
-    <p class="subtitle">Messages of support and solidarity from members and supporters across Region VIII.</p>
-    <div id="freedom-wall-list" class="loading">Loading freedom wall messages...</div>
-  </div>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=freedomwall";
+<section class="page-header">
 
-    async function loadFreedomWall() {
-      const container = document.getElementById("freedom-wall-list");
+<h1>Freedom Wall</h1>
 
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
+<p>
+Messages of support from members of the movement across Region VIII.
+All posts are reviewed before being displayed publicly.
+</p>
 
-        if (!data.success || !data.items.length) {
-          container.innerHTML = '<div class="empty">No approved freedom wall messages yet.</div>';
-          return;
-        }
+</section>
 
-        container.innerHTML = `<div class="grid">${
-          data.items.map(item => `
-            <div class="card">
-              ${item.PhotoURL ? `<img src="${item.PhotoURL}" alt="${item.FullName || "Supporter"}">` : ""}
-              <div class="name">${item.FullName || "Anonymous Supporter"}</div>
-              <div class="place">${item.Municipality || ""}</div>
-              <div class="message">${item.Message || ""}</div>
-            </div>
-          `).join("")
-        }</div>`;
 
-      } catch (error) {
-        container.innerHTML = '<div class="empty">Failed to load freedom wall messages.</div>';
-        console.error(error);
-      }
-    }
+<section class="freedom-container">
 
-    loadFreedomWall();
-  </script>
+<div class="freedom-grid" id="freedomWall">
+
+Loading messages...
+
+</div>
+
+</section>
+
+
+<section class="submit-section">
+
+<h3>Share Your Message</h3>
+
+<p>Members can post messages of support and solidarity.</p>
+
+<br>
+
+<a href="member-portal-access.html?next=freedom-wall-submit.html" class="submit-btn">
+Post Your Message
+</a>
+
+</section>
+
+
+<script>
+
+const api="https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=freedomwall";
+
+fetch(api)
+.then(res => res.json())
+.then(data => {
+
+const container=document.getElementById("freedomWall");
+
+container.innerHTML="";
+
+data.items.forEach(item=>{
+
+const card=document.createElement("div");
+card.className="freedom-card";
+
+card.innerHTML=`
+<div class="freedom-name">${item.FullName}</div>
+<div class="freedom-location">${item.Municipality}</div>
+<div class="freedom-message">${item.Message}</div>
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+</script>
+
 </body>
 </html>
