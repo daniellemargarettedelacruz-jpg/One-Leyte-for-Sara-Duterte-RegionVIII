@@ -69,30 +69,13 @@
       font-weight: 600;
     }
 
-    .read-btn {
-      display: inline-block;
-      padding: 10px 16px;
-      background: #0a6b3f;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .read-btn:hover {
-      background: #084c2c;
-    }
-
-    .content-box {
-      margin-top: 16px;
-      padding-top: 16px;
+    .content {
+      margin-top: 12px;
+      padding-top: 14px;
       border-top: 1px solid #e6e6e6;
       white-space: pre-wrap;
       line-height: 1.7;
       color: #333;
-      display: none;
     }
 
     .loading,
@@ -146,7 +129,7 @@
           return;
         }
 
-        container.innerHTML = data.items.map((item, index) => {
+        container.innerHTML = data.items.map((item) => {
           const title = item.Title || "";
           const category = item.Category || "";
           const summary = item.Summary || "";
@@ -157,21 +140,10 @@
           return `
             <div class="card">
               ${imageURL ? `<img src="${imageURL}" alt="${title || 'Announcement'}">` : ""}
-
-              <div class="meta">
-                ${datePosted}${category ? ` • ${category}` : ""}
-              </div>
-
+              <div class="meta">${datePosted}${category ? ` • ${category}` : ""}</div>
               <div class="title">${title}</div>
-
               ${summary ? `<div class="summary">${summary}</div>` : ""}
-
-              ${content ? `
-                <button class="read-btn" onclick="toggleContent('content-${index}', this)">
-                  Read Full Announcement
-                </button>
-                <div class="content-box" id="content-${index}">${content}</div>
-              ` : ""}
+              ${content ? `<div class="content">${content}</div>` : ""}
             </div>
           `;
         }).join("");
@@ -179,18 +151,6 @@
       } catch (error) {
         container.innerHTML = '<div class="empty">Failed to load announcements.</div>';
         console.error(error);
-      }
-    }
-
-    function toggleContent(id, btn) {
-      const box = document.getElementById(id);
-
-      if (box.style.display === "block") {
-        box.style.display = "none";
-        btn.textContent = "Read Full Announcement";
-      } else {
-        box.style.display = "block";
-        btn.textContent = "Hide Full Announcement";
       }
     }
 
