@@ -20,11 +20,13 @@
 
     h1 {
       margin-bottom: 10px;
+      color: #102118;
     }
 
     .subtitle {
       color: #666;
       margin-bottom: 30px;
+      line-height: 1.6;
     }
 
     .card {
@@ -48,6 +50,7 @@
       font-size: 14px;
       color: #888;
       margin-bottom: 10px;
+      line-height: 1.5;
     }
 
     .title {
@@ -55,6 +58,7 @@
       font-weight: bold;
       margin-bottom: 10px;
       color: #102118;
+      line-height: 1.25;
     }
 
     .summary {
@@ -62,6 +66,7 @@
       color: #444;
       margin-bottom: 16px;
       line-height: 1.6;
+      font-weight: 600;
     }
 
     .read-btn {
@@ -73,6 +78,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 14px;
     }
 
     .read-btn:hover {
@@ -89,10 +95,29 @@
       display: none;
     }
 
-    .loading, .empty {
+    .loading,
+    .empty {
       text-align: center;
       padding: 40px 20px;
       color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px 16px 50px;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .summary {
+        font-size: 15px;
+      }
+
+      .card {
+        padding: 18px;
+      }
     }
   </style>
 </head>
@@ -121,26 +146,35 @@
           return;
         }
 
-        container.innerHTML = data.items.map((item, index) => `
-          <div class="card">
-            ${item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title || 'Announcement'}">` : ""}
+        container.innerHTML = data.items.map((item, index) => {
+          const title = item.Title || "";
+          const category = item.Category || "";
+          const summary = item.Summary || "";
+          const content = item.Content || "";
+          const imageURL = item.ImageURL || "";
+          const datePosted = item.DatePosted || "";
 
-            <div class="meta">
-              ${item.DatePosted || ""} ${item.Category ? "• " + item.Category : ""}
+          return `
+            <div class="card">
+              ${imageURL ? `<img src="${imageURL}" alt="${title || 'Announcement'}">` : ""}
+
+              <div class="meta">
+                ${datePosted}${category ? ` • ${category}` : ""}
+              </div>
+
+              <div class="title">${title}</div>
+
+              ${summary ? `<div class="summary">${summary}</div>` : ""}
+
+              ${content ? `
+                <button class="read-btn" onclick="toggleContent('content-${index}', this)">
+                  Read Full Announcement
+                </button>
+                <div class="content-box" id="content-${index}">${content}</div>
+              ` : ""}
             </div>
-
-            <div class="title">${item.Title || ""}</div>
-
-            ${item.Summary ? `<div class="summary">${item.Summary}</div>` : ""}
-
-            ${item.Content ? `
-              <button class="read-btn" onclick="toggleContent('content-${index}', this)">
-                Read Full Announcement
-              </button>
-              <div class="content-box" id="content-${index}">${item.Content}</div>
-            ` : ""}
-          </div>
-        `).join("");
+          `;
+        }).join("");
 
       } catch (error) {
         container.innerHTML = '<div class="empty">Failed to load announcements.</div>';
