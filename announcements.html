@@ -11,25 +11,31 @@
       background: #f7f7f7;
       color: #222;
     }
+
     .container {
       max-width: 1000px;
       margin: 0 auto;
-      padding: 30px 20px;
+      padding: 30px 20px 60px;
     }
+
     h1 {
       margin-bottom: 10px;
     }
+
     .subtitle {
       color: #666;
       margin-bottom: 30px;
     }
+
     .card {
       background: #fff;
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 20px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border-left: 5px solid #d4af37;
     }
+
     .card img {
       width: 100%;
       max-height: 340px;
@@ -37,25 +43,52 @@
       border-radius: 10px;
       margin-bottom: 15px;
     }
+
     .meta {
       font-size: 14px;
       color: #888;
       margin-bottom: 10px;
     }
+
     .title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
       margin-bottom: 10px;
+      color: #102118;
     }
+
     .summary {
       font-size: 16px;
       color: #444;
-      margin-bottom: 10px;
-    }
-    .content {
-      white-space: pre-wrap;
+      margin-bottom: 16px;
       line-height: 1.6;
     }
+
+    .read-btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #0a6b3f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .read-btn:hover {
+      background: #084c2c;
+    }
+
+    .content-box {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e6e6e6;
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #333;
+      display: none;
+    }
+
     .loading, .empty {
       text-align: center;
       padding: 40px 20px;
@@ -66,7 +99,10 @@
 <body>
   <div class="container">
     <h1>Official Announcements</h1>
-    <p class="subtitle">Updates, advisories, statements, and official notices from One Leyte for Sara Duterte Region VIII.</p>
+    <p class="subtitle">
+      Updates, advisories, statements, and official notices from One Leyte for Sara Duterte Region VIII.
+    </p>
+
     <div id="announcements-list" class="loading">Loading announcements...</div>
   </div>
 
@@ -80,29 +116,51 @@
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        if (!data.success || !data.items.length) {
+        if (!data.success || !data.items || !data.items.length) {
           container.innerHTML = '<div class="empty">No announcements available yet.</div>';
           return;
         }
 
-        container.innerHTML = data.items.map(item => `
-  <div class="card">
-    ${item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title}">` : ""}
+        container.innerHTML = data.items.map((item, index) => `
+          <div class="card">
+            ${item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title || 'Announcement'}">` : ""}
 
-    <div class="meta">
-      ${item.DatePosted || ""} ${item.Category ? "• " + item.Category : ""}
-    </div>
+            <div class="meta">
+              ${item.DatePosted || ""} ${item.Category ? "• " + item.Category : ""}
+            </div>
 
-    <div class="title">
-      ${item.Title || ""}
-    </div>
+            <div class="title">${item.Title || ""}</div>
 
-    ${item.Summary ? `<div class="summary">${item.Summary}</div>` : ""}
+            ${item.Summary ? `<div class="summary">${item.Summary}</div>` : ""}
 
-    ${item.Content ? `<div class="content">${item.Content}</div>` : ""}
+            ${item.Content ? `
+              <button class="read-btn" onclick="toggleContent('content-${index}', this)">
+                Read Full Announcement
+              </button>
+              <div class="content-box" id="content-${index}">
+                ${item.Content}
+              </div>
+            ` : ""}
+          </div>
+        `).join("");
 
-  </div>
-`).join("");
+      } catch (error) {
+        container.innerHTML = '<div class="empty">Failed to load announcements.</div>';
+        console.error(error);
+      }
+    }
+
+    function toggleContent(id, btn) {
+      const box = document.getElementById(id);
+
+      if (box.style.display === "block") {
+        box.style.display = "none";
+        btn.textContent = "Read Full Announcement";
+      } else {
+        box.style.display = "block";
+        btn.textContent = "Hide Full Announcement";
+      }
+    }
 
     loadAnnouncements();
   </script>
