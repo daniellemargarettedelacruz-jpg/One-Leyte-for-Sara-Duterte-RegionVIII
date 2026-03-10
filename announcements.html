@@ -137,9 +137,7 @@
               <button class="read-btn" onclick="toggleContent('content-${index}', this)">
                 Read Full Announcement
               </button>
-              <div class="content-box" id="content-${index}">
-                ${item.Content}
-              </div>
+              <div class="content-box" id="content-${index}">${item.Content}</div>
             ` : ""}
           </div>
         `).join("");
