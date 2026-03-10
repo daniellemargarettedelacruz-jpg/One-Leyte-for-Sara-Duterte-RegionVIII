@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Portal | One Leyte</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.portal-section{
+padding:80px 20px;
+text-align:center;
+}
+
+.portal-box{
+max-width:420px;
+margin:auto;
+background:white;
+padding:40px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.portal-box h2{
+margin-bottom:10px;
+}
+
+.portal-box p{
+margin-bottom:25px;
+color:#555;
+}
+
+.portal-box input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:16px;
+}
+
+.portal-btn{
+width:100%;
+padding:12px;
+background:#0a6b3f;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+.portal-btn:hover{
+background:#084e2f;
+}
+
+.portal-message{
+margin-top:15px;
+font-size:14px;
+}
+
+.back-home{
+margin-top:20px;
+display:inline-block;
+color:#0a6b3f;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="portal-section">
+
+<div class="portal-box">
+
+<h2>Member Portal</h2>
+
+<p>
+Enter your Member ID and Last Name to access the portal.
+</p>
+
+<input id="memberId" type="text" placeholder="Member ID (Example: OLR8-000001)">
+
+<input id="lastName" type="text" placeholder="Last Name">
+
+<button class="portal-btn" onclick="verifyMember()">Access Portal</button>
+
+<div id="message" class="portal-message"></div>
+
+<a class="back-home" href="index.html">Return to Homepage</a>
+
+</div>
+
+</section>
+
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+
+async function verifyMember(){
+
+const memberId = document.getElementById("memberId").value.trim();
+const lastName = document.getElementById("lastName").value.trim().toLowerCase();
+
+const messageBox = document.getElementById("message");
+
+if(!memberId || !lastName){
+messageBox.innerHTML = "Please enter Member ID and Last Name.";
+return;
+}
+
+messageBox.innerHTML = "Verifying membership...";
+
+try{
+
+const response = await fetch(
+API_URL + "?action=verifymember&memberId=" + encodeURIComponent(memberId) + "&lastName=" + encodeURIComponent(lastName)
+);
+
+const data = await response.json();
+
+if(data.success){
+
+messageBox.innerHTML = "Welcome " + data.memberName + ". Redirecting to portal...";
+
+setTimeout(function(){
+
+window.location.href = "member-portal.html";
+
+},1500);
+
+}else{
+
+messageBox.innerHTML = data.message;
+
+}
+
+}catch(error){
+
+messageBox.innerHTML = "Unable to verify membership.";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
