@@ -86,20 +86,23 @@
         }
 
         container.innerHTML = data.items.map(item => `
-          <div class="card">
-            ${item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title}">` : ""}
-            <div class="meta">${item.DatePosted || ""} ${item.Category ? "• " + item.Category : ""}</div>
-            <div class="title">${item.Title || ""}</div>
-            ${item.Summary ? `<div class="summary">${item.Summary}</div>` : ""}
-            <div class="content">${item.Content || ""}</div>
-          </div>
-        `).join("");
+  <div class="card">
+    ${item.ImageURL ? `<img src="${item.ImageURL}" alt="${item.Title}">` : ""}
 
-      } catch (error) {
-        container.innerHTML = '<div class="empty">Failed to load announcements.</div>';
-        console.error(error);
-      }
-    }
+    <div class="meta">
+      ${item.DatePosted || ""} ${item.Category ? "• " + item.Category : ""}
+    </div>
+
+    <div class="title">
+      ${item.Title || ""}
+    </div>
+
+    ${item.Summary ? `<div class="summary">${item.Summary}</div>` : ""}
+
+    ${item.Content ? `<div class="content">${item.Content}</div>` : ""}
+
+  </div>
+`).join("");
 
     loadAnnouncements();
   </script>
