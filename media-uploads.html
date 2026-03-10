@@ -1,115 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Media Uploads | One Leyte for Sara Duterte</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f8fafc;
-      color: #1e293b;
-    }
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 30px 20px;
-    }
-    h1 {
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      color: #64748b;
-      margin-bottom: 30px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    }
-    .media-box img,
-    .media-box video {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      display: block;
-    }
-    .content {
-      padding: 16px;
-    }
-    .name {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-    .place {
-      color: #64748b;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-    .caption {
-      line-height: 1.6;
-    }
-    .loading, .empty {
-      text-align: center;
-      padding: 40px 20px;
-      color: #666;
-    }
-  </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Media Uploads | One Leyte</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.page-header{
+text-align:center;
+padding:70px 20px 40px 20px;
+background:#08110c;
+color:white;
+}
+
+.page-header h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+.page-header p{
+max-width:700px;
+margin:auto;
+color:#cfd7d2;
+}
+
+.media-container{
+padding:60px 20px;
+background:#f4f4f4;
+}
+
+.media-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+max-width:1100px;
+margin:auto;
+}
+
+.media-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+.media-card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.media-caption{
+padding:15px;
+font-size:14px;
+color:#333;
+}
+
+.submit-section{
+text-align:center;
+padding:50px 20px;
+background:white;
+}
+
+.submit-btn{
+display:inline-block;
+padding:14px 26px;
+background:#0a6b3f;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+}
+
+.submit-btn:hover{
+background:#084c2c;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="container">
-    <h1>Media Uploads</h1>
-    <p class="subtitle">Approved photos and videos shared by members and supporters.</p>
-    <div id="media-list" class="loading">Loading media uploads...</div>
-  </div>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=media";
+<section class="page-header">
 
-    async function loadMedia() {
-      const container = document.getElementById("media-list");
+<h1>Community Media</h1>
 
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
+<p>
+Photos and videos shared by members from events, gatherings,
+and activities across the region.
+</p>
 
-        if (!data.success || !data.items.length) {
-          container.innerHTML = '<div class="empty">No approved media uploads yet.</div>';
-          return;
-        }
+</section>
 
-        container.innerHTML = `<div class="grid">${
-          data.items.map(item => `
-            <div class="card">
-              <div class="media-box">
-                ${String(item.MediaType).toLowerCase() === "video"
-                  ? `<video controls src="${item.MediaURL}"></video>`
-                  : `<img src="${item.MediaURL}" alt="${item.Caption || "Media upload"}">`
-                }
-              </div>
-              <div class="content">
-                <div class="name">${item.FullName || "Supporter"}</div>
-                <div class="place">${item.Municipality || ""}</div>
-                <div class="caption">${item.Caption || ""}</div>
-              </div>
-            </div>
-          `).join("")
-        }</div>`;
 
-      } catch (error) {
-        container.innerHTML = '<div class="empty">Failed to load media uploads.</div>';
-        console.error(error);
-      }
-    }
+<section class="media-container">
 
-    loadMedia();
-  </script>
+<div class="media-grid" id="mediaGrid">
+
+Loading media...
+
+</div>
+
+</section>
+
+
+<section class="submit-section">
+
+<h3>Upload Media</h3>
+
+<p>Members can upload photos and videos from activities.</p>
+
+<br>
+
+<a href="member-portal-access.html?next=media-upload-submit.html" class="submit-btn">
+Upload Media
+</a>
+
+</section>
+
+
+<script>
+
+const api="https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=media";
+
+fetch(api)
+.then(res => res.json())
+.then(data => {
+
+const container=document.getElementById("mediaGrid");
+
+container.innerHTML="";
+
+data.items.forEach(item=>{
+
+const card=document.createElement("div");
+card.className="media-card";
+
+card.innerHTML=`
+<img src="${item.MediaURL}">
+<div class="media-caption">
+<strong>${item.FullName}</strong><br>
+${item.Caption}
+</div>
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+</script>
+
 </body>
 </html>
