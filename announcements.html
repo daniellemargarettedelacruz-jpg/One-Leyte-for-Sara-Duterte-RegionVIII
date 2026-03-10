@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Announcements | One Leyte for Sara Duterte</title>
+
+<style>
+body{
+font-family:Arial, sans-serif;
+background:#f4f6fb;
+margin:0;
+padding:40px;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-bottom:20px;
+border-radius:8px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card h3{
+margin-top:0;
+}
+
+.date{
+color:#888;
+font-size:13px;
+margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Announcements</h1>
+
+<div class="container" id="announcements"></div>
+
+<script>
+const sheetURL =
+"https://docs.google.com/spreadsheets/d/1x6Aw4CahhR-5p6QZ3-r2KHF2X0U2WDbANtRqGnbdFJE/gviz/tq?tqx=out:json&gid=0";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+  const json = JSON.parse(data.substring(47).slice(0,-2));
+  const rows = json.table.rows;
+  const container = document.getElementById("announcements");
+
+  rows.forEach(r => {
+    const date = r.c[0]?.v || "";
+    const title = r.c[1]?.v || "";
+    const message = r.c[2]?.v || "";
+    const status = r.c[3]?.v || "";
+
+    if(status !== "Published") return;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="date">${date}</div>
+      <h3>${title}</h3>
+      <p>${message}</p>
+    `;
+
+    container.appendChild(card);
+  });
+});
+</script>
+
+</body>
+</html>
