@@ -2,13 +2,46 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Announcements | One Leyte</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements | One Leyte</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
- <style>
+<style>
+
+.page-header{
+text-align:center;
+padding:70px 20px 40px 20px;
+background:#08110c;
+color:white;
+}
+
+.page-header h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+.page-header p{
+color:#cfd7d2;
+max-width:700px;
+margin:auto;
+}
+
+.announcement-container{
+padding:60px 20px;
+background:#f4f4f4;
+}
+
+.announcement-grid{
+max-width:1100px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+/* LANDSCAPE CARD */
 
 .announcement-card{
 display:flex;
@@ -65,81 +98,157 @@ font-size:14px;
 background:#084f2e;
 }
 
+/* POPUP */
+
+#announcementPopup{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.popup-box{
+background:white;
+max-width:700px;
+width:90%;
+border-radius:12px;
+padding:25px;
+max-height:80vh;
+overflow:auto;
+}
+
+.popup-box h2{
+margin-top:0;
+}
+
+.popup-close{
+margin-top:20px;
+padding:8px 16px;
+cursor:pointer;
+}
+
 </style>
+
 </head>
 
-  <div id="announcementPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:9999;">
-
-<div style="background:white; max-width:700px; width:90%; border-radius:12px; padding:25px; max-height:80vh; overflow:auto;">
-
-<h2 id="popupTitle"></h2>
-<p id="popupMeta" style="color:#666; font-size:13px;"></p>
-
-<div id="popupContent" style="margin-top:15px; line-height:1.6;"></div>
-
-<button onclick="closePopup()" style="margin-top:20px; padding:8px 16px;">Close</button>
-
-</div>
-
-</div>
 <body>
 
-  <section class="page-header">
-    <h1>Announcements</h1>
-    <p>
-      Updates and important notices for members of One Leyte for Sara Duterte Region VIII.
-      All announcements are reviewed before being displayed publicly.
-    </p>
-  </section>
+<section class="page-header">
+<h1>Announcements</h1>
+<p>
+Updates and important notices for members of One Leyte for Sara Duterte Region VIII.
+All announcements are reviewed before being displayed publicly.
+</p>
+</section>
 
-  <section class="announcement-container">
-    <div class="announcement-grid" id="announcementList">
-      <div class="empty-message">Loading announcements...</div>
-    </div>
-  </section>
+<section class="announcement-container">
+<div class="announcement-grid" id="announcementList">
+<div class="empty-message">Loading announcements...</div>
+</div>
+</section>
 
-  <script>
-    const api = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+<!-- POPUP -->
 
-    fetch(api)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("announcementList");
-        container.innerHTML = "";
+<div id="announcementPopup">
+<div class="popup-box">
 
-        if (!data.items || data.items.length === 0) {
-          container.innerHTML = '<div class="empty-message">No announcements available yet.</div>';
-          return;
-        }
+<h2 id="popupTitle"></h2>
+<p id="popupMeta" style="color:#666;font-size:13px;"></p>
 
-        data.items.forEach(item => {
-          const card = document.createElement("div");
-          card.className = "announcement-card";
+<div id="popupContent" style="margin-top:15px;line-height:1.6;"></div>
 
-          const title = item.Title || "";
-          const category = item.Category || "";
-          const datePosted = item.DatePosted || "";
-          const summary = item.Summary || "";
-          const content = item.Content || "";
-          const imageURL = item.ImageURL || "";
+<button class="popup-close" onclick="closePopup()">Close</button>
 
-          card.innerHTML = `
-            ${imageURL ? `<img src="${imageURL}" alt="${title}">` : ``}
-            <div class="announcement-title">${title}</div>
-            <div class="announcement-meta">${datePosted}${category ? ` • ${category}` : ``}</div>
-            ${summary ? `<div class="announcement-summary">${summary}</div>` : ``}
-            ${content ? `<div class="announcement-content">${content}</div>` : ``}
-          `;
+</div>
+</div>
 
-          container.appendChild(card);
-        });
-      })
-      .catch(error => {
-        const container = document.getElementById("announcementList");
-        container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
-        console.error(error);
-      });
-  </script>
+<script>
+
+const api = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+
+fetch(api)
+.then(res => res.json())
+.then(data => {
+
+const container = document.getElementById("announcementList");
+container.innerHTML = "";
+
+if(!data.items || data.items.length === 0){
+container.innerHTML = '<div class="empty-message">No announcements available yet.</div>';
+return;
+}
+
+data.items.forEach(item => {
+
+const card = document.createElement("div");
+card.className = "announcement-card";
+
+const title = item.Title || "";
+const category = item.Category || "";
+const datePosted = item.DatePosted || "";
+const summary = item.Summary || "";
+const content = item.Content || "";
+const imageURL = item.ImageURL || "";
+
+card.innerHTML = `
+
+${imageURL ? `<img class="announcement-image" src="${imageURL}" alt="${title}">` : ``}
+
+<div class="announcement-body">
+
+<div class="announcement-title">${title}</div>
+
+<div class="announcement-meta">
+${datePosted}${category ? ` • ${category}` : ``}
+</div>
+
+${summary ? `<div class="announcement-summary">${summary}</div>` : ``}
+
+<button class="read-btn"
+onclick="openPopup(
+\`${title}\`,
+\`${datePosted} • ${category}\`,
+\`${content}\`
+)">
+Read Full Announcement
+</button>
+
+</div>
+`;
+
+container.appendChild(card);
+
+});
+
+})
+.catch(error => {
+const container = document.getElementById("announcementList");
+container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
+console.error(error);
+});
+
+/* POPUP FUNCTIONS */
+
+function openPopup(title, meta, content){
+
+document.getElementById("popupTitle").innerText = title;
+document.getElementById("popupMeta").innerText = meta;
+document.getElementById("popupContent").innerText = content;
+
+document.getElementById("announcementPopup").style.display = "flex";
+
+}
+
+function closePopup(){
+
+document.getElementById("announcementPopup").style.display = "none";
+
+}
+
+</script>
 
 </body>
 </html>
