@@ -18,41 +18,7 @@ padding:70px 20px 40px 20px;
 background:#08110c;
 color:white;
 }
-.upload-form input,
-.upload-form textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:15px;
-border-radius:6px;
-border:1px solid #ccc;
-color:#111;
-background:#fff;
-}
 
-.upload-form input[type="file"]{
-color:#111;
-background:#fff;
-}
-
-.upload-form input[type="file"]::file-selector-button{
-background:#0a6b3f;
-color:#fff;
-border:none;
-padding:10px 14px;
-border-radius:6px;
-margin-right:12px;
-cursor:pointer;
-}
-
-.upload-status{
-margin-top:15px;
-font-weight:600;
-color:#111;
-min-height:24px;
-}
-
-  
 .page-header h1{
 font-size:34px;
 margin-bottom:10px;
@@ -132,6 +98,28 @@ margin-top:5px;
 margin-bottom:15px;
 border-radius:6px;
 border:1px solid #ccc;
+color:#111;
+background:#fff;
+box-sizing:border-box;
+}
+
+.upload-form input[type="file"]{
+color:#111;
+background:#fff;
+}
+
+.upload-form input[type="file"]::file-selector-button{
+background:#0a6b3f;
+color:#fff;
+border:none;
+padding:10px 14px;
+border-radius:6px;
+margin-right:12px;
+cursor:pointer;
+}
+
+.upload-form input[type="file"]::file-selector-button:hover{
+background:#084c2c;
 }
 
 .upload-form button{
@@ -141,15 +129,34 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-weight:600;
 }
 
 .upload-form button:hover{
 background:#084c2c;
 }
 
+.upload-form button:disabled{
+background:#7aa892;
+cursor:not-allowed;
+}
+
 .upload-status{
 margin-top:15px;
 font-weight:600;
+color:#111;
+min-height:24px;
+}
+
+.upload-form label{
+display:block;
+color:#333;
+font-size:14px;
+}
+
+.upload-form input[type="checkbox"]{
+width:auto;
+margin-right:8px;
 }
 
 </style>
@@ -196,8 +203,6 @@ Upload Media
 </section>
 
 
-<!-- NEW UPLOAD FORM -->
-
 <section class="submit-section">
 
 <h3>Submit Photo</h3>
@@ -219,7 +224,7 @@ I allow One Leyte for Sara Duterte to review and publish this photo if approved.
 
 <br><br>
 
-<button onclick="uploadMedia()">Submit Photo</button>
+<button type="button" id="uploadBtn" onclick="uploadMedia()">Submit Photo</button>
 
 <div id="uploadStatus" class="upload-status"></div>
 
@@ -230,23 +235,27 @@ I allow One Leyte for Sara Duterte to review and publish this photo if approved.
 
 <script>
 
-const api="https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=media";
+const api = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=media";
 
 fetch(api)
 .then(res => res.json())
 .then(data => {
 
-const container=document.getElementById("mediaGrid");
+const container = document.getElementById("mediaGrid");
+container.innerHTML = "";
 
-container.innerHTML="";
+if (!data.items || !data.items.length) {
+  container.innerHTML = "<p style='text-align:center;'>No approved media yet.</p>";
+  return;
+}
 
-data.items.forEach(item=>{
+data.items.forEach(item => {
 
-const card=document.createElement("div");
-card.className="media-card";
+const card = document.createElement("div");
+card.className = "media-card";
 
-card.innerHTML=`
-<img src="${item.MediaURL}">
+card.innerHTML = `
+<img src="${item.MediaURL}" alt="Community Media">
 <div class="media-caption">
 <strong>${item.FullName}</strong><br>
 ${item.Caption}
@@ -257,82 +266,108 @@ container.appendChild(card);
 
 });
 
+})
+.catch(() => {
+  document.getElementById("mediaGrid").innerHTML = "<p style='text-align:center;'>Unable to load media right now.</p>";
 });
 
 
 async function uploadMedia(){
 
-const status=document.getElementById("uploadStatus");
+const status = document.getElementById("uploadStatus");
+const button = document.getElementById("uploadBtn");
 
-const fullName=document.getElementById("fullName").value.trim();
-const municipality=document.getElementById("municipality").value.trim();
-const caption=document.getElementById("caption").value.trim();
-const consent=document.getElementById("consent").checked;
-const file=document.getElementById("photoFile").files[0];
+const fullName = document.getElementById("fullName").value.trim();
+const municipality = document.getElementById("municipality").value.trim();
+const caption = document.getElementById("caption").value.trim();
+const consent = document.getElementById("consent").checked;
+const file = document.getElementById("photoFile").files[0];
+
+status.style.color = "#111";
 
 if(!fullName || !municipality || !caption){
-status.innerText="Please fill all fields.";
+status.innerText = "Please fill all fields.";
+status.style.color = "red";
 return;
 }
 
 if(!file){
-status.innerText="Please choose a photo.";
+status.innerText = "Please choose a photo.";
+status.style.color = "red";
 return;
 }
 
-const base64=await fileToBase64(file);
+if(!consent){
+status.innerText = "Please check the consent box.";
+status.style.color = "red";
+return;
+}
 
-const payload={
-action:"uploadmedia",
-fullName:fullName,
-municipality:municipality,
-caption:caption,
-consent:consent?"Yes":"",
-fileName:file.name,
-mimeType:file.type,
-base64Data:base64
+if(!file.type.startsWith("image/")){
+status.innerText = "Only image files are allowed.";
+status.style.color = "red";
+return;
+}
+
+button.disabled = true;
+button.innerText = "Uploading...";
+status.innerText = "Uploading...";
+status.style.color = "#111";
+
+try {
+
+const base64 = await fileToBase64(file);
+
+const payload = {
+action: "uploadmedia",
+fullName: fullName,
+municipality: municipality,
+caption: caption,
+consent: "Yes",
+fileName: file.name,
+mimeType: file.type,
+base64Data: base64
 };
 
-status.innerText="Uploading...";
-
-fetch("https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec",{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8"},
-body:JSON.stringify(payload)
-})
-.then(res=>res.json())
-.then(result=>{
-
-if(result.success){
-status.innerText="Upload successful. Waiting for admin approval.";
-document.getElementById("photoFile").value="";
-}
-else{
-status.innerText=result.message;
-}
-
-})
-.catch(err=>{
-status.innerText="Upload failed.";
+const response = await fetch("https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec", {
+method: "POST",
+headers: { "Content-Type": "text/plain;charset=utf-8" },
+body: JSON.stringify(payload)
 });
 
+const result = await response.json();
+
+if(result.success){
+status.innerText = "Upload successful. Waiting for admin approval.";
+status.style.color = "green";
+
+document.getElementById("fullName").value = "";
+document.getElementById("municipality").value = "";
+document.getElementById("caption").value = "";
+document.getElementById("photoFile").value = "";
+document.getElementById("consent").checked = false;
+} else {
+status.innerText = result.message || "Upload failed.";
+status.style.color = "red";
+}
+
+} catch(err){
+status.innerText = "Upload failed. Please try again.";
+status.style.color = "red";
+}
+
+button.disabled = false;
+button.innerText = "Submit Photo";
 }
 
 
 function fileToBase64(file){
-
-return new Promise((resolve,reject)=>{
-
-const reader=new FileReader();
-
-reader.onload=()=>resolve(reader.result);
-
-reader.onerror=error=>reject(error);
-
+return new Promise((resolve, reject) => {
+const reader = new FileReader();
+reader.onload = () => resolve(reader.result);
+reader.onerror = error => reject(error);
 reader.readAsDataURL(file);
-
 });
-
 }
 
 </script>
