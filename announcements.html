@@ -8,92 +8,80 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <style>
-    .page-header {
-      text-align: center;
-      padding: 70px 20px 40px 20px;
-      background: #08110c;
-      color: white;
-    }
+ <style>
 
-    .page-header h1 {
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
+.announcement-card{
+display:flex;
+gap:20px;
+background:white;
+border-radius:12px;
+padding:20px;
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+border-left:4px solid #0a6b3f;
+align-items:flex-start;
+}
 
-    .page-header p {
-      color: #cfd7d2;
-      max-width: 700px;
-      margin: auto;
-    }
+.announcement-image{
+width:240px;
+height:160px;
+border-radius:10px;
+object-fit:cover;
+}
 
-    .announcement-container {
-      padding: 60px 20px;
-      background: #f4f4f4;
-    }
+.announcement-body{
+flex:1;
+}
 
-    .announcement-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      max-width: 1100px;
-      margin: auto;
-    }
+.announcement-title{
+font-size:22px;
+font-weight:700;
+color:#0a6b3f;
+margin-bottom:6px;
+}
 
-    .announcement-card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-      border-left: 4px solid #0a6b3f;
-    }
+.announcement-meta{
+font-size:13px;
+color:#777;
+margin-bottom:10px;
+}
 
-    .announcement-card img {
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      max-height: 260px;
-      object-fit: cover;
-    }
+.announcement-summary{
+font-size:14px;
+margin-bottom:12px;
+font-weight:600;
+}
 
-    .announcement-title {
-      font-weight: 700;
-      font-size: 20px;
-      margin-bottom: 8px;
-      color: #0a6b3f;
-      line-height: 1.3;
-    }
+.read-btn{
+background:#0a6b3f;
+color:white;
+border:none;
+padding:8px 16px;
+border-radius:6px;
+cursor:pointer;
+font-size:14px;
+}
 
-    .announcement-meta {
-      font-size: 13px;
-      color: #777;
-      margin-bottom: 10px;
-    }
+.read-btn:hover{
+background:#084f2e;
+}
 
-    .announcement-summary {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 10px;
-      font-weight: 600;
-      line-height: 1.5;
-    }
-
-    .announcement-content {
-      font-size: 14px;
-      color: #444;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-
-    .empty-message {
-      text-align: center;
-      color: #666;
-      padding: 30px 20px;
-      grid-column: 1 / -1;
-    }
-  </style>
+</style>
 </head>
 
+  <div id="announcementPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:9999;">
+
+<div style="background:white; max-width:700px; width:90%; border-radius:12px; padding:25px; max-height:80vh; overflow:auto;">
+
+<h2 id="popupTitle"></h2>
+<p id="popupMeta" style="color:#666; font-size:13px;"></p>
+
+<div id="popupContent" style="margin-top:15px; line-height:1.6;"></div>
+
+<button onclick="closePopup()" style="margin-top:20px; padding:8px 16px;">Close</button>
+
+</div>
+
+</div>
 <body>
 
   <section class="page-header">
