@@ -18,7 +18,41 @@ padding:70px 20px 40px 20px;
 background:#08110c;
 color:white;
 }
+.upload-form input,
+.upload-form textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+color:#111;
+background:#fff;
+}
 
+.upload-form input[type="file"]{
+color:#111;
+background:#fff;
+}
+
+.upload-form input[type="file"]::file-selector-button{
+background:#0a6b3f;
+color:#fff;
+border:none;
+padding:10px 14px;
+border-radius:6px;
+margin-right:12px;
+cursor:pointer;
+}
+
+.upload-status{
+margin-top:15px;
+font-weight:600;
+color:#111;
+min-height:24px;
+}
+
+  
 .page-header h1{
 font-size:34px;
 margin-bottom:10px;
