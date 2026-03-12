@@ -82,6 +82,42 @@ font-weight:600;
 background:#084c2c;
 }
 
+/* Upload Form */
+
+.upload-form{
+max-width:600px;
+margin:40px auto;
+text-align:left;
+}
+
+.upload-form input,
+.upload-form textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+.upload-form button{
+padding:12px 20px;
+background:#0a6b3f;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.upload-form button:hover{
+background:#084c2c;
+}
+
+.upload-status{
+margin-top:15px;
+font-weight:600;
+}
+
 </style>
 
 </head>
@@ -126,6 +162,38 @@ Upload Media
 </section>
 
 
+<!-- NEW UPLOAD FORM -->
+
+<section class="submit-section">
+
+<h3>Submit Photo</h3>
+
+<div class="upload-form">
+
+<input type="text" id="fullName" placeholder="Full Name">
+
+<input type="text" id="municipality" placeholder="Municipality">
+
+<textarea id="caption" placeholder="Caption"></textarea>
+
+<input type="file" id="photoFile" accept="image/*">
+
+<label>
+<input type="checkbox" id="consent">
+I allow One Leyte for Sara Duterte to review and publish this photo if approved.
+</label>
+
+<br><br>
+
+<button onclick="uploadMedia()">Submit Photo</button>
+
+<div id="uploadStatus" class="upload-status"></div>
+
+</div>
+
+</section>
+
+
 <script>
 
 const api="https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=media";
@@ -156,6 +224,82 @@ container.appendChild(card);
 });
 
 });
+
+
+async function uploadMedia(){
+
+const status=document.getElementById("uploadStatus");
+
+const fullName=document.getElementById("fullName").value.trim();
+const municipality=document.getElementById("municipality").value.trim();
+const caption=document.getElementById("caption").value.trim();
+const consent=document.getElementById("consent").checked;
+const file=document.getElementById("photoFile").files[0];
+
+if(!fullName || !municipality || !caption){
+status.innerText="Please fill all fields.";
+return;
+}
+
+if(!file){
+status.innerText="Please choose a photo.";
+return;
+}
+
+const base64=await fileToBase64(file);
+
+const payload={
+action:"uploadmedia",
+fullName:fullName,
+municipality:municipality,
+caption:caption,
+consent:consent?"Yes":"",
+fileName:file.name,
+mimeType:file.type,
+base64Data:base64
+};
+
+status.innerText="Uploading...";
+
+fetch("https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec",{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify(payload)
+})
+.then(res=>res.json())
+.then(result=>{
+
+if(result.success){
+status.innerText="Upload successful. Waiting for admin approval.";
+document.getElementById("photoFile").value="";
+}
+else{
+status.innerText=result.message;
+}
+
+})
+.catch(err=>{
+status.innerText="Upload failed.";
+});
+
+}
+
+
+function fileToBase64(file){
+
+return new Promise((resolve,reject)=>{
+
+const reader=new FileReader();
+
+reader.onload=()=>resolve(reader.result);
+
+reader.onerror=error=>reject(error);
+
+reader.readAsDataURL(file);
+
+});
+
+}
 
 </script>
 
