@@ -255,7 +255,7 @@ const card = document.createElement("div");
 card.className = "media-card";
 
 card.innerHTML = `
-<img src="${item.MediaURL}" alt="Community Media">
+<img src="${item.ThumbnailURL || item.MediaURL}" alt="Community Media">
 <div class="media-caption">
 <strong>${item.FullName}</strong><br>
 ${item.Caption}
