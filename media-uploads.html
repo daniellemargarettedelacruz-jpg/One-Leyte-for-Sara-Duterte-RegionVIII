@@ -491,9 +491,19 @@
       </div>
 
       <div class="upload-full">
-        <label for="qrUrl">QR URL</label>
-        <input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
-        <div class="field-note">This is auto-filled when the MemberID is found.</div>
+      <label for="qrUrl">QR URL</label>
+<input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
+<div class="field-note">This is auto-filled when the MemberID is found.</div>
+
+<div id="qrPreviewWrap" style="display:none; margin-top:10px;">
+  <img id="qrPreviewImage"
+       alt="Upload QR"
+       style="max-width:180px; border:1px solid #ddd; border-radius:10px; background:#fff; padding:8px;">
+</div>
+
+<button type="button" id="copyQrLinkBtn" style="margin-top:10px;">
+  Copy Upload Link
+</button>
       </div>
 
       <div>
