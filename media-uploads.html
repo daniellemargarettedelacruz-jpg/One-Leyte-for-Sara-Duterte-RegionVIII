@@ -345,7 +345,6 @@
   color:#555;
 }
 
-/* Modal */
 .media-modal{
   display:none;
   position:fixed;
@@ -455,7 +454,6 @@
 </section>
 
 <section class="media-container">
-
   <div class="media-feed" id="mediaFeed">
     Loading media...
   </div>
@@ -463,7 +461,6 @@
   <div class="media-loadmore-wrap" id="loadMoreWrap" style="display:none;">
     <button class="media-loadmore-btn" id="loadMoreBtn">Load More</button>
   </div>
-
 </section>
 
 <section class="submit-section">
@@ -481,29 +478,13 @@
       <div>
         <label for="memberId">Member ID</label>
         <input type="text" id="memberId" placeholder="Enter your MemberID">
-        <div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
+        <div class="field-note">If opened from your member portal or QR code, MemberID may already be filled.</div>
         <div id="memberLookupStatus" class="lookup-status"></div>
       </div>
 
       <div>
         <label for="fullName">Full Name</label>
         <input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
-      </div>
-
-      <div class="upload-full">
-      <label for="qrUrl">QR URL</label>
-<input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
-<div class="field-note">This is auto-filled when the MemberID is found.</div>
-
-<div id="qrPreviewWrap" style="display:none; margin-top:10px;">
-  <img id="qrPreviewImage"
-       alt="Upload QR"
-       style="max-width:180px; border:1px solid #ddd; border-radius:10px; background:#fff; padding:8px;">
-</div>
-
-<button type="button" id="copyQrLinkBtn" style="margin-top:10px;">
-  Copy Upload Link
-</button>
       </div>
 
       <div>
@@ -582,10 +563,6 @@ const mediaModalClose = document.getElementById("mediaModalClose");
 
 const memberIdInput = document.getElementById("memberId");
 const fullNameInput = document.getElementById("fullName");
-const qrUrlInput = document.getElementById("qrUrl");
-const qrPreviewWrap = document.getElementById("qrPreviewWrap");
-const qrPreviewImage = document.getElementById("qrPreviewImage");
-const copyQrLinkBtn = document.getElementById("copyQrLinkBtn");
 const municipalityInput = document.getElementById("municipality");
 const captionInput = document.getElementById("caption");
 const descriptionInput = document.getElementById("description");
@@ -763,17 +740,11 @@ document.addEventListener("keydown", function(e) {
 
 (function autofillMemberIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-
   const memberIdFromUrl = (params.get("memberId") || params.get("MemberID") || "").trim();
-  const qrUrlFromUrl = (params.get("qrUrl") || params.get("qrurl") || "").trim();
 
   if (memberIdFromUrl) {
     memberIdInput.value = memberIdFromUrl;
     resolveMemberName();
-  }
-
-  if (qrUrlFromUrl) {
-    qrUrlInput.value = decodeURIComponent(qrUrlFromUrl);
   }
 })();
 
@@ -793,7 +764,6 @@ async function resolveMemberName() {
   memberLookupStatus.className = "lookup-status";
 
   if (!memberId) {
-    qrUrlInput.value = "";
     lastResolvedMemberId = "";
     return;
   }
@@ -812,40 +782,26 @@ async function resolveMemberName() {
 
     if (data.success) {
       const fullName = data.fullName || data.name || data.memberName || "";
-      const qrUrl = data.qrUrl || data.QRURL || data.qrURL || data.qr_link || "";
       const municipality = data.municipality || data.Municipality || "";
 
       fullNameInput.value = fullName;
-      qrUrlInput.value = qrUrl;
-      if (qrUrl) {
-
-  const qrService =
-    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-    encodeURIComponent(qrUrl);
-
-  qrPreviewImage.src = qrService;
-
-  qrPreviewWrap.style.display = "block";
-}
 
       if (!municipalityInput.value.trim() && municipality) {
         municipalityInput.value = municipality;
       }
 
-      memberLookupStatus.textContent = fullName ? "Member found." : "Member found.";
+      memberLookupStatus.textContent = "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
 
       lastResolvedMemberId = memberId;
     } else {
       fullNameInput.value = "";
-      qrUrlInput.value = "";
       memberLookupStatus.textContent = data.message || "MemberID not found.";
       memberLookupStatus.className = "lookup-status member-bad";
       lastResolvedMemberId = "";
     }
   } catch (err) {
     fullNameInput.value = "";
-    qrUrlInput.value = "";
     memberLookupStatus.textContent = "Unable to verify MemberID right now.";
     memberLookupStatus.className = "lookup-status member-bad";
     lastResolvedMemberId = "";
@@ -897,7 +853,6 @@ function updatePreview() {
 async function submitMediaPost() {
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
-  const qrUrl = qrUrlInput.value.trim();
   const municipality = municipalityInput.value.trim();
   const caption = captionInput.value.trim();
   const description = descriptionInput.value.trim();
@@ -1009,7 +964,6 @@ async function submitMediaPost() {
       action: "submitmediapost",
       memberId: memberId,
       fullName: fullName,
-      qrUrl: qrUrl,
       municipality: municipality,
       caption: caption,
       description: description,
@@ -1040,7 +994,6 @@ async function submitMediaPost() {
       previewWrap.style.display = "none";
 
       fullNameInput.value = result.fullName || fullName;
-      qrUrlInput.value = result.qrUrl || qrUrl;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
     } else {
@@ -1098,18 +1051,6 @@ function escapeAttr(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
-
-  copyQrLinkBtn.addEventListener("click", function() {
-
-  const url = qrUrlInput.value;
-
-  if (!url) return;
-
-  navigator.clipboard.writeText(url).then(function() {
-    alert("Upload link copied.");
-  });
-
-});
 </script>
 
 </body>
