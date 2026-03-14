@@ -129,6 +129,10 @@ color:#111;
 background:#fff;
 }
 
+.wall-form input[readonly]{
+background:#f2f4f2;
+}
+
 .wall-form textarea{
 min-height:140px;
 resize:vertical;
@@ -179,6 +183,33 @@ min-height:24px;
 color:#111;
 }
 
+.lookup-status{
+font-size:12px;
+color:#555;
+margin-top:-8px;
+margin-bottom:14px;
+min-height:16px;
+}
+
+.member-good{
+color:#0a6b3f;
+}
+
+.member-bad{
+color:#b42318;
+}
+
+.member-loading{
+color:#555;
+}
+
+.field-note{
+font-size:12px;
+color:#666;
+margin-top:-8px;
+margin-bottom:14px;
+}
+
 </style>
 
 </head>
@@ -216,9 +247,11 @@ All posts are reviewed before being displayed publicly.
 
 <label for="memberId">Member ID</label>
 <input type="text" id="memberId" placeholder="Enter your MemberID">
+<div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
+<div id="memberLookupStatus" class="lookup-status"></div>
 
 <label for="fullName">Full Name</label>
-<input type="text" id="fullName" placeholder="Enter your full name">
+<input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
 
 <label for="message">Your Message</label>
 <textarea id="message" placeholder="Write your message here..."></textarea>
@@ -240,8 +273,14 @@ All posts are reviewed before being displayed publicly.
 <script>
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
-
 const api = WEB_APP_URL + "?action=freedomwall";
+
+const memberIdInput = document.getElementById("memberId");
+const fullNameInput = document.getElementById("fullName");
+const memberLookupStatus = document.getElementById("memberLookupStatus");
+
+let memberLookupTimer = null;
+let lastResolvedMemberId = "";
 
 fetch(api)
 .then(res => res.json())
@@ -266,13 +305,13 @@ const firstLetter = fullName.trim().charAt(0).toUpperCase();
 
 card.innerHTML = `
 <div class="post-header">
-  <div class="post-avatar">${firstLetter}</div>
+  <div class="post-avatar">${escapeHtml(firstLetter)}</div>
   <div>
-    <div class="post-name">${fullName}</div>
+    <div class="post-name">${escapeHtml(fullName)}</div>
   </div>
 </div>
 
-<div class="post-message">${message}</div>
+<div class="post-message">${escapeHtml(message)}</div>
 `;
 
 container.appendChild(card);
@@ -290,25 +329,93 @@ container.appendChild(card);
 // QR / URL MemberID autofill
 (function autofillMemberIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  const memberId = (params.get("memberId") || "").trim();
+  const memberId = (params.get("memberId") || params.get("MemberID") || "").trim();
   if (memberId) {
-    document.getElementById("memberId").value = memberId;
+    memberIdInput.value = memberId;
+    resolveMemberName();
   }
 })();
+
+memberIdInput.addEventListener("input", function() {
+  clearTimeout(memberLookupTimer);
+  memberLookupTimer = setTimeout(resolveMemberName, 500);
+});
+
+memberIdInput.addEventListener("change", resolveMemberName);
+memberIdInput.addEventListener("blur", resolveMemberName);
+
+async function resolveMemberName() {
+  const memberId = memberIdInput.value.trim();
+
+  fullNameInput.value = "";
+  memberLookupStatus.textContent = "";
+  memberLookupStatus.className = "lookup-status";
+
+  if (!memberId) {
+    lastResolvedMemberId = "";
+    return;
+  }
+
+  if (memberId === lastResolvedMemberId && fullNameInput.value.trim()) {
+    return;
+  }
+
+  memberLookupStatus.textContent = "Checking MemberID...";
+  memberLookupStatus.classList.add("member-loading");
+
+  try {
+    const url = WEB_APP_URL + "?action=getmembername&memberId=" + encodeURIComponent(memberId);
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.success) {
+      const fullName = data.fullName || data.name || data.memberName || "";
+
+      fullNameInput.value = fullName;
+      memberLookupStatus.textContent = fullName ? "Member found." : "Member found.";
+      memberLookupStatus.className = "lookup-status member-good";
+
+      lastResolvedMemberId = memberId;
+    } else {
+      fullNameInput.value = "";
+      memberLookupStatus.textContent = data.message || "MemberID not found.";
+      memberLookupStatus.className = "lookup-status member-bad";
+      lastResolvedMemberId = "";
+    }
+  } catch (err) {
+    fullNameInput.value = "";
+    memberLookupStatus.textContent = "Unable to verify MemberID right now.";
+    memberLookupStatus.className = "lookup-status member-bad";
+    lastResolvedMemberId = "";
+    console.error(err);
+  }
+}
 
 async function submitFreedomWall() {
   const status = document.getElementById("wallStatus");
   const button = document.getElementById("wallSubmitBtn");
 
-  const memberId = document.getElementById("memberId").value.trim();
-  const fullName = document.getElementById("fullName").value.trim();
+  const memberId = memberIdInput.value.trim();
+  const fullName = fullNameInput.value.trim();
   const message = document.getElementById("message").value.trim();
   const consent = document.getElementById("consent").checked;
 
   status.style.color = "#111";
 
-  if (!memberId || !fullName || !message) {
-    status.innerText = "Please complete all required fields.";
+  if (!memberId) {
+    status.innerText = "Please enter your MemberID.";
+    status.style.color = "red";
+    return;
+  }
+
+  if (!fullName) {
+    status.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
+    status.style.color = "red";
+    return;
+  }
+
+  if (!message) {
+    status.innerText = "Please write your message.";
     status.style.color = "red";
     return;
   }
@@ -345,9 +452,10 @@ async function submitFreedomWall() {
       status.innerText = "Message submitted successfully. Waiting for admin approval.";
       status.style.color = "green";
 
-      document.getElementById("fullName").value = "";
       document.getElementById("message").value = "";
       document.getElementById("consent").checked = false;
+      memberLookupStatus.textContent = "Member verified.";
+      memberLookupStatus.className = "lookup-status member-good";
     } else {
       status.innerText = result.message || "Submission failed.";
       status.style.color = "red";
@@ -361,6 +469,13 @@ async function submitFreedomWall() {
 
   button.disabled = false;
   button.innerText = "Submit Message";
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 </script>
