@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,410 +10,545 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-
 .page-header{
-text-align:center;
-padding:70px 20px 40px 20px;
-background:#08110c;
-color:white;
+  text-align:center;
+  padding:70px 20px 40px 20px;
+  background:#08110c;
+  color:white;
 }
 
 .page-header h1{
-font-size:34px;
-margin-bottom:10px;
+  font-size:34px;
+  margin-bottom:10px;
 }
 
 .page-header p{
-max-width:700px;
-margin:auto;
-color:#cfd7d2;
+  max-width:720px;
+  margin:auto;
+  color:#cfd7d2;
 }
 
 .media-container{
-padding:60px 20px;
-background:#f4f4f4;
+  padding:50px 20px 70px;
+  background:#f4f4f4;
 }
 
-.media-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
-max-width:1100px;
-margin:auto;
+.media-feed{
+  column-count:3;
+  column-gap:22px;
+  max-width:1150px;
+  margin:auto;
 }
 
-.media-card{
-background:white;
-border-radius:14px;
-overflow:hidden;
-box-shadow:0 6px 16px rgba(0,0,0,0.08);
-display:flex;
-flex-direction:column;
+.media-post{
+  display:inline-block;
+  width:100%;
+  background:#fff;
+  border-radius:16px;
+  margin:0 0 22px;
+  overflow:hidden;
+  box-shadow:0 8px 18px rgba(0,0,0,0.08);
+  break-inside:avoid;
 }
 
-.media-thumb{
-width:100%;
-height:240px;
-background:#e9ece8;
-overflow:hidden;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
+.media-main{
+  width:100%;
+  background:#e9ece8;
 }
 
-.media-thumb img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
+.media-main img,
+.media-main video{
+  width:100%;
+  display:block;
+  max-height:560px;
+  object-fit:cover;
+  background:#000;
+}
+
+.media-info{
+  padding:16px 16px 14px;
+}
+
+.media-name{
+  font-weight:700;
+  font-size:18px;
+  color:#111;
+  margin-bottom:4px;
+}
+
+.media-meta{
+  font-size:12px;
+  color:#666;
+  margin-bottom:10px;
 }
 
 .media-caption{
-padding:16px;
-font-size:14px;
-color:#333;
+  font-size:15px;
+  font-weight:600;
+  color:#222;
+  margin-bottom:8px;
+  line-height:1.4;
 }
 
-.media-caption strong{
-display:block;
-margin-bottom:6px;
-font-size:18px;
-color:#111;
+.media-description{
+  font-size:13px;
+  color:#555;
+  line-height:1.55;
+  white-space:pre-line;
+}
+
+.media-thumbs{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:6px;
+  padding:0 16px 16px;
+}
+
+.media-thumb-item{
+  position:relative;
+  height:92px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#eef1ee;
+  cursor:pointer;
+}
+
+.media-thumb-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.video-badge{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.25);
+  color:#fff;
+  font-size:26px;
+  font-weight:bold;
 }
 
 .media-loadmore-wrap{
-text-align:center;
-margin-top:30px;
+  text-align:center;
+  margin-top:25px;
 }
 
 .media-loadmore-btn{
-padding:12px 22px;
-background:#0a6b3f;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
+  padding:12px 22px;
+  background:#0a6b3f;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
 }
 
 .media-loadmore-btn:hover{
-background:#084c2c;
+  background:#084c2c;
 }
 
 .submit-section{
-text-align:center;
-padding:50px 20px;
-background:white;
+  text-align:center;
+  padding:50px 20px 70px;
+  background:white;
 }
 
-.submit-btn{
-display:inline-block;
-padding:14px 26px;
-background:#0a6b3f;
-color:white;
-text-decoration:none;
-border-radius:8px;
-font-weight:600;
+.submit-section h3{
+  margin-bottom:10px;
 }
 
-.submit-btn:hover{
-background:#084c2c;
+.submit-note{
+  max-width:760px;
+  margin:0 auto 24px;
+  color:#666;
+  font-size:14px;
 }
 
 .upload-form{
-max-width:650px;
-margin:40px auto;
-text-align:left;
+  max-width:760px;
+  margin:30px auto 0;
+  text-align:left;
+  background:#fff;
+  border:1px solid #e6ebe7;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 8px 18px rgba(0,0,0,0.05);
+}
+
+.upload-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.upload-full{
+  grid-column:1 / -1;
 }
 
 .upload-form input,
-.upload-form textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:15px;
-border-radius:6px;
-border:1px solid #ccc;
-color:#111;
-background:#fff;
-box-sizing:border-box;
+.upload-form textarea,
+.upload-form select{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  margin-bottom:15px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  color:#111;
+  background:#fff;
+  box-sizing:border-box;
+  font:inherit;
 }
 
 .upload-form input[readonly],
 .upload-form textarea[readonly]{
-background:#f2f4f2;
+  background:#f2f4f2;
 }
 
 .upload-form input[type="file"]{
-color:#111;
-background:#fff;
+  color:#111;
+  background:#fff;
 }
 
 .upload-form input[type="file"]::file-selector-button{
-background:#0a6b3f;
-color:#fff;
-border:none;
-padding:10px 14px;
-border-radius:6px;
-margin-right:12px;
-cursor:pointer;
+  background:#0a6b3f;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:6px;
+  margin-right:12px;
+  cursor:pointer;
 }
 
 .upload-form input[type="file"]::file-selector-button:hover{
-background:#084c2c;
+  background:#084c2c;
 }
 
 .upload-form button{
-padding:12px 20px;
-background:#0a6b3f;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:600;
+  padding:13px 22px;
+  background:#0a6b3f;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
 }
 
 .upload-form button:hover{
-background:#084c2c;
+  background:#084c2c;
 }
 
 .upload-form button:disabled{
-background:#7aa892;
-cursor:not-allowed;
+  background:#7aa892;
+  cursor:not-allowed;
 }
 
 .upload-status{
-margin-top:15px;
-font-weight:600;
-color:#111;
-min-height:24px;
+  margin-top:15px;
+  font-weight:600;
+  color:#111;
+  min-height:24px;
 }
 
 .upload-form label{
-display:block;
-color:#333;
-font-size:14px;
-font-weight:600;
+  display:block;
+  color:#333;
+  font-size:14px;
+  font-weight:600;
 }
 
 .upload-form input[type="checkbox"]{
-width:auto;
-margin-right:8px;
-margin-top:2px;
-margin-bottom:0;
+  width:auto;
+  margin-right:8px;
+  margin-top:2px;
+  margin-bottom:0;
 }
 
 .checkbox-wrap{
-display:flex;
-gap:10px;
-align-items:flex-start;
-margin-bottom:18px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:18px;
 }
 
 .empty-message{
-text-align:center;
-color:#666;
-padding:30px 20px;
-max-width:900px;
-margin:auto;
+  text-align:center;
+  color:#666;
+  padding:30px 20px;
+  max-width:900px;
+  margin:auto;
 }
 
 .preview-wrap{
-display:none;
-margin-bottom:18px;
+  display:none;
+  margin-top:6px;
 }
 
-.preview-wrap img{
-width:100%;
-max-height:320px;
-object-fit:contain;
-border-radius:10px;
-border:1px solid #d7ddd8;
-background:#fafafa;
+.preview-title{
+  font-size:13px;
+  font-weight:700;
+  color:#333;
+  margin-bottom:10px;
+}
+
+.preview-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+  gap:10px;
+}
+
+.preview-card{
+  border:1px solid #d7ddd8;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fafafa;
+  min-height:110px;
+}
+
+.preview-card img,
+.preview-card video{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  display:block;
+  background:#000;
 }
 
 .field-note{
-font-size:12px;
-color:#666;
-margin-top:-8px;
-margin-bottom:14px;
+  font-size:12px;
+  color:#666;
+  margin-top:-8px;
+  margin-bottom:14px;
 }
 
 .lookup-status{
-font-size:12px;
-color:#555;
-margin-top:-8px;
-margin-bottom:14px;
-min-height:16px;
+  font-size:12px;
+  color:#555;
+  margin-top:-8px;
+  margin-bottom:14px;
+  min-height:16px;
 }
 
 .member-good{
-color:#0a6b3f;
+  color:#0a6b3f;
 }
 
 .member-bad{
-color:#b42318;
+  color:#b42318;
 }
 
 .member-loading{
-color:#555;
+  color:#555;
 }
 
 /* Modal */
 .media-modal{
-display:none;
-position:fixed;
-z-index:9999;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.88);
-padding:30px 20px;
-box-sizing:border-box;
-overflow:auto;
+  display:none;
+  position:fixed;
+  z-index:9999;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.88);
+  padding:30px 20px;
+  box-sizing:border-box;
+  overflow:auto;
 }
 
 .media-modal-content{
-max-width:1000px;
-margin:40px auto;
-background:#111;
-border-radius:14px;
-overflow:hidden;
-position:relative;
+  max-width:1000px;
+  margin:40px auto;
+  background:#111;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
 }
 
 .media-modal-close{
-position:absolute;
-top:12px;
-right:16px;
-font-size:30px;
-color:white;
-cursor:pointer;
-z-index:2;
-font-weight:bold;
+  position:absolute;
+  top:12px;
+  right:16px;
+  font-size:30px;
+  color:white;
+  cursor:pointer;
+  z-index:2;
+  font-weight:bold;
+}
+
+.media-modal-body{
+  background:#000;
 }
 
 .media-modal-image-wrap{
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-max-height:75vh;
-overflow:hidden;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  max-height:75vh;
+  overflow:hidden;
 }
 
-.media-modal-image{
-width:100%;
-height:auto;
-max-height:75vh;
-object-fit:contain;
-display:block;
+.media-modal-image,
+.media-modal-video{
+  width:100%;
+  height:auto;
+  max-height:75vh;
+  object-fit:contain;
+  display:block;
+  background:#000;
 }
 
 .media-modal-caption{
-background:white;
-padding:18px;
+  background:white;
+  padding:18px;
 }
 
 .media-modal-caption strong{
-display:block;
-margin-bottom:8px;
-font-size:18px;
-color:#111;
+  display:block;
+  margin-bottom:8px;
+  font-size:18px;
+  color:#111;
+}
+
+@media (max-width:980px){
+  .media-feed{
+    column-count:2;
+  }
+}
+
+@media (max-width:760px){
+  .upload-grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
 }
 
 @media (max-width:640px){
-  .media-thumb{
-    height:210px;
+  .media-feed{
+    column-count:1;
   }
 
   .page-header h1{
     font-size:28px;
   }
+
+  .upload-form{
+    padding:18px;
+  }
 }
-
 </style>
-
 </head>
 
 <body>
 
 <section class="page-header">
-
-<h1>Community Media</h1>
-
-<p>
-Photos and videos shared by members from events, gatherings,
-and activities across the region.
-</p>
-
+  <h1>Community Media</h1>
+  <p>
+    Photos and videos shared by members from events, gatherings,
+    and activities across the region.
+  </p>
 </section>
 
 <section class="media-container">
 
-<div class="media-grid" id="mediaGrid">
-Loading media...
-</div>
+  <div class="media-feed" id="mediaFeed">
+    Loading media...
+  </div>
 
-<div class="media-loadmore-wrap" id="loadMoreWrap" style="display:none;">
-  <button class="media-loadmore-btn" id="loadMoreBtn">Load More</button>
-</div>
+  <div class="media-loadmore-wrap" id="loadMoreWrap" style="display:none;">
+    <button class="media-loadmore-btn" id="loadMoreBtn">Load More</button>
+  </div>
 
 </section>
 
 <section class="submit-section">
 
-<h3>Submit Photo</h3>
+  <h3>Submit Your Media</h3>
+  <p class="submit-note">
+    Members may upload up to <strong>3 photos</strong> and <strong>1 video</strong> per submission.
+    Video should be <strong>1 minute or less</strong>. All uploads are reviewed before publishing.
+  </p>
 
-<div class="upload-form">
+  <div class="upload-form">
 
-<label for="memberId">Member ID</label>
-<input type="text" id="memberId" placeholder="Enter your MemberID">
-<div class="field-note">If you opened this from your QR code, MemberID may already be filled.</div>
-<div id="memberLookupStatus" class="lookup-status"></div>
+    <div class="upload-grid">
 
-<label for="fullName">Full Name</label>
-<input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
+      <div>
+        <label for="memberId">Member ID</label>
+        <input type="text" id="memberId" placeholder="Enter your MemberID">
+        <div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
+        <div id="memberLookupStatus" class="lookup-status"></div>
+      </div>
 
-<label for="qrUrl">QR URL</label>
-<input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
-<div class="field-note">This is auto-filled when the MemberID is found.</div>
+      <div>
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
+      </div>
 
-<label for="municipality">Municipality</label>
-<input type="text" id="municipality" placeholder="Municipality">
+      <div class="upload-full">
+        <label for="qrUrl">QR URL</label>
+        <input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
+        <div class="field-note">This is auto-filled when the MemberID is found.</div>
+      </div>
 
-<label for="caption">Caption</label>
-<textarea id="caption" placeholder="Caption"></textarea>
+      <div>
+        <label for="municipality">Municipality</label>
+        <input type="text" id="municipality" placeholder="Municipality">
+      </div>
 
-<label for="photoFile">Choose Photo</label>
-<input type="file" id="photoFile" accept="image/*" capture="environment">
+      <div>
+        <label for="caption">Caption</label>
+        <input type="text" id="caption" placeholder="Short title or caption">
+      </div>
 
-<div class="preview-wrap" id="previewWrap">
-  <img id="previewImage" src="" alt="Preview">
-</div>
+      <div class="upload-full">
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" placeholder="Optional longer description or story"></textarea>
+      </div>
 
-<label class="checkbox-wrap">
-<input type="checkbox" id="consent">
-<span>I allow One Leyte for Sara Duterte to review and publish this photo if approved.</span>
-</label>
+      <div class="upload-full">
+        <label for="photoFiles">Choose Photos (up to 3)</label>
+        <input type="file" id="photoFiles" accept="image/*" multiple>
+        <div class="field-note">You may upload up to 3 photos.</div>
+      </div>
 
-<button type="button" id="uploadBtn" onclick="uploadMedia()">Submit Photo</button>
+      <div class="upload-full">
+        <label for="videoFile">Choose Video (optional, max 1 minute)</label>
+        <input type="file" id="videoFile" accept="video/mp4,video/webm,video/quicktime">
+        <div class="field-note">Only 1 video is allowed per submission.</div>
+      </div>
 
-<div id="uploadStatus" class="upload-status"></div>
+      <div class="upload-full">
+        <div class="preview-wrap" id="previewWrap">
+          <div class="preview-title">Preview</div>
+          <div class="preview-grid" id="previewGrid"></div>
+        </div>
+      </div>
 
-</div>
+    </div>
+
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="consent">
+      <span>I allow One Leyte for Sara Duterte to review and publish this media submission if approved.</span>
+    </label>
+
+    <button type="button" id="uploadBtn" onclick="submitMediaPost()">Submit Media</button>
+
+    <div id="uploadStatus" class="upload-status"></div>
+
+  </div>
 
 </section>
 
-<!-- Image Modal -->
 <div class="media-modal" id="mediaModal">
   <div class="media-modal-content">
     <span class="media-modal-close" id="mediaModalClose">&times;</span>
-    <div class="media-modal-image-wrap">
-      <img id="mediaModalImage" class="media-modal-image" src="" alt="Full Media">
-    </div>
+    <div class="media-modal-body" id="mediaModalBody"></div>
     <div class="media-modal-caption">
       <strong id="mediaModalName"></strong>
       <div id="mediaModalText"></div>
@@ -423,16 +557,15 @@ Loading media...
 </div>
 
 <script>
-
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
-const api = WEB_APP_URL + "?action=media";
+const MEDIA_API = WEB_APP_URL + "?action=mediaposts";
 
-const mediaGrid = document.getElementById("mediaGrid");
+const mediaFeed = document.getElementById("mediaFeed");
 const loadMoreWrap = document.getElementById("loadMoreWrap");
 const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 const mediaModal = document.getElementById("mediaModal");
-const mediaModalImage = document.getElementById("mediaModalImage");
+const mediaModalBody = document.getElementById("mediaModalBody");
 const mediaModalName = document.getElementById("mediaModalName");
 const mediaModalText = document.getElementById("mediaModalText");
 const mediaModalClose = document.getElementById("mediaModalClose");
@@ -441,61 +574,134 @@ const memberIdInput = document.getElementById("memberId");
 const fullNameInput = document.getElementById("fullName");
 const qrUrlInput = document.getElementById("qrUrl");
 const municipalityInput = document.getElementById("municipality");
-const photoFileInput = document.getElementById("photoFile");
+const captionInput = document.getElementById("caption");
+const descriptionInput = document.getElementById("description");
+const photoFilesInput = document.getElementById("photoFiles");
+const videoFileInput = document.getElementById("videoFile");
 const previewWrap = document.getElementById("previewWrap");
-const previewImage = document.getElementById("previewImage");
+const previewGrid = document.getElementById("previewGrid");
 const memberLookupStatus = document.getElementById("memberLookupStatus");
+const uploadStatus = document.getElementById("uploadStatus");
+const uploadBtn = document.getElementById("uploadBtn");
 
 let allMediaItems = [];
 let visibleCount = 6;
 let memberLookupTimer = null;
 let lastResolvedMemberId = "";
 
-fetch(api)
-.then(res => res.json())
-.then(data => {
-  if (!data.items || !data.items.length) {
-    mediaGrid.innerHTML = "<div class='empty-message'>No approved media yet.</div>";
-    return;
-  }
+fetch(MEDIA_API)
+  .then(res => res.json())
+  .then(data => {
+    if (!data.items || !data.items.length) {
+      mediaFeed.innerHTML = "<div class='empty-message'>No approved media posts yet.</div>";
+      return;
+    }
 
-  allMediaItems = data.items;
-  renderMediaItems();
-})
-.catch(() => {
-  mediaGrid.innerHTML = "<div class='empty-message'>Unable to load media right now.</div>";
-});
+    allMediaItems = data.items;
+    renderMediaItems();
+  })
+  .catch(() => {
+    mediaFeed.innerHTML = "<div class='empty-message'>Unable to load media right now.</div>";
+  });
 
 function renderMediaItems() {
-  mediaGrid.innerHTML = "";
+  mediaFeed.innerHTML = "";
 
   const itemsToShow = allMediaItems.slice(0, visibleCount);
 
   itemsToShow.forEach(item => {
     const card = document.createElement("div");
-    card.className = "media-card";
+    card.className = "media-post";
 
-    const previewSrc = item.ThumbnailURL || item.MediaURL || "";
-    const fullSrc = item.MediaURL || item.ThumbnailURL || "";
     const fullName = item.FullName || "Member";
+    const municipality = item.Municipality || "";
     const caption = item.Caption || "";
+    const description = item.Description || "";
+    const dateText = item.PostedDate || item.ApprovedAt || "";
+
+    const photo1 = item.Photo1URL || "";
+    const photo2 = item.Photo2URL || "";
+    const photo3 = item.Photo3URL || "";
+    const videoUrl = item.VideoURL || "";
+    const videoThumbnail = item.VideoThumbnailURL || "";
+
+    let mainMediaHtml = "";
+    if (videoUrl) {
+      mainMediaHtml = `
+        <video controls preload="metadata">
+          <source src="${escapeAttr(videoUrl)}">
+        </video>
+      `;
+    } else if (photo1) {
+      mainMediaHtml = `
+        <img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">
+      `;
+    } else {
+      mainMediaHtml = `
+        <div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>
+      `;
+    }
+
+    let thumbs = "";
+
+    if (photo2) {
+      thumbs += `
+        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+          <img src="${escapeAttr(photo2)}" alt="Photo 2" loading="lazy">
+        </div>
+      `;
+    }
+
+    if (photo3) {
+      thumbs += `
+        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+          <img src="${escapeAttr(photo3)}" alt="Photo 3" loading="lazy">
+        </div>
+      `;
+    }
+
+    if (videoUrl) {
+      thumbs += `
+        <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+          <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Thumbnail" loading="lazy">
+          <div class="video-badge">▶</div>
+        </div>
+      `;
+    }
 
     card.innerHTML = `
-      <div class="media-thumb">
-        <img src="${escapeAttr(previewSrc)}" alt="Community Media" loading="lazy">
+      <div class="media-main">${mainMediaHtml}</div>
+
+      <div class="media-info">
+        <div class="media-name">${escapeHtml(fullName)}</div>
+        <div class="media-meta">${escapeHtml(municipality)}${municipality && dateText ? " • " : ""}${escapeHtml(dateText)}</div>
+        <div class="media-caption">${escapeHtml(caption)}</div>
+        ${description ? `<div class="media-description">${escapeHtml(description)}</div>` : ""}
       </div>
-      <div class="media-caption">
-        <strong>${escapeHtml(fullName)}</strong>
-        ${escapeHtml(caption)}
-      </div>
+
+      ${thumbs ? `<div class="media-thumbs">${thumbs}</div>` : ""}
     `;
 
-    const thumb = card.querySelector(".media-thumb");
-    thumb.addEventListener("click", () => {
-      openMediaModal(fullSrc, fullName, caption);
+    const mainMediaEl = card.querySelector(".media-main");
+    mainMediaEl.addEventListener("click", () => {
+      if (videoUrl) {
+        openMediaModal("video", videoUrl, fullName, caption + (description ? "\n\n" + description : ""));
+      } else if (photo1) {
+        openMediaModal("image", photo1, fullName, caption + (description ? "\n\n" + description : ""));
+      }
     });
 
-    mediaGrid.appendChild(card);
+    card.querySelectorAll(".media-thumb-item").forEach(thumb => {
+      thumb.addEventListener("click", () => {
+        const type = thumb.getAttribute("data-type");
+        const src = thumb.getAttribute("data-src");
+        const name = thumb.getAttribute("data-name");
+        const text = thumb.getAttribute("data-text");
+        openMediaModal(type, src, name, text);
+      });
+    });
+
+    mediaFeed.appendChild(card);
   });
 
   loadMoreWrap.style.display = visibleCount < allMediaItems.length ? "block" : "none";
@@ -506,16 +712,29 @@ loadMoreBtn.addEventListener("click", () => {
   renderMediaItems();
 });
 
-function openMediaModal(imageSrc, fullName, caption) {
-  mediaModalImage.src = imageSrc;
+function openMediaModal(type, src, fullName, text) {
+  if (type === "video") {
+    mediaModalBody.innerHTML = `
+      <video class="media-modal-video" controls autoplay>
+        <source src="${escapeAttr(src)}">
+      </video>
+    `;
+  } else {
+    mediaModalBody.innerHTML = `
+      <div class="media-modal-image-wrap">
+        <img id="mediaModalImage" class="media-modal-image" src="${escapeAttr(src)}" alt="Full Media">
+      </div>
+    `;
+  }
+
   mediaModalName.textContent = fullName || "Member";
-  mediaModalText.textContent = caption || "";
+  mediaModalText.textContent = text || "";
   mediaModal.style.display = "block";
 }
 
 function closeMediaModal() {
   mediaModal.style.display = "none";
-  mediaModalImage.src = "";
+  mediaModalBody.innerHTML = "";
 }
 
 mediaModalClose.addEventListener("click", closeMediaModal);
@@ -529,15 +748,11 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
-// QR / URL MemberID autofill
 (function autofillMemberIdFromURL() {
   const params = new URLSearchParams(window.location.search);
 
-  const memberIdFromUrl =
-    (params.get("memberId") || params.get("MemberID") || "").trim();
-
-  const qrUrlFromUrl =
-    (params.get("qrUrl") || params.get("qrurl") || "").trim();
+  const memberIdFromUrl = (params.get("memberId") || params.get("MemberID") || "").trim();
+  const qrUrlFromUrl = (params.get("qrUrl") || params.get("qrurl") || "").trim();
 
   if (memberIdFromUrl) {
     memberIdInput.value = memberIdFromUrl;
@@ -549,7 +764,6 @@ document.addEventListener("keydown", function(e) {
   }
 })();
 
-// Resolve full name when MemberID changes
 memberIdInput.addEventListener("input", function() {
   clearTimeout(memberLookupTimer);
   memberLookupTimer = setTimeout(resolveMemberName, 500);
@@ -584,23 +798,9 @@ async function resolveMemberName() {
     const data = await res.json();
 
     if (data.success) {
-      const fullName =
-        data.fullName ||
-        data.name ||
-        data.memberName ||
-        "";
-
-      const qrUrl =
-        data.qrUrl ||
-        data.QRURL ||
-        data.qrURL ||
-        data.qr_link ||
-        "";
-
-      const municipality =
-        data.municipality ||
-        data.Municipality ||
-        "";
+      const fullName = data.fullName || data.name || data.memberName || "";
+      const qrUrl = data.qrUrl || data.QRURL || data.qrURL || data.qr_link || "";
+      const municipality = data.municipality || data.Municipality || "";
 
       fullNameInput.value = fullName;
       qrUrlInput.value = qrUrl;
@@ -609,9 +809,7 @@ async function resolveMemberName() {
         municipalityInput.value = municipality;
       }
 
-      memberLookupStatus.textContent = fullName
-        ? "Member found."
-        : "Member found, but no full name was returned.";
+      memberLookupStatus.textContent = fullName ? "Member found." : "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
 
       lastResolvedMemberId = memberId;
@@ -632,106 +830,169 @@ async function resolveMemberName() {
   }
 }
 
-// Preview selected image
-photoFileInput.addEventListener("change", function() {
-  const file = this.files[0];
+photoFilesInput.addEventListener("change", updatePreview);
+videoFileInput.addEventListener("change", updatePreview);
 
-  if (!file) {
+function updatePreview() {
+  previewGrid.innerHTML = "";
+
+  const photoFiles = Array.from(photoFilesInput.files || []).slice(0, 3);
+  const videoFile = (videoFileInput.files || [])[0];
+
+  if (!photoFiles.length && !videoFile) {
     previewWrap.style.display = "none";
-    previewImage.src = "";
     return;
   }
 
-  if (!file.type.startsWith("image/")) {
-    previewWrap.style.display = "none";
-    previewImage.src = "";
-    return;
+  photoFiles.forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const card = document.createElement("div");
+      card.className = "preview-card";
+      card.innerHTML = `<img src="${e.target.result}" alt="Photo Preview">`;
+      previewGrid.appendChild(card);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  if (videoFile && videoFile.type.startsWith("video/")) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const card = document.createElement("div");
+      card.className = "preview-card";
+      card.innerHTML = `<video controls><source src="${e.target.result}"></video>`;
+      previewGrid.appendChild(card);
+    };
+    reader.readAsDataURL(videoFile);
   }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    previewImage.src = e.target.result;
-    previewWrap.style.display = "block";
-  };
-  reader.readAsDataURL(file);
-});
+  previewWrap.style.display = "block";
+}
 
-async function uploadMedia() {
-  const status = document.getElementById("uploadStatus");
-  const button = document.getElementById("uploadBtn");
-
+async function submitMediaPost() {
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
   const qrUrl = qrUrlInput.value.trim();
   const municipality = municipalityInput.value.trim();
-  const caption = document.getElementById("caption").value.trim();
+  const caption = captionInput.value.trim();
+  const description = descriptionInput.value.trim();
   const consent = document.getElementById("consent").checked;
-  const file = photoFileInput.files[0];
 
-  status.style.color = "#111";
+  const photoFiles = Array.from(photoFilesInput.files || []);
+  const videoFile = (videoFileInput.files || [])[0];
+
+  uploadStatus.style.color = "#111";
 
   if (!memberId) {
-    status.innerText = "Please enter your MemberID.";
-    status.style.color = "red";
+    uploadStatus.innerText = "Please enter your MemberID.";
+    uploadStatus.style.color = "red";
     return;
   }
 
   if (!fullName) {
-    status.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
-    status.style.color = "red";
+    uploadStatus.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
+    uploadStatus.style.color = "red";
     return;
   }
 
   if (!municipality || !caption) {
-    status.innerText = "Please fill all required fields.";
-    status.style.color = "red";
+    uploadStatus.innerText = "Please fill all required fields.";
+    uploadStatus.style.color = "red";
     return;
   }
 
-  if (!file) {
-    status.innerText = "Please choose a photo.";
-    status.style.color = "red";
+  if (photoFiles.length > 3) {
+    uploadStatus.innerText = "You may upload up to 3 photos only.";
+    uploadStatus.style.color = "red";
+    return;
+  }
+
+  if (!photoFiles.length && !videoFile) {
+    uploadStatus.innerText = "Please choose at least one photo or one video.";
+    uploadStatus.style.color = "red";
     return;
   }
 
   if (!consent) {
-    status.innerText = "Please check the consent box.";
-    status.style.color = "red";
+    uploadStatus.innerText = "Please check the consent box.";
+    uploadStatus.style.color = "red";
     return;
   }
 
-  if (!file.type.startsWith("image/")) {
-    status.innerText = "Only image files are allowed.";
-    status.style.color = "red";
-    return;
+  for (const file of photoFiles) {
+    if (!file.type.startsWith("image/")) {
+      uploadStatus.innerText = "Only image files are allowed in the photo field.";
+      uploadStatus.style.color = "red";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      uploadStatus.innerText = "Each photo must be below 5MB.";
+      uploadStatus.style.color = "red";
+      return;
+    }
   }
 
-  const maxSize = 5 * 1024 * 1024;
-  if (file.size > maxSize) {
-    status.innerText = "Image too large. Please upload a file below 5MB.";
-    status.style.color = "red";
-    return;
+  if (videoFile) {
+    if (!videoFile.type.startsWith("video/")) {
+      uploadStatus.innerText = "The video field only accepts video files.";
+      uploadStatus.style.color = "red";
+      return;
+    }
+
+    if (videoFile.size > 25 * 1024 * 1024) {
+      uploadStatus.innerText = "Video must be below 25MB.";
+      uploadStatus.style.color = "red";
+      return;
+    }
+
+    const durationOk = await validateVideoDuration(videoFile, 60);
+    if (!durationOk) {
+      uploadStatus.innerText = "Video must be 1 minute or less.";
+      uploadStatus.style.color = "red";
+      return;
+    }
   }
 
-  button.disabled = true;
-  button.innerText = "Uploading...";
-  status.innerText = "Uploading photo. Please wait...";
-  status.style.color = "#111";
+  uploadBtn.disabled = true;
+  uploadBtn.innerText = "Uploading...";
+  uploadStatus.innerText = "Uploading media. Please wait...";
+  uploadStatus.style.color = "#111";
 
   try {
-    const base64 = await fileToBase64(file);
+    const photoPayloads = [];
+    for (const file of photoFiles.slice(0, 3)) {
+      const base64 = await fileToBase64WithPrefix(file);
+      photoPayloads.push({
+        fileName: file.name,
+        mimeType: file.type,
+        base64: base64
+      });
+    }
+
+    let videoPayload = null;
+    if (videoFile) {
+      const base64 = await fileToBase64WithPrefix(videoFile);
+      videoPayload = {
+        fileName: videoFile.name,
+        mimeType: videoFile.type,
+        base64: base64
+      };
+    }
 
     const payload = {
-      action: "uploadmedia",
+      action: "submitmediapost",
       memberId: memberId,
       fullName: fullName,
       qrUrl: qrUrl,
       municipality: municipality,
       caption: caption,
+      description: description,
       consent: "Yes",
-      fileName: file.name,
-      mimeType: file.type,
-      base64Data: base64
+      photos: photoPayloads,
+      video: videoPayload
     };
 
     const response = await fetch(WEB_APP_URL, {
@@ -743,45 +1004,58 @@ async function uploadMedia() {
     const result = await response.json();
 
     if (result.success) {
-      status.innerText = "Upload successful. Waiting for admin approval.";
-      status.style.color = "green";
+      uploadStatus.innerText = "Upload successful. Waiting for admin approval.";
+      uploadStatus.style.color = "green";
 
       municipalityInput.value = "";
-      document.getElementById("caption").value = "";
-      photoFileInput.value = "";
+      captionInput.value = "";
+      descriptionInput.value = "";
+      photoFilesInput.value = "";
+      videoFileInput.value = "";
       document.getElementById("consent").checked = false;
+      previewGrid.innerHTML = "";
       previewWrap.style.display = "none";
-      previewImage.src = "";
 
       fullNameInput.value = result.fullName || fullName;
       qrUrlInput.value = result.qrUrl || qrUrl;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
     } else {
-      status.innerText = result.message || "Upload failed.";
-      status.style.color = "red";
+      uploadStatus.innerText = result.message || "Upload failed.";
+      uploadStatus.style.color = "red";
     }
-
   } catch (err) {
-    status.innerText = "Upload failed. Please try again.";
-    status.style.color = "red";
+    uploadStatus.innerText = "Upload failed. Please try again.";
+    uploadStatus.style.color = "red";
     console.error(err);
   }
 
-  button.disabled = false;
-  button.innerText = "Submit Photo";
+  uploadBtn.disabled = false;
+  uploadBtn.innerText = "Submit Media";
 }
 
-function fileToBase64(file) {
+function validateVideoDuration(file, maxSeconds) {
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.preload = "metadata";
+
+    video.onloadedmetadata = function() {
+      URL.revokeObjectURL(video.src);
+      resolve(video.duration <= maxSeconds);
+    };
+
+    video.onerror = function() {
+      resolve(false);
+    };
+
+    video.src = URL.createObjectURL(file);
+  });
+}
+
+function fileToBase64WithPrefix(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result || "";
-      const cleanBase64 = String(result).includes(",")
-        ? String(result).split(",")[1]
-        : String(result);
-      resolve(cleanBase64);
-    };
+    reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
     reader.readAsDataURL(file);
   });
@@ -801,7 +1075,6 @@ function escapeAttr(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
-
 </script>
 
 </body>
