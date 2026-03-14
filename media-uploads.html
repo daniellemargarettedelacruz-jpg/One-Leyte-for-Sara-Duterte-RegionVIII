@@ -141,7 +141,8 @@ background:#fff;
 box-sizing:border-box;
 }
 
-.upload-form input[readonly]{
+.upload-form input[readonly],
+.upload-form textarea[readonly]{
 background:#f2f4f2;
 }
 
@@ -200,6 +201,8 @@ font-weight:600;
 .upload-form input[type="checkbox"]{
 width:auto;
 margin-right:8px;
+margin-top:2px;
+margin-bottom:0;
 }
 
 .checkbox-wrap{
@@ -236,6 +239,26 @@ font-size:12px;
 color:#666;
 margin-top:-8px;
 margin-bottom:14px;
+}
+
+.lookup-status{
+font-size:12px;
+color:#555;
+margin-top:-8px;
+margin-bottom:14px;
+min-height:16px;
+}
+
+.member-good{
+color:#0a6b3f;
+}
+
+.member-bad{
+color:#b42318;
+}
+
+.member-loading{
+color:#555;
 }
 
 /* Modal */
@@ -350,9 +373,14 @@ Loading media...
 <label for="memberId">Member ID</label>
 <input type="text" id="memberId" placeholder="Enter your MemberID">
 <div class="field-note">If you opened this from your QR code, MemberID may already be filled.</div>
+<div id="memberLookupStatus" class="lookup-status"></div>
 
 <label for="fullName">Full Name</label>
 <input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
+
+<label for="qrUrl">QR URL</label>
+<input type="text" id="qrUrl" placeholder="QR link will appear here" readonly>
+<div class="field-note">This is auto-filled when the MemberID is found.</div>
 
 <label for="municipality">Municipality</label>
 <input type="text" id="municipality" placeholder="Municipality">
@@ -411,12 +439,17 @@ const mediaModalClose = document.getElementById("mediaModalClose");
 
 const memberIdInput = document.getElementById("memberId");
 const fullNameInput = document.getElementById("fullName");
+const qrUrlInput = document.getElementById("qrUrl");
+const municipalityInput = document.getElementById("municipality");
 const photoFileInput = document.getElementById("photoFile");
 const previewWrap = document.getElementById("previewWrap");
 const previewImage = document.getElementById("previewImage");
+const memberLookupStatus = document.getElementById("memberLookupStatus");
 
 let allMediaItems = [];
 let visibleCount = 6;
+let memberLookupTimer = null;
+let lastResolvedMemberId = "";
 
 fetch(api)
 .then(res => res.json())
@@ -449,7 +482,7 @@ function renderMediaItems() {
 
     card.innerHTML = `
       <div class="media-thumb">
-        <img src="${previewSrc}" alt="Community Media" loading="lazy">
+        <img src="${escapeAttr(previewSrc)}" alt="Community Media" loading="lazy">
       </div>
       <div class="media-caption">
         <strong>${escapeHtml(fullName)}</strong>
@@ -490,33 +523,111 @@ mediaModal.addEventListener("click", function(e) {
   if (e.target === mediaModal) closeMediaModal();
 });
 
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape" && mediaModal.style.display === "block") {
+    closeMediaModal();
+  }
+});
+
 // QR / URL MemberID autofill
 (function autofillMemberIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  const memberId = (params.get("memberId") || "").trim();
-  if (memberId) {
-    memberIdInput.value = memberId;
+
+  const memberIdFromUrl =
+    (params.get("memberId") || params.get("MemberID") || "").trim();
+
+  const qrUrlFromUrl =
+    (params.get("qrUrl") || params.get("qrurl") || "").trim();
+
+  if (memberIdFromUrl) {
+    memberIdInput.value = memberIdFromUrl;
     resolveMemberName();
+  }
+
+  if (qrUrlFromUrl) {
+    qrUrlInput.value = decodeURIComponent(qrUrlFromUrl);
   }
 })();
 
 // Resolve full name when MemberID changes
+memberIdInput.addEventListener("input", function() {
+  clearTimeout(memberLookupTimer);
+  memberLookupTimer = setTimeout(resolveMemberName, 500);
+});
+
 memberIdInput.addEventListener("change", resolveMemberName);
 memberIdInput.addEventListener("blur", resolveMemberName);
 
 async function resolveMemberName() {
   const memberId = memberIdInput.value.trim();
-  fullNameInput.value = "";
 
-  if (!memberId) return;
+  fullNameInput.value = "";
+  memberLookupStatus.textContent = "";
+  memberLookupStatus.className = "lookup-status";
+
+  if (!memberId) {
+    qrUrlInput.value = "";
+    lastResolvedMemberId = "";
+    return;
+  }
+
+  if (memberId === lastResolvedMemberId && fullNameInput.value.trim()) {
+    return;
+  }
+
+  memberLookupStatus.textContent = "Checking MemberID...";
+  memberLookupStatus.classList.add("member-loading");
 
   try {
-    // reuse verifymember endpoint by passing a placeholder lastName is not ideal,
-    // so backend upgrade below will make media upload resolve the name.
-    // For now we only display the MemberID as entered until backend patch is added.
-    // This keeps the page safe from breaking.
-    fullNameInput.value = "";
+    const url = WEB_APP_URL + "?action=getmembername&memberId=" + encodeURIComponent(memberId);
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.success) {
+      const fullName =
+        data.fullName ||
+        data.name ||
+        data.memberName ||
+        "";
+
+      const qrUrl =
+        data.qrUrl ||
+        data.QRURL ||
+        data.qrURL ||
+        data.qr_link ||
+        "";
+
+      const municipality =
+        data.municipality ||
+        data.Municipality ||
+        "";
+
+      fullNameInput.value = fullName;
+      qrUrlInput.value = qrUrl;
+
+      if (!municipalityInput.value.trim() && municipality) {
+        municipalityInput.value = municipality;
+      }
+
+      memberLookupStatus.textContent = fullName
+        ? "Member found."
+        : "Member found, but no full name was returned.";
+      memberLookupStatus.className = "lookup-status member-good";
+
+      lastResolvedMemberId = memberId;
+    } else {
+      fullNameInput.value = "";
+      qrUrlInput.value = "";
+      memberLookupStatus.textContent = data.message || "MemberID not found.";
+      memberLookupStatus.className = "lookup-status member-bad";
+      lastResolvedMemberId = "";
+    }
   } catch (err) {
+    fullNameInput.value = "";
+    qrUrlInput.value = "";
+    memberLookupStatus.textContent = "Unable to verify MemberID right now.";
+    memberLookupStatus.className = "lookup-status member-bad";
+    lastResolvedMemberId = "";
     console.error(err);
   }
 }
@@ -550,14 +661,28 @@ async function uploadMedia() {
   const button = document.getElementById("uploadBtn");
 
   const memberId = memberIdInput.value.trim();
-  const municipality = document.getElementById("municipality").value.trim();
+  const fullName = fullNameInput.value.trim();
+  const qrUrl = qrUrlInput.value.trim();
+  const municipality = municipalityInput.value.trim();
   const caption = document.getElementById("caption").value.trim();
   const consent = document.getElementById("consent").checked;
   const file = photoFileInput.files[0];
 
   status.style.color = "#111";
 
-  if (!memberId || !municipality || !caption) {
+  if (!memberId) {
+    status.innerText = "Please enter your MemberID.";
+    status.style.color = "red";
+    return;
+  }
+
+  if (!fullName) {
+    status.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
+    status.style.color = "red";
+    return;
+  }
+
+  if (!municipality || !caption) {
     status.innerText = "Please fill all required fields.";
     status.style.color = "red";
     return;
@@ -599,6 +724,8 @@ async function uploadMedia() {
     const payload = {
       action: "uploadmedia",
       memberId: memberId,
+      fullName: fullName,
+      qrUrl: qrUrl,
       municipality: municipality,
       caption: caption,
       consent: "Yes",
@@ -619,13 +746,17 @@ async function uploadMedia() {
       status.innerText = "Upload successful. Waiting for admin approval.";
       status.style.color = "green";
 
-      document.getElementById("municipality").value = "";
+      municipalityInput.value = "";
       document.getElementById("caption").value = "";
       photoFileInput.value = "";
       document.getElementById("consent").checked = false;
       previewWrap.style.display = "none";
       previewImage.src = "";
-      fullNameInput.value = result.fullName || "";
+
+      fullNameInput.value = result.fullName || fullName;
+      qrUrlInput.value = result.qrUrl || qrUrl;
+      memberLookupStatus.textContent = "Member verified.";
+      memberLookupStatus.className = "lookup-status member-good";
     } else {
       status.innerText = result.message || "Upload failed.";
       status.style.color = "red";
@@ -644,7 +775,13 @@ async function uploadMedia() {
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => {
+      const result = reader.result || "";
+      const cleanBase64 = String(result).includes(",")
+        ? String(result).split(",")[1]
+        : String(result);
+      resolve(cleanBase64);
+    };
     reader.onerror = error => reject(error);
     reader.readAsDataURL(file);
   });
@@ -653,6 +790,14 @@ function fileToBase64(file) {
 function escapeHtml(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function escapeAttr(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
