@@ -583,6 +583,9 @@ const mediaModalClose = document.getElementById("mediaModalClose");
 const memberIdInput = document.getElementById("memberId");
 const fullNameInput = document.getElementById("fullName");
 const qrUrlInput = document.getElementById("qrUrl");
+const qrPreviewWrap = document.getElementById("qrPreviewWrap");
+const qrPreviewImage = document.getElementById("qrPreviewImage");
+const copyQrLinkBtn = document.getElementById("copyQrLinkBtn");
 const municipalityInput = document.getElementById("municipality");
 const captionInput = document.getElementById("caption");
 const descriptionInput = document.getElementById("description");
@@ -814,6 +817,16 @@ async function resolveMemberName() {
 
       fullNameInput.value = fullName;
       qrUrlInput.value = qrUrl;
+      if (qrUrl) {
+
+  const qrService =
+    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+    encodeURIComponent(qrUrl);
+
+  qrPreviewImage.src = qrService;
+
+  qrPreviewWrap.style.display = "block";
+}
 
       if (!municipalityInput.value.trim() && municipality) {
         municipalityInput.value = municipality;
@@ -1085,6 +1098,18 @@ function escapeAttr(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+
+  copyQrLinkBtn.addEventListener("click", function() {
+
+  const url = qrUrlInput.value;
+
+  if (!url) return;
+
+  navigator.clipboard.writeText(url).then(function() {
+    alert("Upload link copied.");
+  });
+
+});
 </script>
 
 </body>
