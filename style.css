@@ -847,7 +847,7 @@ body {
 }
 
 .alliance-image-wrap{
-  height:120px;
+  height:90px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -855,9 +855,11 @@ body {
 }
 
 .alliance-image-wrap img{
-  max-width:100%;
-  max-height:100%;
+  width:70px;
+  height:70px;
   object-fit:contain;
+  display:block;
+  margin:auto;
 }
 
 .alliance-placeholder{
@@ -908,6 +910,11 @@ body {
   gap:20px;
   max-width:900px;
   margin:auto;
+  margin-bottom:40px;
+}
+.sector-note{
+  margin-top:20px;
+  margin-bottom:25px;
 }
 
 
