@@ -779,6 +779,11 @@ body {
   text-transform:uppercase;
 }
 
+/* UNITY RIBBON SPACING FIX */
+
+.unity-ribbon-section{
+  padding:90px 20px 70px 20px;
+}
 /* highlight REGION VIII */
 
 .region-highlight{
@@ -1008,3 +1013,4 @@ body {
   }
 
 }
+
