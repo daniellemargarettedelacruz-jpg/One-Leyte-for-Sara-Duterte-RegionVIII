@@ -987,17 +987,24 @@ body {
 /* PRIVACY NOTE */
 
 .privacy-note{
-  margin-top:35px;
-  margin-bottom:25px;
+  margin-top:45px;
+  margin-bottom:10px;
+  padding-top:10px;
   font-size:14px;
-  color:#cfd6d1;
+  color:rgba(16,33,24,0.42);
   text-align:center;
+  line-height:1.7;
 }
 
 .privacy-note i{
   margin-right:6px;
 }
 
+.alliances-section .privacy-note{
+  max-width:980px;
+  margin:50px auto 0 auto;
+  color:rgba(16,33,24,0.38);
+}
 
 
 /* MOBILE */
