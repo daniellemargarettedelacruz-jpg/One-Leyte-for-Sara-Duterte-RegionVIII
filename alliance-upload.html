@@ -3,60 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Submit Your Alliance Upload</title>
+  <title>Alliance Upload | One Leyte for Sara Duterte</title>
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     body{
-      background:#08110c;
-      font-family:Arial, Helvetica, sans-serif;
-      color:#102118;
       margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f3f4f6;
+      color:#102118;
     }
 
-    .alliance-upload-page{
+    .alliance-page{
       min-height:100vh;
-      padding:60px 20px;
-      background:linear-gradient(180deg, rgba(4,10,7,.92) 0%, rgba(7,16,11,.96) 100%);
+      padding:48px 18px;
+      background:#f3f4f6;
     }
 
-    .alliance-upload-wrap{
-      width:92%;
-      max-width:860px;
+    .alliance-shell{
+      width:100%;
+      max-width:840px;
       margin:0 auto;
     }
 
-    .alliance-upload-card{
-      background:#f4f1e8;
-      border-radius:24px;
-      padding:34px 28px;
-      box-shadow:0 18px 40px rgba(0,0,0,.22);
+    .alliance-card{
+      background:#ffffff;
+      border:1px solid #e2e8e4;
+      border-radius:18px;
+      padding:28px 24px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.06);
     }
 
-    .alliance-upload-header{
-      text-align:center;
-      margin-bottom:28px;
+    .alliance-header{
+      margin-bottom:26px;
     }
 
-    .alliance-upload-header h1{
-      font-family:Georgia, serif;
-      font-size:2.1rem;
-      margin-bottom:10px;
-      color:#0a6b3f;
+    .alliance-header h1{
+      margin:0 0 8px 0;
+      font-size:2rem;
+      color:#102118;
     }
 
-    .alliance-upload-header p{
-      max-width:700px;
-      margin:0 auto;
-      color:#4e5a53;
+    .alliance-header p{
+      margin:0;
+      color:#5b665f;
       line-height:1.7;
+      font-size:15px;
     }
 
     .alliance-form{
       display:grid;
-      gap:18px;
+      gap:22px;
     }
 
     .form-row{
@@ -72,6 +71,7 @@
     }
 
     .form-group label{
+      font-size:15px;
       font-weight:700;
       color:#102118;
     }
@@ -79,19 +79,73 @@
     .form-group input,
     .form-group textarea{
       width:100%;
-      border:1px solid #d6ddd7;
+      border:1px solid #d2d8d4;
       border-radius:12px;
-      padding:14px;
-      font-size:.98rem;
-      color:#102118;
+      padding:14px 14px;
+      font-size:15px;
       background:#ffffff;
+      color:#102118;
       outline:none;
       box-sizing:border-box;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus{
+      border-color:#0a6b3f;
+      box-shadow:0 0 0 3px rgba(10,107,63,0.10);
     }
 
     .form-group textarea{
-      min-height:120px;
+      min-height:130px;
       resize:vertical;
+    }
+
+    .field-note{
+      font-size:13px;
+      color:#69756e;
+      line-height:1.6;
+      margin-top:2px;
+    }
+
+    .upload-link-box{
+      border:1px solid #d2d8d4;
+      border-radius:14px;
+      background:#fafbfa;
+      padding:16px;
+    }
+
+    .upload-link-box .upload-top{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .upload-icon{
+      width:48px;
+      height:48px;
+      border-radius:12px;
+      background:#0a6b3f;
+      color:#ffffff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      flex-shrink:0;
+    }
+
+    .upload-text strong{
+      display:block;
+      color:#102118;
+      font-size:15px;
+      margin-bottom:2px;
+    }
+
+    .upload-text span{
+      color:#6a746e;
+      font-size:13px;
+      line-height:1.5;
     }
 
     .privacy-box{
@@ -100,24 +154,27 @@
       background:#eef5f1;
       color:#214233;
       line-height:1.7;
-      font-size:.95rem;
+      font-size:14px;
+      border:1px solid #d9e8df;
     }
 
     .checkbox-row{
       display:flex;
       align-items:flex-start;
       gap:10px;
-      font-size:.95rem;
+      font-size:14px;
       color:#2c4337;
       line-height:1.6;
+    }
+
+    .checkbox-row input{
+      margin-top:3px;
     }
 
     .button-row{
       display:flex;
       gap:14px;
-      justify-content:center;
       flex-wrap:wrap;
-      margin-top:6px;
     }
 
     .upload-btn{
@@ -132,11 +189,22 @@
       font-weight:700;
       border:none;
       cursor:pointer;
+      font-size:15px;
+      transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .upload-btn:hover{
+      transform:translateY(-1px);
     }
 
     .upload-btn.primary{
       background:#0a6b3f;
       color:#ffffff;
+      box-shadow:0 8px 20px rgba(10,107,63,0.18);
+    }
+
+    .upload-btn.primary:hover{
+      background:#085332;
     }
 
     .upload-btn.secondary{
@@ -144,53 +212,68 @@
       color:#102118;
     }
 
+    .upload-btn.secondary:hover{
+      background:#e0bc4f;
+    }
+
     .success-message,
     .error-message{
       display:none;
-      margin-top:14px;
-      padding:12px 14px;
-      border-radius:10px;
+      padding:13px 14px;
+      border-radius:12px;
       text-align:center;
       font-weight:600;
+      font-size:14px;
     }
 
     .success-message{
       background:#e8f6ee;
       color:#0a6b3f;
+      border:1px solid #cfe8d9;
     }
 
     .error-message{
       background:#fdecec;
       color:#9f1f1f;
+      border:1px solid #f2caca;
     }
 
     @media (max-width:768px){
-      .alliance-upload-card{
-        padding:26px 18px;
-        border-radius:18px;
+      .alliance-page{
+        padding:30px 14px;
+      }
+
+      .alliance-card{
+        padding:22px 16px;
+        border-radius:16px;
       }
 
       .form-row{
         grid-template-columns:1fr;
+        gap:16px;
       }
 
       .upload-btn{
         width:100%;
+      }
+
+      .alliance-header h1{
+        font-size:1.7rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <section class="alliance-upload-page">
-    <div class="alliance-upload-wrap">
-      <div class="alliance-upload-card">
+  <section class="alliance-page">
+    <div class="alliance-shell">
+      <div class="alliance-card">
 
-        <div class="alliance-upload-header">
-          <h1>Submit Your Alliance Upload</h1>
+        <div class="alliance-header">
+          <h1>Alliance Upload</h1>
           <p>
-            Alliance groups may submit their logo, banner, or activity photo for review.
-            Approved submissions may later appear in the Regional Alliances section of the website.
+            Submit your alliance logo, banner, or official image link for private admin review.
+            Approved submissions may appear in the Regional Alliances section of the website.
           </p>
         </div>
 
@@ -200,45 +283,107 @@
           <div class="form-row">
             <div class="form-group">
               <label for="allianceName">Alliance Name</label>
-              <input type="text" id="allianceName" name="allianceName" placeholder="Example: One Biliran for Sara Duterte" required>
+              <input
+                type="text"
+                id="allianceName"
+                name="allianceName"
+                placeholder="Example: One Biliran for Sara Duterte"
+                required
+              >
             </div>
 
             <div class="form-group">
               <label for="municipality">Province / Location</label>
-              <input type="text" id="municipality" name="municipality" placeholder="Example: Biliran" required>
+              <input
+                type="text"
+                id="municipality"
+                name="municipality"
+                placeholder="Example: Biliran"
+                required
+              >
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="uploaderName">Contact Person</label>
-              <input type="text" id="uploaderName" name="uploaderName" placeholder="Full name" required>
+              <input
+                type="text"
+                id="uploaderName"
+                name="uploaderName"
+                placeholder="Full name"
+                required
+              >
             </div>
 
             <div class="form-group">
               <label for="contactInfo">Email or Contact Number</label>
-              <input type="text" id="contactInfo" name="contactInfo" placeholder="Optional contact detail">
+              <input
+                type="text"
+                id="contactInfo"
+                name="contactInfo"
+                placeholder="Optional contact detail"
+              >
             </div>
           </div>
 
           <div class="form-group">
-            <label for="caption">Short Description</label>
-            <textarea id="caption" name="caption" placeholder="Tell us briefly about your alliance or group."></textarea>
+            <label for="caption">Caption</label>
+            <input
+              type="text"
+              id="caption"
+              name="caption"
+              placeholder="Short title or caption"
+            >
           </div>
 
           <div class="form-group">
-            <label for="photoUrl">Direct Image Link / Google Drive Share Link</label>
-            <input type="url" id="photoUrl" name="photoUrl" placeholder="Paste the image link here" required>
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Optional longer description or short story about the alliance"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="photoUrl">Paste Image Link</label>
+
+            <div class="upload-link-box">
+              <div class="upload-top">
+                <div class="upload-icon">
+                  <i class="fas fa-image"></i>
+                </div>
+                <div class="upload-text">
+                  <strong>Direct Upload Link</strong>
+                  <span>Paste your Google Drive share link or direct image link below.</span>
+                </div>
+              </div>
+
+              <input
+                type="url"
+                id="photoUrl"
+                name="photoUrl"
+                placeholder="https://..."
+                required
+              >
+            </div>
+
+            <div class="field-note">
+              Use one official logo, banner, or alliance image only. Make sure the link is accessible for admin review.
+            </div>
           </div>
 
           <div class="privacy-box">
-            Submitted information is handled privately and reviewed by administrators.
-            Public display, if approved, will only show the alliance name, image, municipality/location, and approved description.
+            Submitted information is kept private and reviewed by administrators first.
+            Nothing is shown publicly unless approved. Public display, if approved, will only show the alliance name, image, location, and approved caption/description.
           </div>
 
           <label class="checkbox-row">
             <input type="checkbox" id="consent" name="consent" value="Yes" required>
-            <span>I confirm that this submission is authorized by our alliance/group and may be reviewed for possible public display.</span>
+            <span>
+              I confirm that this submission is authorized by our alliance/group and may be reviewed for possible public display.
+            </span>
           </label>
 
           <div class="button-row">
@@ -253,8 +398,13 @@
             </a>
           </div>
 
-          <div id="successMessage" class="success-message">Alliance submission sent successfully and is now pending admin review.</div>
-          <div id="errorMessage" class="error-message">Submission failed. Please try again.</div>
+          <div id="successMessage" class="success-message">
+            Alliance submission sent successfully and is now pending admin review.
+          </div>
+
+          <div id="errorMessage" class="error-message">
+            Submission failed. Please try again.
+          </div>
         </form>
 
       </div>
