@@ -918,9 +918,9 @@ body {
   margin-bottom:40px;
 }
 .sector-note{
-  margin-top:20px;
-  margin-bottom:35px;
-  line-height:1.6;
+  margin-top:10px;
+  margin-bottom:26px;
+  line-height:1.7;
 }
 
 
@@ -979,7 +979,8 @@ body {
 
 .sector-capsule-wide{
   grid-column:1 / -1;
-  margin-bottom:25px;
+  margin-top:4px;
+  margin-bottom:22px;
 }
 
 
@@ -987,11 +988,10 @@ body {
 /* PRIVACY NOTE */
 
 .privacy-note{
-  margin-top:45px;
-  margin-bottom:10px;
-  padding-top:10px;
+  margin-top:18px;
+  margin-bottom:18px;
   font-size:14px;
-  color:rgba(16,33,24,0.42);
+  color:#cfd6d1;
   text-align:center;
   line-height:1.7;
 }
