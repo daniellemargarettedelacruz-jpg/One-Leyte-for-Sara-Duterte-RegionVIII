@@ -269,97 +269,33 @@
   </section>
 
   <!-- REGIONAL ALLIANCES -->
-  <section class="alliances-section" id="alliances">
-  <div class="container">
+ <script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    <div class="section-heading">
-      <h2>Regional Alliances</h2>
-      <p>Alliance groups across Eastern Visayas supporting the movement.</p>
-    </div>
+  async function loadAllianceUploads() {
+    const grid = document.getElementById("alliancesGrid");
+    if (!grid) return;
 
-    <div class="alliances-showcase" id="alliancesGrid">
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+      const data = await res.json();
 
-      <!-- Upload Button -->
-      <a href="alliance-upload.html" class="alliance-upload-tile">
-        <i class="fas fa-cloud-upload-alt"></i>
-        <span>Upload Alliance Logo</span>
-      </a>
+      if (!Array.isArray(data)) return;
 
-    </div>
+      data.forEach(item => {
+        const tile = document.createElement("div");
+        tile.className = "alliance-logo-tile";
+        tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
+        grid.appendChild(tile);
+      });
 
-  </div>
-</section>
+    } catch (err) {
+      console.error("Alliance logos failed to load", err);
+    }
+  }
 
-      <div class="alliances-grid">
-
-        <div class="alliance-card">
-          <div class="alliance-image-wrap">
-            <img src="assets/images/oneleyte-logo.jpg" alt="One Leyte for Sara Duterte">
-          </div>
-          <h3>One Leyte for Sara Duterte</h3>
-        </div>
-
-        <div class="alliance-card">
-          <div class="alliance-image-wrap">
-            <img src="assets/images/one-biliran.png" alt="One Biliran for Sara Duterte">
-          </div>
-          <h3>One Biliran for Sara Duterte</h3>
-        </div>
-
-        <div class="alliance-card">
-          <div class="alliance-image-wrap">
-            <img src="assets/images/one-samar.png" alt="One Samar for Sara Duterte">
-          </div>
-          <h3>One Samar for Sara Duterte</h3>
-        </div>
-
-        <div class="alliance-card alliance-placeholder-card">
-          <div class="alliance-image-wrap alliance-placeholder">
-            <span>Coming Soon</span>
-          </div>
-          <h3>One Southern Leyte for Sara Duterte</h3>
-        </div>
-
-        <div class="alliance-card alliance-placeholder-card">
-          <div class="alliance-image-wrap alliance-placeholder">
-            <span>Coming Soon</span>
-          </div>
-          <h3>One Eastern Samar for Sara Duterte</h3>
-        </div>
-
-        <div class="alliance-card alliance-placeholder-card">
-          <div class="alliance-image-wrap alliance-placeholder">
-            <span>Coming Soon</span>
-          </div>
-          <h3>One Northern Samar for Sara Duterte</h3>
-        </div>
-
-        <a
-        <a
-<a
-  class="alliance-card alliance-submit-card"
-  href="alliance-upload.html"
-  aria-label="Submit Your Alliance Logo"
->
-  <div class="alliance-image-wrap alliance-submit-icon">
-    <i class="fas fa-plus"></i>
-  </div>
-  <h3>Submit Your Alliance Logo</h3>
-  <p>Upload your alliance logo or banner for admin review before public display.</p>
-</a>
-
-      </div>
-
-      <div class="privacy-note">
-        <i class="fas fa-shield-alt"></i>
-        <span>
-          Membership information is treated with confidentiality. Public alliance displays are for visual representation only.
-          Personal details submitted by members and group representatives are securely handled and are not displayed publicly on this website.
-        </span>
-      </div>
-
-    </div>
-  </section>
+  loadAllianceUploads();
+</script>
 
   <!-- WHY JOIN -->
   <section class="why-join">
