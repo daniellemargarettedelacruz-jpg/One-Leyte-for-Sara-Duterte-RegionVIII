@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan QR to Post | One Leyte</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#08110c;
+  color:#111;
+}
+
+.scan-section{
+  padding:60px 20px;
+  text-align:center;
+}
+
+.scan-box{
+  max-width:700px;
+  margin:auto;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.18);
+}
+
+.scan-box h1{
+  margin:0 0 10px;
+  color:#102118;
+}
+
+.scan-box p{
+  color:#555;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.scanner-wrap{
+  position:relative;
+  width:100%;
+  max-width:520px;
+  margin:20px auto;
+  border-radius:16px;
+  overflow:hidden;
+  background:#000;
+  min-height:320px;
+}
+
+#reader{
+  width:100%;
+}
+
+.scan-status{
+  margin-top:16px;
+  min-height:24px;
+  font-weight:600;
+  color:#333;
+}
+
+.scan-actions{
+  margin-top:22px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+}
+
+.scan-btn{
+  display:inline-block;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  background:#0a6b3f;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.scan-btn:hover{
+  background:#084e2f;
+}
+
+.scan-btn.secondary{
+  background:#e7efe9;
+  color:#0a6b3f;
+}
+
+.scan-btn.secondary:hover{
+  background:#d8e6dc;
+}
+
+.manual-box{
+  margin-top:26px;
+  padding-top:22px;
+  border-top:1px solid #e6ebe7;
+}
+
+.manual-box input{
+  width:100%;
+  max-width:420px;
+  padding:12px;
+  margin:10px auto 14px;
+  border:1px solid #d5ddd8;
+  border-radius:8px;
+  box-sizing:border-box;
+  font-size:16px;
+  display:block;
+}
+
+.note{
+  font-size:12px;
+  color:#666;
+  margin-top:8px;
+}
+
+@media (max-width:640px){
+  .scan-box{
+    padding:20px;
+  }
+
+  .scanner-wrap{
+    min-height:260px;
+  }
+}
+</style>
+</head>
+<body>
+
+<section class="scan-section">
+  <div class="scan-box">
+
+    <h1>Scan QR to Post</h1>
+    <p>
+      Scan your member QR code to open posting options for
+      <strong>Freedom Wall</strong> and <strong>Media Uploads</strong>.
+    </p>
+
+    <div class="scanner-wrap">
+      <div id="reader"></div>
+    </div>
+
+    <div id="scanStatus" class="scan-status">Opening camera...</div>
+
+    <div class="scan-actions">
+      <button id="startScanBtn" class="scan-btn" type="button">Start Scanner</button>
+      <button id="stopScanBtn" class="scan-btn secondary" type="button">Stop Scanner</button>
+      <a class="scan-btn secondary" href="index.html">Return to Homepage</a>
+    </div>
+
+    <div class="manual-box">
+      <p><strong>Manual fallback</strong></p>
+      <input id="manualMemberId" type="text" placeholder="Enter Member ID manually">
+      <button id="manualGoBtn" class="scan-btn" type="button">Continue with Member ID</button>
+      <div class="note">Use this if your camera cannot scan the QR code.</div>
+    </div>
+
+  </div>
+</section>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+const scanStatus = document.getElementById("scanStatus");
+const startScanBtn = document.getElementById("startScanBtn");
+const stopScanBtn = document.getElementById("stopScanBtn");
+const manualMemberId = document.getElementById("manualMemberId");
+const manualGoBtn = document.getElementById("manualGoBtn");
+
+const PORTAL_URL = "member-portal-access.html";
+const html5QrCode = new Html5Qrcode("reader");
+let scannerRunning = false;
+let hasRedirected = false;
+
+function setStatus(text, isError = false) {
+  scanStatus.textContent = text;
+  scanStatus.style.color = isError ? "#b42318" : "#333";
+}
+
+function extractMemberId(decodedText) {
+  const raw = String(decodedText || "").trim();
+
+  if (!raw) return "";
+
+  try {
+    const url = new URL(raw);
+    const memberId = (url.searchParams.get("memberId") || url.searchParams.get("MemberID") || "").trim();
+    if (memberId) return memberId;
+  } catch (err) {
+    // not a full URL, continue below
+  }
+
+  const match = raw.match(/(?:memberId|MemberID)=([^&]+)/);
+  if (match && match[1]) {
+    return decodeURIComponent(match[1]).trim();
+  }
+
+  return raw;
+}
+
+function redirectToPortal(memberId) {
+  if (!memberId || hasRedirected) return;
+  hasRedirected = true;
+  window.location.href = PORTAL_URL + "?memberId=" + encodeURIComponent(memberId);
+}
+
+async function startScanner() {
+  if (scannerRunning) return;
+
+  hasRedirected = false;
+  setStatus("Requesting camera access...");
+
+  try {
+    const cameras = await Html5Qrcode.getCameras();
+
+    if (!cameras || !cameras.length) {
+      setStatus("No camera found on this device.", true);
+      return;
+    }
+
+    scannerRunning = true;
+
+    await html5QrCode.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: function(viewfinderWidth, viewfinderHeight) {
+          const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+          const box = Math.floor(minEdge * 0.7);
+          return { width: box, height: box };
+        }
+      },
+      (decodedText) => {
+        const memberId = extractMemberId(decodedText);
+
+        if (!memberId) {
+          setStatus("QR scanned but no Member ID was found.", true);
+          return;
+        }
+
+        setStatus("QR scanned. Opening member portal...");
+        stopScanner().finally(() => {
+          redirectToPortal(memberId);
+        });
+      },
+      () => {
+        // ignore scan failures frame by frame
+      }
+    );
+
+    setStatus("Camera ready. Point it at the member QR code.");
+  } catch (error) {
+    scannerRunning = false;
+    console.error(error);
+    setStatus("Unable to open camera. Please allow camera access or use manual entry.", true);
+  }
+}
+
+async function stopScanner() {
+  if (!scannerRunning) return;
+
+  try {
+    await html5QrCode.stop();
+    await html5QrCode.clear();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    scannerRunning = false;
+    setStatus("Scanner stopped.");
+  }
+}
+
+startScanBtn.addEventListener("click", startScanner);
+stopScanBtn.addEventListener("click", stopScanner);
+
+manualGoBtn.addEventListener("click", function() {
+  const memberId = manualMemberId.value.trim();
+  if (!memberId) {
+    setStatus("Please enter a Member ID first.", true);
+    return;
+  }
+  redirectToPortal(memberId);
+});
+
+window.addEventListener("beforeunload", function() {
+  if (scannerRunning) {
+    html5QrCode.stop().catch(() => {});
+  }
+});
+
+startScanner();
+</script>
+
+</body>
+</html>
