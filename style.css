@@ -763,15 +763,28 @@ body {
 .site-top-ribbon{
   width:100%;
   background:#0a6b3f;
-  padding:10px 20px;
+  padding:20px 20px;
   text-align:center;
+  border-bottom:3px solid #d4af37;
 }
 
 .site-top-ribbon-title{
   font-family: Georgia, serif;
-  font-size:16px;
+  font-size:28px;
+  font-weight:800;
   color:#ffffff;
-  letter-spacing:1px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.region-highlight{
+  color:#d4af37;
+}
+
+@media (max-width:768px){
+  .site-top-ribbon-title{
+    font-size:22px;
+  }
 }
 
 
