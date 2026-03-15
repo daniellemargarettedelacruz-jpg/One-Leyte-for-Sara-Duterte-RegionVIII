@@ -8,66 +8,129 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#08110c;
+}
 
 .portal-section{
-padding:80px 20px;
-text-align:center;
+  padding:80px 20px;
+  text-align:center;
 }
 
 .portal-box{
-max-width:420px;
-margin:auto;
-background:white;
-padding:40px;
-border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  max-width:520px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
 .portal-box h2{
-margin-bottom:10px;
+  margin-bottom:10px;
+  color:#102118;
 }
 
 .portal-box p{
-margin-bottom:25px;
-color:#555;
+  margin-bottom:25px;
+  color:#555;
+  line-height:1.6;
 }
 
 .portal-box input{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border:1px solid #ddd;
-border-radius:6px;
-font-size:16px;
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  font-size:16px;
+  box-sizing:border-box;
 }
 
 .portal-btn{
-width:100%;
-padding:12px;
-background:#0a6b3f;
-color:white;
-border:none;
-border-radius:6px;
-font-size:16px;
-cursor:pointer;
+  width:100%;
+  padding:12px;
+  background:#0a6b3f;
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:600;
 }
 
 .portal-btn:hover{
-background:#084e2f;
+  background:#084e2f;
 }
 
 .portal-message{
-margin-top:15px;
-font-size:14px;
+  margin-top:15px;
+  font-size:14px;
+  min-height:24px;
+  color:#333;
 }
 
 .back-home{
-margin-top:20px;
-display:inline-block;
-color:#0a6b3f;
-text-decoration:none;
+  margin-top:20px;
+  display:inline-block;
+  color:#0a6b3f;
+  text-decoration:none;
+  font-weight:600;
 }
 
+.portal-actions{
+  display:none;
+  margin-top:25px;
+  text-align:left;
+}
+
+.portal-welcome{
+  background:#f6faf7;
+  border:1px solid #d9e6dd;
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:18px;
+}
+
+.portal-welcome strong{
+  display:block;
+  font-size:20px;
+  color:#102118;
+  margin-bottom:8px;
+}
+
+.portal-welcome span{
+  display:block;
+  color:#555;
+  font-size:14px;
+  margin-top:4px;
+}
+
+.action-links{
+  display:grid;
+  gap:12px;
+}
+
+.action-link{
+  display:block;
+  text-align:center;
+  padding:13px 16px;
+  background:#0a6b3f;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:600;
+}
+
+.action-link:hover{
+  background:#084e2f;
+}
+
+.hidden{
+  display:none;
+}
 </style>
 </head>
 
@@ -75,79 +138,141 @@ text-decoration:none;
 
 <section class="portal-section">
 
-<div class="portal-box">
+  <div class="portal-box">
 
-<h2>Member Portal</h2>
+    <h2>Member Portal</h2>
 
-<p>
-Enter your Member ID and Full Name to access the portal.
-</p>
+    <p id="portalIntro">
+      Scan your QR code or enter your Member ID and Full Name to access posting options.
+    </p>
 
-<input id="memberId" type="text" placeholder="Member ID (Example: OLR8-000001)">
+    <div id="manualForm">
+      <input id="memberId" type="text" placeholder="Member ID (Example: OLR8-000001)">
+      <input id="fullName" type="text" placeholder="Full Name">
+      <button class="portal-btn" onclick="verifyMember()">Access Portal</button>
+    </div>
 
-<input id="FullName" type="text" placeholder="Full Name">
+    <div id="message" class="portal-message"></div>
 
-<button class="portal-btn" onclick="verifyMember()">Access Portal</button>
+    <div id="portalActions" class="portal-actions">
+      <div class="portal-welcome">
+        <strong id="welcomeName">Welcome</strong>
+        <span><b>Member ID:</b> <span id="welcomeMemberId"></span></span>
+      </div>
 
-<div id="message" class="portal-message"></div>
+      <div class="action-links">
+        <a id="freedomWallLink" class="action-link" href="#">Post on Freedom Wall</a>
+        <a id="mediaUploadsLink" class="action-link" href="#">Upload Media</a>
+      </div>
+    </div>
 
-<a class="back-home" href="index.html">Return to Homepage</a>
+    <a class="back-home" href="index.html">Return to Homepage</a>
 
-</div>
+  </div>
 
 </section>
 
-
 <script>
-
 const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-async function verifyMember(){
-
-const memberId = document.getElementById("memberId").value.trim();
-const lastName = document.getElementById("lastName").value.trim().toLowerCase();
-
+const memberIdInput = document.getElementById("memberId");
+const fullNameInput = document.getElementById("fullName");
 const messageBox = document.getElementById("message");
+const manualForm = document.getElementById("manualForm");
+const portalActions = document.getElementById("portalActions");
+const welcomeName = document.getElementById("welcomeName");
+const welcomeMemberId = document.getElementById("welcomeMemberId");
+const freedomWallLink = document.getElementById("freedomWallLink");
+const mediaUploadsLink = document.getElementById("mediaUploadsLink");
 
-if(!memberId || !lastName){
-messageBox.innerHTML = "Please enter Member ID and Full Name.";
-return;
+(function initPortalAccess() {
+  const params = new URLSearchParams(window.location.search);
+  const memberIdFromUrl = (params.get("memberId") || params.get("MemberID") || "").trim();
+
+  if (memberIdFromUrl) {
+    memberIdInput.value = memberIdFromUrl;
+    autoAccessWithMemberId(memberIdFromUrl);
+  }
+})();
+
+async function autoAccessWithMemberId(memberId) {
+  messageBox.innerHTML = "Verifying QR access...";
+
+  try {
+    const response = await fetch(
+      API_URL + "?action=getmembername&memberId=" + encodeURIComponent(memberId)
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      const resolvedName = data.memberName || data.fullName || data.name || "Member";
+      showPortalActions(memberId, resolvedName);
+      messageBox.innerHTML = "QR verified successfully.";
+    } else {
+      messageBox.innerHTML = data.message || "Unable to verify QR access.";
+    }
+
+  } catch (error) {
+    console.error(error);
+    messageBox.innerHTML = "Unable to verify QR access right now.";
+  }
 }
 
-messageBox.innerHTML = "Verifying membership...";
+async function verifyMember() {
+  const memberId = memberIdInput.value.trim();
+  const fullName = fullNameInput.value.trim().toLowerCase();
 
-try{
+  if (!memberId || !fullName) {
+    messageBox.innerHTML = "Please enter Member ID and Full Name.";
+    return;
+  }
 
-const response = await fetch(
-API_URL + "?action=verifymember&memberId=" + encodeURIComponent(memberId) + "&FullName=" + encodeURIComponent(lastName)
-);
+  messageBox.innerHTML = "Verifying membership...";
 
-const data = await response.json();
+  try {
+    const response = await fetch(
+      API_URL + "?action=getmembername&memberId=" + encodeURIComponent(memberId)
+    );
 
-if(data.success){
+    const data = await response.json();
 
-messageBox.innerHTML = "Welcome " + data.memberName + ". Redirecting to portal...";
+    if (!data.success) {
+      messageBox.innerHTML = data.message || "Member not found.";
+      return;
+    }
 
-setTimeout(function(){
+    const resolvedName = String(data.memberName || data.fullName || data.name || "").trim();
 
-window.location.href = "member-portal.html";
+    if (!resolvedName) {
+      messageBox.innerHTML = "Member name could not be resolved.";
+      return;
+    }
 
-},1500);
+    if (resolvedName.toLowerCase() !== fullName) {
+      messageBox.innerHTML = "Full Name does not match this Member ID.";
+      return;
+    }
 
-}else{
+    messageBox.innerHTML = "Welcome " + resolvedName + ". Opening portal...";
+    showPortalActions(memberId, resolvedName);
 
-messageBox.innerHTML = data.message;
-
+  } catch (error) {
+    console.error(error);
+    messageBox.innerHTML = "Unable to verify membership.";
+  }
 }
 
-}catch(error){
+function showPortalActions(memberId, memberName) {
+  manualForm.classList.add("hidden");
+  portalActions.style.display = "block";
 
-messageBox.innerHTML = "Unable to verify membership.";
+  welcomeName.textContent = "Welcome, " + memberName;
+  welcomeMemberId.textContent = memberId;
 
+  freedomWallLink.href = "freedom-wall.html?memberId=" + encodeURIComponent(memberId);
+  mediaUploadsLink.href = "media-uploads.html?memberId=" + encodeURIComponent(memberId);
 }
-
-}
-
 </script>
 
 </body>
