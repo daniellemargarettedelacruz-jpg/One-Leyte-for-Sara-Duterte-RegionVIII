@@ -1,370 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>One Leyte for Sara Duterte Region VIII</title>
+  <title>One Leyte for Sara Duterte Region VIII</title>
 
-<link rel="stylesheet" href="style.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-<header class="hero">
-
-<img src="assets/images/banner-main.jpg" class="hero-banner" alt="One Leyte Banner" />
-
-<div class="hero-overlay">
-
-<div class="container hero-content">
-
-<img src="assets/images/oneleyte-logo.jpg" class="hero-logo" alt="One Leyte Logo" />
-
-<h1>One Leyte for Sara Duterte Region VIII</h1>
-
-<p class="tagline">
-Save the Nation • Save the Next Generation
-</p>
-
-<p class="intro">
-A voluntary movement of individuals from Leyte who believe in strong leadership,
-unity, and the responsibility to help protect the future of our nation and the next generation.
-</p>
-
-<div class="cta-group">
-
-<a
-class="btn primary"
-href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header"
-target="_blank">
-Register as Member
-</a>
-
-<a class="btn secondary" href="claim-id.html">
-Claim My ID
-</a>
-
-<a class="btn secondary" href="verify.html">
-Verify Membership
-</a>
-
-<a class="btn secondary" href="scan-qr.html">
-📷 Scan QR to Post
-</a>
-
-</div>
-
-<p class="hero-privacy-note">
-<i class="fas fa-lock"></i>
-Your personal information is handled with care, kept confidential,
-and is not displayed publicly on this website.
-</p>
-
-</div>
-</div>
-</header>
-
-
-<!-- ANNOUNCEMENTS -->
-
-<section class="home-announcement-banner" id="latestBanner" style="display:none;"></section>
-
-<section class="home-featured-announcement" id="featuredAnnouncementSection" style="display:none;">
-<div class="container">
-<div class="featured-announcement-card" id="featuredAnnouncementCard"></div>
-</div>
-</section>
-
-<section class="home-announcement-slider">
-<div class="container">
-
-<h2 class="slider-heading">Latest Announcements</h2>
-
-<div class="announcement-slider-track" id="announcementSliderTrack">
-<div class="announcement-slider-empty">Loading announcements...</div>
-</div>
-
-</div>
-</section>
-
-
-
-<!-- COMMUNITY -->
-
-<section class="community">
-
-<div class="container">
-
-<h2 class="community-title">Community Participation</h2>
-
-<p class="community-intro">
-Members of the movement can actively participate through community engagement features available on this platform.
-</p>
-
-<div class="community-grid">
-
-<a href="freedom-wall.html" class="community-card card-link">
-<i class="fa-solid fa-comments"></i>
-<h3>Freedom Wall</h3>
-<p>Members can share their messages of support and solidarity with the community.</p>
-<span class="community-btn">Explore</span>
-</a>
-
-<a href="media-uploads.html" class="community-card card-link">
-<i class="fa-solid fa-camera"></i>
-<h3>Media Uploads</h3>
-<p>Upload photos and videos from activities, gatherings, and community events.</p>
-<span class="community-btn">View Media</span>
-</a>
-
-<a href="announcements.html" class="community-card card-link">
-<i class="fa-solid fa-bullhorn"></i>
-<h3>Announcements</h3>
-<p>Stay updated with official updates and announcements from the movement.</p>
-<span class="community-btn">Read Updates</span>
-</a>
-
-<a href="claim-id.html" class="community-card card-link">
-<i class="fa-solid fa-id-card"></i>
-<h3>Member Digital ID</h3>
-<p>Every registered member receives a digital membership ID with QR verification.</p>
-<span class="community-btn">Claim ID</span>
-</a>
-
-</div>
-
-</div>
-</section>
-
-
-
-<!-- ABOUT -->
-
-<section class="about">
-
-<div class="container narrow">
-
-<h2>Our Purpose</h2>
-
-<p>
-One Leyte for Sara Duterte is a voluntary movement of individuals from
-Leyte and across Eastern Visayas who believe in the importance of unity,
-civic responsibility, and freedom of choice in shaping the future of the nation.
-</p>
-
-<p>
-Citizens have come together with a shared purpose: to help build a stronger
-Philippines and protect the future of the next generation.
-</p>
-
-</div>
-</section>
-
-
-
-<!-- HISTORY -->
-
-<section class="history">
-
-<div class="container narrow">
-
-<h2>The Story of One Leyte</h2>
-
-<p>
-One Leyte for Sara Duterte began as a gathering of individuals from Leyte and across Region VIII who share a common belief: that the people of the region should always have the freedom to express their own voice and convictions about the future of the nation.
-</p>
-
-<p>
-Out of these shared concerns and aspirations, individuals began to unite in a spirit of responsibility and civic participation.
-</p>
-
-</div>
-</section>
-
-
-
-<!-- UNITY RIBBON -->
-
-<section class="unity-ribbon-section">
-
-<div class="container">
-
-<div class="unity-ribbon">
-
-<h2>Eastern Visayas United</h2>
-
-<p>
-Across Leyte, Southern Leyte, Biliran, Samar, Eastern Samar, and Northern Samar,
-citizens are coming together in unity and volunteerism to support responsible leadership and safeguard the future of the next generation.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- REGIONAL ALLIANCES -->
-
-<section class="alliances-section">
-
-<div class="container">
-
-<h2>Regional Alliances</h2>
-
-<div class="alliances-grid">
-
-<div class="alliance-card">
-<h3>One Leyte for Sara Duterte</h3>
-</div>
-
-<div class="alliance-card">
-<h3>One Southern Leyte for Sara Duterte</h3>
-</div>
-
-<div class="alliance-card">
-<h3>One Biliran for Sara Duterte</h3>
-</div>
-
-<div class="alliance-card">
-<h3>One Samar for Sara Duterte</h3>
-</div>
-
-<div class="alliance-card">
-<h3>One Eastern Samar for Sara Duterte</h3>
-</div>
-
-<div class="alliance-card">
-<h3>One Northern Samar for Sara Duterte</h3>
-</div>
-
-</div>
-
-<div class="privacy-note">
-<i class="fas fa-shield-alt"></i>
-Membership information is treated with confidentiality.
-Personal details submitted by members are securely handled and are not displayed publicly on this website.
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- SECTORAL REPRESENTATION -->
-
-<section class="sectoral-section">
-
-<div class="container">
-
-<h2>Sectoral Representation</h2>
-
-<div class="sectoral-grid">
-
-<div class="sector-card">Youth / Students</div>
-<div class="sector-card">Women</div>
-<div class="sector-card">Solo Parents</div>
-<div class="sector-card">Senior Citizens</div>
-<div class="sector-card">Farmers</div>
-<div class="sector-card">Fisherfolk</div>
-<div class="sector-card">Teachers / Educators</div>
-<div class="sector-card">Healthcare Workers</div>
-<div class="sector-card">Professionals</div>
-<div class="sector-card">Business Owners</div>
-<div class="sector-card">OFWs</div>
-<div class="sector-card">Transport Workers</div>
-<div class="sector-card">Uniformed Services</div>
-<div class="sector-card">Retirees & Veterans</div>
-<div class="sector-card">PWD</div>
-<div class="sector-card">Indigenous Peoples</div>
-<div class="sector-card">Underserved Communities</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- WHY JOIN -->
-
-<section class="why-join">
-
-<div class="container">
-
-<h2>Why Join the Movement</h2>
-
-<div class="why-grid">
-
-<div class="why-card">
-<h3>Unity of the People</h3>
-<p>The movement brings together citizens across communities to strengthen the nation.</p>
-</div>
-
-<div class="why-card">
-<h3>Volunteerism and Service</h3>
-<p>Membership is based on voluntary participation and civic responsibility.</p>
-</div>
-
-<div class="why-card">
-<h3>Protecting Future Generations</h3>
-<p>Citizens join to help safeguard the future of the next generation.</p>
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- PRINCIPLES -->
-
-<section class="principles">
-
-<div class="container narrow">
-
-<h2>Core Principles</h2>
-
-<ul class="principles-list">
-<li>Voluntary Participation</li>
-<li>Unity and Bayanihan</li>
-<li>Community Leadership</li>
-<li>Service to the Nation</li>
-<li>Protecting the Next Generation</li>
-</ul>
-
-</div>
-
-</section>
-
-
-
-<footer class="site-footer">
-
-<div class="site-footer-inner">
-
-<div class="footer-copyright">
-© 2026 One Leyte for Sara Duterte Region VIII
-</div>
-
-<div class="buildframe-credit">
-⚙ Powered by <strong>BuildFrame Digital System Builder</strong>
-</div>
-
-</div>
-
-</footer>
-
-
+  <!-- TOP RIBBON TITLE -->
+  <div class="site-top-ribbon">
+    <div class="container">
+      <p class="site-top-ribbon-title">Region VIII Alliance for Sara Duterte</p>
+    </div>
+  </div>
+
+  <header class="hero">
+    <img src="assets/images/banner-main.jpg" class="hero-banner" alt="One Leyte Banner" />
+
+    <div class="hero-overlay">
+      <div class="container hero-content">
+
+        <img src="assets/images/oneleyte-logo.jpg" class="hero-logo" alt="One Leyte Logo" />
+
+        <h1>One Leyte for Sara Duterte Region VIII</h1>
+
+        <p class="tagline">
+          Save the Nation • Save the Next Generation
+        </p>
+
+        <p class="intro">
+          A voluntary movement of individuals from Leyte who believe in strong leadership,
+          unity, and the responsibility to help protect the future of our nation and the next generation.
+        </p>
+
+        <div class="cta-group">
+          <a
+            class="btn primary"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header"
+            target="_blank"
+          >
+            Register as Member
+          </a>
+
+          <a class="btn secondary" href="claim-id.html">
+            Claim My ID
+          </a>
+
+          <a class="btn secondary" href="verify.html">
+            Verify Membership
+          </a>
+
+          <a class="btn secondary" href="scan-qr.html">
+            📷 Scan QR to Post
+          </a>
+        </div>
+
+        <p class="hero-privacy-note">
+          <i class="fas fa-lock"></i>
+          Your personal information is handled with care, kept confidential,
+          and is not displayed publicly on this website.
+        </p>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ANNOUNCEMENTS -->
+  <section class="home-announcement-banner" id="latestBanner" style="display:none;"></section>
+
+  <section class="home-featured-announcement" id="featuredAnnouncementSection" style="display:none;">
+    <div class="container">
+      <div class="featured-announcement-card" id="featuredAnnouncementCard"></div>
+    </div>
+  </section>
+
+  <section class="home-announcement-slider">
+    <div class="container">
+      <h2 class="slider-heading">Latest Announcements</h2>
+
+      <div class="announcement-slider-track" id="announcementSliderTrack">
+        <div class="announcement-slider-empty">Loading announcements...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="community">
+    <div class="container">
+
+      <h2 class="community-title">Community Participation</h2>
+
+      <p class="community-intro">
+        Members of the movement can actively participate through community engagement
+        features available on this platform.
+      </p>
+
+      <div class="community-grid">
+
+        <a href="freedom-wall.html" class="community-card card-link">
+          <div class="icon-orbit">
+            <div class="icon-badge magnetic-icon">
+              <i class="fa-solid fa-comments"></i>
+            </div>
+          </div>
+          <h3>Freedom Wall</h3>
+          <p>Members can share their messages of support and solidarity with the community.</p>
+          <span class="community-btn">Explore</span>
+        </a>
+
+        <a href="media-uploads.html" class="community-card card-link">
+          <div class="icon-orbit">
+            <div class="icon-badge magnetic-icon">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+          </div>
+          <h3>Media Uploads</h3>
+          <p>Upload photos and videos from activities, gatherings, and community events.</p>
+          <span class="community-btn">View Media</span>
+        </a>
+
+        <a href="announcements.html" class="community-card card-link">
+          <div class="icon-orbit">
+            <div class="icon-badge magnetic-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+          </div>
+          <h3>Announcements</h3>
+          <p>Stay updated with official updates and announcements from the movement.</p>
+          <span class="community-btn">Read Updates</span>
+        </a>
+
+        <a href="claim-id.html" class="community-card card-link">
+          <div class="icon-orbit">
+            <div class="icon-badge magnetic-icon">
+              <i class="fa-solid fa-id-card"></i>
+            </div>
+          </div>
+          <h3>Member Digital ID</h3>
+          <p>Every registered member receives a digital membership ID with QR verification.</p>
+          <span class="community-btn">Claim ID</span>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="container narrow">
+
+      <h2>Our Purpose</h2>
+
+      <p>
+        One Leyte for Sara Duterte is a voluntary movement of individuals from
+        Leyte and across Eastern Visayas who believe in the importance of unity,
+        civic responsibility, and freedom of choice in shaping the future of the nation.
+      </p>
+
+      <p>
+        Citizens have come together with a shared purpose: to help build a stronger
+        Philippines and protect the future of the next generation.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="history">
+    <div class="container narrow">
+
+      <h2>The Story of One Leyte</h2>
+
+      <p>
+        One Leyte for Sara Duterte began as a gathering of individuals from Leyte and across Region VIII
+        who share a common belief: that the people of the region should always have the freedom to express
+        their own voice and convictions about the future of the nation.
+      </p>
+
+      <p>
+        Out of these shared concerns and aspirations, individuals began to unite in a spirit of
+        responsibility and civic participation.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- UNITY RIBBON -->
+  <section class="unity-ribbon-section">
+    <div class="container">
+      <div class="unity-ribbon">
+        <h2>Eastern Visayas United</h2>
+        <p>
+          Across Leyte, Southern Leyte, Biliran, Samar, Eastern Samar, and Northern Samar,
+          citizens are coming together in unity and volunteerism to support responsible leadership
+          and safeguard the future of the next generation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGIONAL ALLIANCES -->
+  <section class="alliances-section">
+    <div class="container">
+
+      <div class="section-heading">
+        <h2>Regional Alliances</h2>
+        <p>
+          A growing visual coalition of allied groups across Eastern Visayas.
+          Alliance logos and banners may be submitted by groups and reviewed by administrators before appearing publicly.
+        </p>
+      </div>
+
+      <div class="alliances-grid">
+
+        <div class="alliance-card">
+          <div class="alliance-image-wrap">
+            <img src="assets/images/oneleyte-logo.jpg" alt="One Leyte for Sara Duterte">
+          </div>
+          <h3>One Leyte for Sara Duterte</h3>
+        </div>
+
+        <div class="alliance-card">
+          <div class="alliance-image-wrap">
+            <img src="assets/images/one-biliran.png" alt="One Biliran for Sara Duterte">
+          </div>
+          <h3>One Biliran for Sara Duterte</h3>
+        </div>
+
+        <div class="alliance-card">
+          <div class="alliance-image-wrap">
+            <img src="assets/images/one-samar.png" alt="One Samar for Sara Duterte">
+          </div>
+          <h3>One Samar for Sara Duterte</h3>
+        </div>
+
+        <div class="alliance-card alliance-placeholder-card">
+          <div class="alliance-image-wrap alliance-placeholder">
+            <span>Coming Soon</span>
+          </div>
+          <h3>One Southern Leyte for Sara Duterte</h3>
+        </div>
+
+        <div class="alliance-card alliance-placeholder-card">
+          <div class="alliance-image-wrap alliance-placeholder">
+            <span>Coming Soon</span>
+          </div>
+          <h3>One Eastern Samar for Sara Duterte</h3>
+        </div>
+
+        <div class="alliance-card alliance-placeholder-card">
+          <div class="alliance-image-wrap alliance-placeholder">
+            <span>Coming Soon</span>
+          </div>
+          <h3>One Northern Samar for Sara Duterte</h3>
+        </div>
+
+        <a
+          class="alliance-card alliance-submit-card"
+          href="#"
+          onclick="return false;"
+          aria-label="Submit Your Alliance Logo"
+        >
+          <div class="alliance-image-wrap alliance-submit-icon">
+            <i class="fas fa-plus"></i>
+          </div>
+          <h3>Submit Your Alliance Logo</h3>
+          <p>Admin-reviewed upload feature ready for future activation.</p>
+        </a>
+
+      </div>
+
+      <div class="privacy-note">
+        <i class="fas fa-shield-alt"></i>
+        <span>
+          Membership information is treated with confidentiality. Public alliance displays are for visual representation only.
+          Personal details submitted by members and group representatives are securely handled and are not displayed publicly on this website.
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTORAL REPRESENTATION -->
+  <section class="sectoral-section">
+    <div class="container">
+
+      <div class="section-heading">
+        <h2>Sectoral Representation</h2>
+        <p>
+          Volunteers may participate according to their chosen sector. Select your sector below to continue registration.
+        </p>
+      </div>
+
+      <div class="sectoral-capsule-grid">
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Youth / Students">
+          Youth / Students
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Women">
+          Women
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Solo Parents">
+          Solo Parents
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Senior Citizens">
+          Senior Citizens
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Farmers">
+          Farmers
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Fisherfolk">
+          Fisherfolk
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Teachers / Educators">
+          Teachers / Educators
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Healthcare Workers">
+          Healthcare Workers
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Professionals">
+          Professionals
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Business Owners / Entrepreneurs">
+          Business Owners / Entrepreneurs
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="OFWs">
+          OFWs
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Transport Workers">
+          Transport Workers
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Uniformed Services">
+          Uniformed Services
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Retirees & Veterans">
+          Retirees & Veterans
+        </a>
+
+        <a class="sector-capsule capsule-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="PWD">
+          PWD
+        </a>
+
+        <a class="sector-capsule capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Indigenous Peoples">
+          Indigenous Peoples
+        </a>
+
+        <a class="sector-capsule sector-capsule-wide capsule-light" href="https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=header" target="_blank" data-sector="Underserved Communities">
+          Underserved Communities
+        </a>
+
+      </div>
+
+      <div class="privacy-note">
+        <i class="fas fa-lock"></i>
+        <span>
+          Sector participation is welcomed with respect and confidentiality. Personal information submitted through registration
+          is securely handled in private records and is not displayed publicly on this website.
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHY JOIN -->
+  <section class="why-join">
+    <div class="container">
+
+      <h2>Why Join the Movement</h2>
+
+      <div class="why-grid">
+
+        <div class="why-card">
+          <h3>Unity of the People</h3>
+          <p>The movement brings together citizens across communities to strengthen the nation.</p>
+        </div>
+
+        <div class="why-card">
+          <h3>Volunteerism and Service</h3>
+          <p>Membership is based on voluntary participation and civic responsibility.</p>
+        </div>
+
+        <div class="why-card">
+          <h3>Protecting Future Generations</h3>
+          <p>Citizens join to help safeguard the future of the next generation.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="principles">
+    <div class="container narrow">
+
+      <h2>Core Principles</h2>
+
+      <ul class="principles-list">
+        <li>Voluntary Participation</li>
+        <li>Unity and Bayanihan</li>
+        <li>Community Leadership</li>
+        <li>Service to the Nation</li>
+        <li>Protecting the Next Generation</li>
+      </ul>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+
+      <div class="footer-copyright">
+        © 2026 One Leyte for Sara Duterte Region VIII
+      </div>
+
+      <div class="buildframe-credit">
+        ⚙ Powered by <strong>BuildFrame Digital System Builder</strong>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.community-card');
+
+    cards.forEach((card) => {
+      const icon = card.querySelector('.magnetic-icon');
+
+      card.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 768 || !icon) return;
+
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const moveX = (x - centerX) / 18;
+        const moveY = (y - centerY) / 18;
+
+        icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (icon) {
+          icon.style.transform = 'translate(0px, 0px) scale(1)';
+        }
+      });
+    });
+
+    const sectorCapsules = document.querySelectorAll('.sector-capsule');
+
+    sectorCapsules.forEach((capsule) => {
+      capsule.addEventListener('click', function (e) {
+        e.preventDefault();
+        const destination = this.getAttribute('href');
+
+        this.classList.add('sector-capsule-active');
+
+        setTimeout(() => {
+          window.open(destination, '_blank');
+          this.classList.remove('sector-capsule-active');
+        }, 180);
+      });
+    });
+
+    const announcementApi = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+
+    fetch(announcementApi)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+
+        if (data.latest && data.latest.Title) {
+          const banner = document.getElementById("latestBanner");
+          banner.style.display = "block";
+          banner.innerHTML = `📢 Latest Announcement: <a href="announcements.html">${data.latest.Title}</a>`;
+        }
+
+        if (data.featured && data.featured.Title) {
+          const featuredSection = document.getElementById("featuredAnnouncementSection");
+          const featuredCard = document.getElementById("featuredAnnouncementCard");
+
+          featuredSection.style.display = "block";
+
+          featuredCard.innerHTML = `
+            <div class="featured-announcement-label">Featured Announcement</div>
+            <div class="featured-announcement-title">${data.featured.Title || ""}</div>
+            <div class="featured-announcement-meta">
+              ${(data.featured.DatePosted || "")}${data.featured.Category ? ` • ${data.featured.Category}` : ""}
+            </div>
+            <div class="featured-announcement-summary">${data.featured.Summary || ""}</div>
+            <a class="featured-announcement-btn" href="announcements.html">Read Full Announcement</a>
+          `;
+        }
+
+        const sliderTrack = document.getElementById("announcementSliderTrack");
+        sliderTrack.innerHTML = "";
+
+        if (!data.items || !data.items.length) {
+          sliderTrack.innerHTML = `<div class="announcement-slider-empty">No announcements available yet.</div>`;
+          return;
+        }
+
+        data.items.slice(0, 6).forEach(item => {
+          const card = document.createElement("div");
+          card.className = "announcement-slide-card";
+
+          card.innerHTML = `
+            <div class="announcement-slide-title">${item.Title || ""}</div>
+            <div class="announcement-slide-meta">
+              ${(item.DatePosted || "")}${item.Category ? ` • ${item.Category}` : ""}
+            </div>
+            <div class="announcement-slide-summary">${item.Summary || ""}</div>
+          `;
+
+          sliderTrack.appendChild(card);
+        });
+      })
+      .catch(err => {
+        console.error("Announcement homepage load error:", err);
+      });
+  </script>
 
 </body>
 </html>
