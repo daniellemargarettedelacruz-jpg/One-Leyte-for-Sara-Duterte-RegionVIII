@@ -108,44 +108,47 @@
       margin-top:2px;
     }
 
-    .upload-link-box{
+    .file-upload-box{
       border:1px solid #d2d8d4;
       border-radius:14px;
       background:#fafbfa;
       padding:16px;
     }
 
-    .upload-link-box .upload-top{
+    .custom-file-wrap{
       display:flex;
       align-items:center;
-      gap:12px;
-      margin-bottom:10px;
+      gap:14px;
+      flex-wrap:wrap;
+      border:1px solid #d2d8d4;
+      border-radius:12px;
+      padding:14px;
+      background:#ffffff;
     }
 
-    .upload-icon{
-      width:48px;
-      height:48px;
-      border-radius:12px;
-      background:#0a6b3f;
-      color:#ffffff;
-      display:flex;
+    .custom-file-btn{
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      font-size:20px;
-      flex-shrink:0;
-    }
-
-    .upload-text strong{
-      display:block;
-      color:#102118;
+      gap:8px;
+      background:#0a6b3f;
+      color:#ffffff;
+      border:none;
+      border-radius:10px;
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
       font-size:15px;
-      margin-bottom:2px;
     }
 
-    .upload-text span{
-      color:#6a746e;
-      font-size:13px;
-      line-height:1.5;
+    .custom-file-name{
+      color:#4f5b54;
+      font-size:15px;
+      word-break:break-word;
+    }
+
+    .hidden-file-input{
+      display:none;
     }
 
     .privacy-box{
@@ -272,7 +275,7 @@
         <div class="alliance-header">
           <h1>Alliance Upload</h1>
           <p>
-            Submit your alliance logo, banner, or official image link for private admin review.
+            Submit your alliance logo image for private admin review.
             Approved submissions may appear in the Regional Alliances section of the website.
           </p>
         </div>
@@ -347,30 +350,29 @@
           </div>
 
           <div class="form-group">
-            <label for="photoUrl">Paste Image Link</label>
+            <label for="logoFile">Upload Logo Image Here</label>
 
-            <div class="upload-link-box">
-              <div class="upload-top">
-                <div class="upload-icon">
+            <div class="file-upload-box">
+              <div class="custom-file-wrap">
+                <button type="button" class="custom-file-btn" id="pickLogoBtn">
                   <i class="fas fa-image"></i>
-                </div>
-                <div class="upload-text">
-                  <strong>Direct Upload Link</strong>
-                  <span>Paste your Google Drive share link or direct image link below.</span>
-                </div>
-              </div>
+                  Choose logo image
+                </button>
 
-              <input
-                type="url"
-                id="photoUrl"
-                name="photoUrl"
-                placeholder="https://..."
-                required
-              >
+                <span class="custom-file-name" id="logoFileName">No file chosen</span>
+
+                <input
+                  type="file"
+                  id="logoFile"
+                  class="hidden-file-input"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  required
+                >
+              </div>
             </div>
 
             <div class="field-note">
-              Use one official logo, banner, or alliance image only. Make sure the link is accessible for admin review.
+              Upload 1 logo image only. Accepted: PNG, JPG, JPEG, WEBP.
             </div>
           </div>
 
@@ -417,6 +419,29 @@
     const allianceForm = document.getElementById("allianceForm");
     const successMessage = document.getElementById("successMessage");
     const errorMessage = document.getElementById("errorMessage");
+    const pickLogoBtn = document.getElementById("pickLogoBtn");
+    const logoFile = document.getElementById("logoFile");
+    const logoFileName = document.getElementById("logoFileName");
+
+    pickLogoBtn.addEventListener("click", function () {
+      logoFile.click();
+    });
+
+    logoFile.addEventListener("change", function () {
+      logoFileName.textContent = this.files && this.files[0] ? this.files[0].name : "No file chosen";
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result.split(",")[1];
+          resolve(result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
 
     allianceForm.addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -424,9 +449,30 @@
       successMessage.style.display = "none";
       errorMessage.style.display = "none";
 
-      const data = new URLSearchParams(new FormData(allianceForm));
-
       try {
+        const file = logoFile.files[0];
+
+        if (!file) {
+          errorMessage.textContent = "Please choose a logo image.";
+          errorMessage.style.display = "block";
+          return;
+        }
+
+        const base64File = await fileToBase64(file);
+
+        const data = new URLSearchParams();
+        data.append("action", "allianceupload");
+        data.append("allianceName", document.getElementById("allianceName").value);
+        data.append("municipality", document.getElementById("municipality").value);
+        data.append("uploaderName", document.getElementById("uploaderName").value);
+        data.append("contactInfo", document.getElementById("contactInfo").value);
+        data.append("caption", document.getElementById("caption").value);
+        data.append("description", document.getElementById("description").value);
+        data.append("consent", document.getElementById("consent").checked ? "Yes" : "No");
+        data.append("fileName", file.name);
+        data.append("mimeType", file.type);
+        data.append("fileData", base64File);
+
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
           body: data
@@ -444,6 +490,7 @@
         if (result.success) {
           successMessage.style.display = "block";
           allianceForm.reset();
+          logoFileName.textContent = "No file chosen";
         } else {
           errorMessage.textContent = result.message || "Submission failed. Please try again.";
           errorMessage.style.display = "block";
