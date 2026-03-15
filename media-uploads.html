@@ -54,15 +54,36 @@
 .media-main{
   width:100%;
   background:#e9ece8;
+  position:relative;
+  cursor:pointer;
 }
 
-.media-main img,
-.media-main video{
+.media-main img{
   width:100%;
   display:block;
   max-height:560px;
   object-fit:cover;
   background:#000;
+}
+
+.media-video-main{
+  position:relative;
+  width:100%;
+  min-height:220px;
+  background:#000;
+}
+
+.media-video-main img{
+  width:100%;
+  height:100%;
+  min-height:220px;
+  max-height:560px;
+  object-fit:cover;
+  display:block;
+}
+
+.media-video-main .video-badge{
+  font-size:42px;
 }
 
 .media-info{
@@ -392,14 +413,21 @@
   overflow:hidden;
 }
 
-.media-modal-image,
-.media-modal-video{
+.media-modal-image{
   width:100%;
   height:auto;
   max-height:75vh;
   object-fit:contain;
   display:block;
   background:#000;
+}
+
+.media-modal-iframe{
+  width:100%;
+  height:75vh;
+  border:none;
+  background:#000;
+  display:block;
 }
 
 .media-modal-caption{
@@ -438,6 +466,10 @@
 
   .upload-form{
     padding:18px;
+  }
+
+  .media-modal-iframe{
+    height:60vh;
   }
 }
 </style>
@@ -595,6 +627,12 @@ fetch(MEDIA_API)
     mediaFeed.innerHTML = "<div class='empty-message'>Unable to load media right now.</div>";
   });
 
+function convertDriveVideoToPreviewUrl(url) {
+  const match = String(url || "").match(/id=([^&]+)/);
+  if (!match || !match[1]) return url;
+  return "https://drive.google.com/file/d/" + match[1] + "/preview";
+}
+
 function renderMediaItems() {
   mediaFeed.innerHTML = "";
 
@@ -619,9 +657,10 @@ function renderMediaItems() {
     let mainMediaHtml = "";
     if (videoUrl) {
       mainMediaHtml = `
-        <video controls preload="metadata">
-          <source src="${escapeAttr(videoUrl)}">
-        </video>
+        <div class="media-video-main">
+          <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Preview" loading="lazy">
+          <div class="video-badge">▶</div>
+        </div>
       `;
     } else if (photo1) {
       mainMediaHtml = `
@@ -637,7 +676,7 @@ function renderMediaItems() {
 
     if (photo2) {
       thumbs += `
-        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
           <img src="${escapeAttr(photo2)}" alt="Photo 2" loading="lazy">
         </div>
       `;
@@ -645,7 +684,7 @@ function renderMediaItems() {
 
     if (photo3) {
       thumbs += `
-        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
           <img src="${escapeAttr(photo3)}" alt="Photo 3" loading="lazy">
         </div>
       `;
@@ -653,7 +692,7 @@ function renderMediaItems() {
 
     if (videoUrl) {
       thumbs += `
-        <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption)}">
+        <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
           <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Thumbnail" loading="lazy">
           <div class="video-badge">▶</div>
         </div>
@@ -705,10 +744,14 @@ loadMoreBtn.addEventListener("click", () => {
 
 function openMediaModal(type, src, fullName, text) {
   if (type === "video") {
+    const previewUrl = convertDriveVideoToPreviewUrl(src);
     mediaModalBody.innerHTML = `
-      <video class="media-modal-video" controls autoplay>
-        <source src="${escapeAttr(src)}">
-      </video>
+      <iframe
+        class="media-modal-iframe"
+        src="${escapeAttr(previewUrl)}"
+        allow="autoplay; fullscreen"
+        allowfullscreen>
+      </iframe>
     `;
   } else {
     mediaModalBody.innerHTML = `
