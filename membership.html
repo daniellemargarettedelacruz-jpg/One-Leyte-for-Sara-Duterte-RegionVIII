@@ -1,4 +1,376 @@
-<a href="membership.html?sector=Women" class="sector-capsule white"><span>Women</span></a>
-<a href="membership.html?sector=Youth" class="sector-capsule green"><span>Youth</span></a>
-<a href="membership.html?sector=Underserved and Marginalized Communities" class="sector-capsule white"><span>Underserved &amp; Marginalized Communities</span></a>
-<a href="membership.html?sector=Muslim Community" class="sector-capsule green"><span>Muslim Community</span></a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Registration | One Leyte for Sara Duterte</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f3f4f6;
+      color:#102118;
+    }
+
+    .membership-page{
+      min-height:100vh;
+      padding:48px 18px;
+      background:#f3f4f6;
+    }
+
+    .membership-shell{
+      width:100%;
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .membership-card{
+      background:#ffffff;
+      border:1px solid #e2e8e4;
+      border-radius:18px;
+      padding:28px 24px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .membership-header{
+      margin-bottom:26px;
+      text-align:center;
+    }
+
+    .membership-header h1{
+      margin:0 0 8px 0;
+      font-size:2rem;
+      color:#102118;
+    }
+
+    .membership-header p{
+      margin:0 auto;
+      color:#5b665f;
+      line-height:1.7;
+      font-size:15px;
+      max-width:720px;
+    }
+
+    .membership-form{
+      display:grid;
+      gap:22px;
+    }
+
+    .form-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .form-group label{
+      font-size:15px;
+      font-weight:700;
+      color:#102118;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+      width:100%;
+      border:1px solid #d2d8d4;
+      border-radius:12px;
+      padding:14px;
+      font-size:15px;
+      background:#ffffff;
+      color:#102118;
+      outline:none;
+      box-sizing:border-box;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus{
+      border-color:#0a6b3f;
+      box-shadow:0 0 0 3px rgba(10,107,63,0.10);
+    }
+
+    .readonly-field{
+      background:#f8faf8 !important;
+      color:#0a6b3f !important;
+      font-weight:700;
+    }
+
+    .privacy-box{
+      padding:16px 18px;
+      border-radius:14px;
+      background:#eef5f1;
+      color:#214233;
+      line-height:1.7;
+      font-size:14px;
+      border:1px solid #d9e8df;
+    }
+
+    .checkbox-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      font-size:14px;
+      color:#2c4337;
+      line-height:1.6;
+    }
+
+    .checkbox-row input{
+      margin-top:3px;
+    }
+
+    .button-row{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .submit-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width:220px;
+      padding:14px 22px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      font-size:15px;
+      transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .submit-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .submit-btn.primary{
+      background:#0a6b3f;
+      color:#ffffff;
+      box-shadow:0 8px 20px rgba(10,107,63,0.18);
+    }
+
+    .submit-btn.primary:hover{
+      background:#085332;
+    }
+
+    .submit-btn.secondary{
+      background:#d4af37;
+      color:#102118;
+    }
+
+    .submit-btn.secondary:hover{
+      background:#e0bc4f;
+    }
+
+    .success-message,
+    .error-message{
+      display:none;
+      padding:13px 14px;
+      border-radius:12px;
+      text-align:center;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    .success-message{
+      background:#e8f6ee;
+      color:#0a6b3f;
+      border:1px solid #cfe8d9;
+    }
+
+    .error-message{
+      background:#fdecec;
+      color:#9f1f1f;
+      border:1px solid #f2caca;
+    }
+
+    @media (max-width:768px){
+      .membership-page{
+        padding:30px 14px;
+      }
+
+      .membership-card{
+        padding:22px 16px;
+        border-radius:16px;
+      }
+
+      .form-row{
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+
+      .submit-btn{
+        width:100%;
+      }
+
+      .membership-header h1{
+        font-size:1.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="membership-page">
+    <div class="membership-shell">
+      <div class="membership-card">
+
+        <div class="membership-header">
+          <h1>Membership Registration</h1>
+          <p>
+            Join the One Leyte for Sara Duterte movement. Your information is submitted privately
+            for internal membership recording only.
+          </p>
+        </div>
+
+        <form id="membershipForm" class="membership-form">
+          <input type="hidden" name="action" value="membership">
+          <input type="hidden" id="sector" name="sector" value="">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="birthdate">Birthdate</label>
+              <input type="date" id="birthdate" name="birthdate" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactNumber">Contact Number</label>
+              <input type="text" id="contactNumber" name="contactNumber" placeholder="Enter your mobile number" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="Enter your email address">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="municipality">Municipality / City</label>
+              <input type="text" id="municipality" name="municipality" placeholder="Enter your municipality or city" required>
+            </div>
+
+            <div class="form-group">
+              <label for="barangay">Barangay</label>
+              <input type="text" id="barangay" name="barangay" placeholder="Enter your barangay" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sectorDisplay">Selected Sector</label>
+            <input type="text" id="sectorDisplay" class="readonly-field" value="" readonly>
+          </div>
+
+          <div class="privacy-box">
+            Your personal information is kept private and is not shown publicly on the website.
+            It is recorded only in the private membership sheet for internal use.
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="consent" required>
+            <span>
+              I voluntarily join and confirm that the information I submitted is true and correct.
+            </span>
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="submit-btn primary">
+              <i class="fas fa-paper-plane"></i>
+              Submit Membership
+            </button>
+
+            <a href="index.html" class="submit-btn secondary">
+              <i class="fas fa-arrow-left"></i>
+              Back to Homepage
+            </a>
+          </div>
+
+          <div id="successMessage" class="success-message">
+            Membership submitted successfully.
+          </div>
+
+          <div id="errorMessage" class="error-message">
+            Submission failed. Please try again.
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+
+    const membershipForm = document.getElementById("membershipForm");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
+    const sectorInput = document.getElementById("sector");
+    const sectorDisplay = document.getElementById("sectorDisplay");
+
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const sector = params.get("sector") || "";
+
+      sectorInput.value = sector;
+      sectorDisplay.value = sector || "General Membership";
+    })();
+
+    membershipForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
+
+      try {
+        const formData = new FormData(membershipForm);
+
+        const response = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: formData
+        });
+
+        const text = await response.text();
+        let result = {};
+
+        try {
+          result = JSON.parse(text);
+        } catch (err) {
+          throw new Error("Invalid server response");
+        }
+
+        if (result.success) {
+          successMessage.style.display = "block";
+          membershipForm.reset();
+          sectorDisplay.value = sectorInput.value || "General Membership";
+        } else {
+          errorMessage.textContent = result.message || "Submission failed. Please try again.";
+          errorMessage.style.display = "block";
+        }
+      } catch (error) {
+        errorMessage.textContent = "Submission failed. Please try again.";
+        errorMessage.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
