@@ -467,8 +467,9 @@
 
   <h3>Submit Your Media</h3>
   <p class="submit-note">
-    Members may upload up to <strong>3 photos</strong> and <strong>1 video</strong> per submission.
-    Video should be <strong>1 minute or less</strong>. All uploads are reviewed before publishing.
+    Members may upload <strong>either up to 3 photos</strong> or <strong>1 video</strong> per submission.
+    Video should be <strong>1 minute or less</strong>. Mixed photo + video in one submission is not allowed.
+    All uploads are reviewed before publishing.
   </p>
 
   <div class="upload-form">
@@ -505,13 +506,13 @@
       <div class="upload-full">
         <label for="photoFiles">Choose Photos (up to 3)</label>
         <input type="file" id="photoFiles" accept="image/*" multiple>
-        <div class="field-note">You may upload up to 3 photos.</div>
+        <div class="field-note">Choose up to 3 photos only. Do not combine with video in the same submission.</div>
       </div>
 
       <div class="upload-full">
         <label for="videoFile">Choose Video (optional, max 1 minute)</label>
         <input type="file" id="videoFile" accept="video/mp4,video/webm,video/quicktime">
-        <div class="field-note">Only 1 video is allowed per submission.</div>
+        <div class="field-note">Choose 1 video only. Do not combine with photos in the same submission.</div>
       </div>
 
       <div class="upload-full">
@@ -613,7 +614,7 @@ function renderMediaItems() {
     const photo2 = item.Photo2URL || "";
     const photo3 = item.Photo3URL || "";
     const videoUrl = item.VideoURL || "";
-    const videoThumbnail = item.VideoThumbnailURL || "";
+    const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || "";
 
     let mainMediaHtml = "";
     if (videoUrl) {
@@ -818,6 +819,15 @@ function updatePreview() {
   const photoFiles = Array.from(photoFilesInput.files || []).slice(0, 3);
   const videoFile = (videoFileInput.files || [])[0];
 
+  if (photoFiles.length > 0 && videoFile) {
+    previewWrap.style.display = "none";
+    uploadStatus.innerText = "Please choose either photos or one video only, not both.";
+    uploadStatus.style.color = "red";
+    return;
+  }
+
+  uploadStatus.innerText = "";
+
   if (!photoFiles.length && !videoFile) {
     previewWrap.style.display = "none";
     return;
@@ -888,7 +898,13 @@ async function submitMediaPost() {
   }
 
   if (!photoFiles.length && !videoFile) {
-    uploadStatus.innerText = "Please choose at least one photo or one video.";
+    uploadStatus.innerText = "Please choose either photo(s) or one video.";
+    uploadStatus.style.color = "red";
+    return;
+  }
+
+  if (photoFiles.length > 0 && videoFile) {
+    uploadStatus.innerText = "Please choose either up to 3 photos OR 1 video only, not both in one submission.";
     uploadStatus.style.color = "red";
     return;
   }
