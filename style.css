@@ -760,33 +760,46 @@ body {
 
 /* TOP RIBBON TITLE */
 
+/* TOP HEADER BANNER */
+
 .site-top-ribbon{
   width:100%;
-  background:#0a6b3f;
-  padding:20px 20px;
+  background:#ffffff;
+  padding:22px 20px;
   text-align:center;
-  border-bottom:3px solid #d4af37;
+  border-bottom:4px solid #0a6b3f;
 }
 
 .site-top-ribbon-title{
   font-family: Georgia, serif;
-  font-size:28px;
+  font-size:32px;
   font-weight:800;
-  color:#ffffff;
+  color:#0a6b3f;
   letter-spacing:2px;
   text-transform:uppercase;
 }
 
+/* highlight REGION VIII */
+
 .region-highlight{
-  color:#d4af37;
+  color:#0a6b3f;
+  font-size:36px;
+  font-weight:900;
 }
+
+/* mobile */
 
 @media (max-width:768px){
-  .site-top-ribbon-title{
-    font-size:22px;
-  }
+
+.site-top-ribbon-title{
+  font-size:22px;
 }
 
+.region-highlight{
+  font-size:26px;
+}
+
+}
 
 
 /* ALLIANCES SECTION */
