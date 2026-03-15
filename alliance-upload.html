@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Your Alliance Logo | One Leyte for Sara Duterte Region VIII</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      background: #08110c;
+      color: #f4f1e8;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .upload-page {
+      min-height: 100vh;
+      padding: 60px 20px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(4, 10, 7, 0.90) 0%,
+          rgba(7, 16, 11, 0.94) 100%
+        );
+    }
+
+    .upload-wrap {
+      width: 92%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .upload-card {
+      background: #f4f1e8;
+      color: #102118;
+      border-radius: 24px;
+      padding: 34px 28px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .upload-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .upload-header h1 {
+      font-family: Georgia, serif;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #0a6b3f;
+    }
+
+    .upload-header p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #4e5a53;
+      line-height: 1.7;
+    }
+
+    .upload-note {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #eef5f1;
+      color: #0a6b3f;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .alliance-form {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-weight: 700;
+      color: #102118;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid #d6ddd7;
+      border-radius: 12px;
+      padding: 14px 14px;
+      font-size: 0.98rem;
+      color: #102118;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #0a6b3f;
+      box-shadow: 0 0 0 3px rgba(10, 107, 63, 0.12);
+    }
+
+    .form-group textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .upload-box {
+      border: 2px dashed rgba(10, 107, 63, 0.35);
+      background: #fcfffd;
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .upload-box i {
+      font-size: 2rem;
+      color: #0a6b3f;
+      margin-bottom: 10px;
+    }
+
+    .upload-box p {
+      color: #516058;
+      margin-bottom: 12px;
+    }
+
+    .upload-help {
+      font-size: 0.9rem;
+      color: #66756d;
+      line-height: 1.6;
+    }
+
+    .privacy-box {
+      margin-top: 8px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: #eef5f1;
+      color: #214233;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .privacy-box i {
+      color: #0a6b3f;
+      margin-right: 8px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #2c4337;
+      line-height: 1.6;
+    }
+
+    .checkbox-row input {
+      margin-top: 4px;
+      accent-color: #0a6b3f;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 220px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .upload-btn.primary {
+      background: #0a6b3f;
+      color: #ffffff;
+    }
+
+    .upload-btn.secondary {
+      background: #d4af37;
+      color: #102118;
+    }
+
+    .back-link {
+      margin-top: 22px;
+      text-align: center;
+    }
+
+    .back-link a {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .upload-card {
+        padding: 26px 18px;
+        border-radius: 18px;
+      }
+
+      .upload-header h1 {
+        font-size: 1.75rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="upload-page">
+    <div class="upload-wrap">
+      <div class="upload-card">
+
+        <div class="upload-header">
+          <h1>Submit Your Alliance Logo</h1>
+          <p>
+            Alliance groups may submit their logo or banner for review. Approved submissions
+            may later appear in the Regional Alliances section of the website.
+          </p>
+          <div class="upload-note">
+            <i class="fas fa-shield-alt"></i>
+            Admin approval required before public display
+          </div>
+        </div>
+
+        <form class="alliance-form" method="POST" action="#" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="allianceName">Alliance Name</label>
+              <input type="text" id="allianceName" name="allianceName" placeholder="Example: One Biliran for Sara Duterte" required />
+            </div>
+
+            <div class="form-group">
+              <label for="location">Province / Location</label>
+              <input type="text" id="location" name="location" placeholder="Example: Biliran" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactPerson">Contact Person</label>
+              <input type="text" id="contactPerson" name="contactPerson" placeholder="Full name" />
+            </div>
+
+            <div class="form-group">
+              <label for="contactInfo">Email or Contact Number</label>
+              <input type="text" id="contactInfo" name="contactInfo" placeholder="Optional contact detail" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Short Description</label>
+            <textarea id="description" name="description" placeholder="Tell us briefly about your alliance or group."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="allianceFile">Upload Logo or Banner</label>
+            <div class="upload-box">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Choose your alliance logo or banner image</p>
+              <input type="file" id="allianceFile" name="allianceFile" accept="image/*" required />
+              <div class="upload-help">
+                Accepted files: JPG, PNG, WEBP. Please upload a clear image that represents your alliance.
+              </div>
+            </div>
+          </div>
+
+          <div class="privacy-box">
+            <i class="fas fa-lock"></i>
+            Submitted information is handled privately and reviewed by administrators. Public display, if approved,
+            will only show the alliance name, logo/banner, and approved description.
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" name="consent" required />
+            <span>
+              I confirm that this submission is authorized by our alliance/group and may be reviewed for possible public display.
+            </span>
+          </label>
+
+          <div class="button-row">
+            <button type="submit" class="upload-btn primary">
+              <i class="fas fa-paper-plane"></i>
+              Submit Alliance Logo
+            </button>
+
+            <a href="index.html" class="upload-btn secondary">
+              <i class="fas fa-arrow-left"></i>
+              Back to Homepage
+            </a>
+          </div>
+        </form>
+
+        <div class="back-link">
+          <a href="media-uploads.html">Looking for event photo/video uploads instead?</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</body>
+</html>
