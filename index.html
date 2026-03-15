@@ -551,6 +551,46 @@
         console.error("Announcement homepage load error:", err);
       });
   </script>
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
+  async function loadAllianceUploads() {
+    const grid = document.getElementById("alliancesGrid");
+    if (!grid) return;
+
+    const submitCard = grid.querySelector(".alliance-submit-card");
+
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+      const data = await res.json();
+
+      if (!Array.isArray(data) || data.length === 0) return;
+
+      data.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "alliance-card";
+
+        card.innerHTML = `
+          <div class="alliance-image-wrap">
+            <img src="${item.fileUrl}" alt="${item.allianceName}">
+          </div>
+          <h3>${item.allianceName || ""}</h3>
+          <p>${item.location || ""}</p>
+        `;
+
+        if (submitCard) {
+          grid.insertBefore(card, submitCard);
+        } else {
+          grid.appendChild(card);
+        }
+      });
+
+    } catch (err) {
+      console.error("Alliance load failed:", err);
+    }
+  }
+
+  loadAllianceUploads();
+</script>
 </body>
 </html>
