@@ -845,11 +845,15 @@ body {
   padding:20px;
   text-align:center;
   box-shadow:0 10px 24px rgba(0,0,0,0.08);
-  transition:transform .25s ease;
+  transition:transform .25s ease, box-shadow .25s ease;
+  text-decoration:none;
+  color:#102118;
+  display:block;
 }
 
 .alliance-card:hover{
   transform:translateY(-4px);
+  box-shadow:0 14px 28px rgba(0,0,0,0.10);
 }
 
 .alliance-image-wrap{
@@ -868,26 +872,24 @@ body {
   margin:auto;
 }
 
-.alliance-placeholder{
-  background:#f1f1f1;
-  border-radius:12px;
-  font-size:14px;
-  color:#777;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100%;
-}
-
 .alliance-submit-card{
   border:2px dashed #0a6b3f;
+  background:#f8fff9;
 }
 
 .alliance-submit-icon{
-  font-size:30px;
-  color:#0a6b3f;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+  background:linear-gradient(145deg, #0a6b3f, #128551);
+  color:#ffffff;
+  font-size:28px;
+  box-shadow:0 10px 24px rgba(10,107,63,0.22);
 }
-
 
 
 /* SECTORAL CAPSULE SECTION */
