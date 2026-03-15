@@ -753,3 +753,222 @@ body {
     font-size: 0.88rem;
   }
 }
+
+/* IMPORT FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Georgia&display=swap');
+
+
+/* TOP RIBBON TITLE */
+
+.site-top-ribbon{
+  width:100%;
+  background:#0a6b3f;
+  padding:10px 20px;
+  text-align:center;
+}
+
+.site-top-ribbon-title{
+  font-family: Georgia, serif;
+  font-size:16px;
+  color:#ffffff;
+  letter-spacing:1px;
+}
+
+
+
+/* ALLIANCES SECTION */
+
+.alliances-section{
+  padding:80px 20px;
+  background:#f4f1e8;
+  color:#102118;
+}
+
+.section-heading{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.section-heading h2{
+  font-size:32px;
+  margin-bottom:10px;
+  color:#102118;
+}
+
+.section-heading p{
+  max-width:720px;
+  margin:auto;
+  color:#555;
+}
+
+.alliances-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:24px;
+}
+
+.alliance-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+  transition:transform .25s ease;
+}
+
+.alliance-card:hover{
+  transform:translateY(-4px);
+}
+
+.alliance-image-wrap{
+  height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:10px;
+}
+
+.alliance-image-wrap img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+.alliance-placeholder{
+  background:#f1f1f1;
+  border-radius:12px;
+  font-size:14px;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+}
+
+.alliance-submit-card{
+  border:2px dashed #0a6b3f;
+}
+
+.alliance-submit-icon{
+  font-size:30px;
+  color:#0a6b3f;
+}
+
+
+
+/* SECTORAL CAPSULE SECTION */
+
+.sectoral-section{
+  padding:90px 20px;
+  background:#08110c;
+}
+
+.sectoral-section h2{
+  text-align:center;
+  margin-bottom:10px;
+  color:#d4af37;
+}
+
+.sectoral-section p{
+  text-align:center;
+  max-width:720px;
+  margin:auto auto 40px auto;
+  color:#c9d4ce;
+}
+
+.sectoral-capsule-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+
+
+/* CAPSULE SHAPE */
+
+.sector-capsule{
+  padding:18px 28px;
+  border-radius:100px;
+  font-family:Poppins, sans-serif;
+  font-weight:600;
+  text-align:center;
+  text-decoration:none;
+  transition:all .25s ease;
+  display:block;
+  border:2px solid transparent;
+}
+
+
+
+/* LEFT STYLE */
+
+.capsule-light{
+  background:#ffffff;
+  color:#0a6b3f;
+}
+
+
+
+/* RIGHT STYLE */
+
+.capsule-dark{
+  background:#0a6b3f;
+  color:#ffffff;
+}
+
+
+
+/* HOVER */
+
+.sector-capsule:hover{
+  transform:translateX(8px);
+}
+
+
+
+/* CLICK PUSH EFFECT */
+
+.sector-capsule-active{
+  transform:translateX(18px) scale(.98);
+}
+
+
+
+/* FULL WIDTH LAST CAPSULE */
+
+.sector-capsule-wide{
+  grid-column:1 / -1;
+}
+
+
+
+/* PRIVACY NOTE */
+
+.privacy-note{
+  margin-top:30px;
+  font-size:14px;
+  color:#cfd6d1;
+  text-align:center;
+}
+
+.privacy-note i{
+  margin-right:6px;
+}
+
+
+
+/* MOBILE */
+
+@media (max-width:700px){
+
+  .sectoral-capsule-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sector-capsule{
+    padding:16px 20px;
+  }
+
+}
