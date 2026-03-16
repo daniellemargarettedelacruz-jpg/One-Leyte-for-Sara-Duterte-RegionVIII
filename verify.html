@@ -17,8 +17,39 @@
       </p>
 
       <div class="member-box">
-        <p><strong>Member ID:</strong> <span id="memberId">No Member ID Found</span></p>
+        <p><strong>Member ID:</strong> <span id="memberIdDisplay">No Member ID Found</span></p>
       </div>
+
+      <div style="margin-top:18px;">
+        <input
+          type="text"
+          id="memberIdInput"
+          placeholder="Enter Member ID"
+          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
+        />
+      </div>
+
+      <div style="margin-top:12px;">
+        <input
+          type="text"
+          id="lastNameInput"
+          placeholder="Enter Last Name"
+          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
+        />
+      </div>
+
+      <div style="margin-top:16px;">
+        <button
+          type="button"
+          id="verifyBtn"
+          class="btn secondary"
+          style="border:none;cursor:pointer;"
+        >
+          Verify Member
+        </button>
+      </div>
+
+      <div id="verifyResult" style="margin-top:18px;"></div>
 
       <p class="note">
         If this page was opened through a valid QR code, the Member ID above
@@ -34,9 +65,102 @@
   </section>
 
   <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+
     const params = new URLSearchParams(window.location.search);
-    const member = params.get("member");
-    document.getElementById("memberId").textContent = member || "No Member ID Found";
+    const memberFromUrl = params.get("memberId") || params.get("member") || "";
+
+    const memberIdDisplay = document.getElementById("memberIdDisplay");
+    const memberIdInput = document.getElementById("memberIdInput");
+    const lastNameInput = document.getElementById("lastNameInput");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const verifyResult = document.getElementById("verifyResult");
+
+    function normalizeMemberId(value) {
+      return String(value || "").replace(/\s+/g, "").trim().toUpperCase();
+    }
+
+    function normalizeText(value) {
+      return String(value || "").replace(/\s+/g, " ").trim();
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function setMemberId(id) {
+      const cleanId = normalizeMemberId(id);
+      memberIdDisplay.textContent = cleanId || "No Member ID Found";
+      memberIdInput.value = cleanId;
+    }
+
+    function verifyMember() {
+      const memberId = normalizeMemberId(memberIdInput.value);
+      const lastName = normalizeText(lastNameInput.value);
+
+      setMemberId(memberId);
+      lastNameInput.value = lastName;
+      verifyResult.innerHTML = "";
+
+      if (!memberId || !lastName) {
+        verifyResult.innerHTML = "<p style='color:red;'>Please enter Member ID and Last Name.</p>";
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = "Verifying...";
+
+      const url =
+        API_URL +
+        "?action=verifymember&memberId=" +
+        encodeURIComponent(memberId) +
+        "&lastName=" +
+        encodeURIComponent(lastName);
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) {
+            verifyResult.innerHTML =
+              "<p style='color:red;'>" + escapeHtml(data.message || "Verification failed.") + "</p>";
+            return;
+          }
+
+          verifyResult.innerHTML = `
+            <div style="margin:0 auto;max-width:420px;padding:18px;border:2px solid #14532d;border-radius:12px;background:#f6fff8;">
+              <p style="margin:0 0 10px 0;color:#14532d;font-weight:700;font-size:20px;">Verified Member</p>
+              <p style="margin:8px 0;"><strong>Member ID:</strong> ${escapeHtml(data.memberId || memberId)}</p>
+              <p style="margin:8px 0;"><strong>Name:</strong> ${escapeHtml(data.memberName || "")}</p>
+            </div>
+          `;
+        })
+        .catch(err => {
+          console.error(err);
+          verifyResult.innerHTML =
+            "<p style='color:red;'>Server error. Please try again later.</p>";
+        })
+        .finally(() => {
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = "Verify Member";
+        });
+    }
+
+    verifyBtn.addEventListener("click", verifyMember);
+
+    memberIdInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") verifyMember();
+    });
+
+    lastNameInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") verifyMember();
+    });
+
+    setMemberId(memberFromUrl);
   </script>
 </body>
 </html>
