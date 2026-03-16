@@ -612,20 +612,27 @@ let visibleCount = 6;
 let memberLookupTimer = null;
 let lastResolvedMemberId = "";
 
-fetch(MEDIA_API)
-  .then(res => res.json())
-  .then(data => {
-    if (!data.items || !data.items.length) {
+async function loadMediaFeed() {
+  try {
+    const res = await fetch(MEDIA_API);
+    const data = await res.json();
+
+    const items = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+
+    if (!items.length) {
       mediaFeed.innerHTML = "<div class='empty-message'>No approved media posts yet.</div>";
       return;
     }
 
-    allMediaItems = data.items;
+    allMediaItems = items;
     renderMediaItems();
-  })
-  .catch(() => {
+  } catch (err) {
+    console.error(err);
     mediaFeed.innerHTML = "<div class='empty-message'>Unable to load media right now.</div>";
-  });
+  }
+}
+
+loadMediaFeed();
 
 function convertDriveVideoToPreviewUrl(url) {
   const match = String(url || "").match(/id=([^&]+)/);
@@ -642,17 +649,17 @@ function renderMediaItems() {
     const card = document.createElement("div");
     card.className = "media-post";
 
-    const fullName = item.FullName || "Member";
-    const municipality = item.Municipality || "";
-    const caption = item.Caption || "";
-    const description = item.Description || "";
-    const dateText = item.PostedDate || item.ApprovedAt || "";
+    const fullName = item.FullName || item.fullName || "Member";
+    const municipality = item.Municipality || item.municipality || "";
+    const caption = item.Caption || item.caption || "";
+    const description = item.Description || item.description || "";
+    const dateText = item.PostedDate || item.postedDate || item.ApprovedAt || item.approvedAt || "";
 
-    const photo1 = item.Photo1URL || "";
-    const photo2 = item.Photo2URL || "";
-    const photo3 = item.Photo3URL || "";
-    const videoUrl = item.VideoURL || "";
-    const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || "";
+    const photo1 = item.Photo1URL || item.photo1Url || "";
+    const photo2 = item.Photo2URL || item.photo2Url || "";
+    const photo3 = item.Photo3URL || item.photo3Url || "";
+    const videoUrl = item.VideoURL || item.videoUrl || "";
+    const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || item.videoThumbnail || "";
 
     let mainMediaHtml = "";
     if (videoUrl) {
@@ -812,10 +819,6 @@ async function resolveMemberName() {
     return;
   }
 
-  if (memberId === lastResolvedMemberId && fullNameInput.value.trim()) {
-    return;
-  }
-
   memberLookupStatus.textContent = "Checking MemberID...";
   memberLookupStatus.classList.add("member-loading");
 
@@ -836,7 +839,6 @@ async function resolveMemberName() {
 
       memberLookupStatus.textContent = "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
-
       lastResolvedMemberId = memberId;
     } else {
       fullNameInput.value = "";
@@ -1037,7 +1039,14 @@ async function submitMediaPost() {
       body: JSON.stringify(payload)
     });
 
-    const result = await response.json();
+    const text = await response.text();
+    let result = {};
+
+    try {
+      result = JSON.parse(text);
+    } catch (parseErr) {
+      throw new Error("Invalid server response: " + text);
+    }
 
     if (result.success) {
       uploadStatus.innerText = "Upload successful. Waiting for admin approval.";
@@ -1060,7 +1069,7 @@ async function submitMediaPost() {
       uploadStatus.style.color = "red";
     }
   } catch (err) {
-    uploadStatus.innerText = "Upload failed. Please try again.";
+    uploadStatus.innerText = err.message || "Upload failed. Please try again.";
     uploadStatus.style.color = "red";
     console.error(err);
   }
