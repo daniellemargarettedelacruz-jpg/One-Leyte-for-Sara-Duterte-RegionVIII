@@ -414,92 +414,77 @@
   </section>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    const allianceForm = document.getElementById("allianceForm");
-    const successMessage = document.getElementById("successMessage");
-    const errorMessage = document.getElementById("errorMessage");
-    const pickLogoBtn = document.getElementById("pickLogoBtn");
-    const logoFile = document.getElementById("logoFile");
-    const logoFileName = document.getElementById("logoFileName");
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    pickLogoBtn.addEventListener("click", function () {
-      logoFile.click();
-    });
+const form = document.getElementById("allianceUploadForm");
+const fileInput = document.getElementById("logoFile");
 
-    logoFile.addEventListener("change", function () {
-      logoFileName.textContent = this.files && this.files[0] ? this.files[0].name : "No file chosen";
-    });
+form.addEventListener("submit", async function(e) {
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result.split(",")[1];
-          resolve(result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+  e.preventDefault();
+
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Please select a logo image.");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = async function() {
+
+    const base64 = reader.result.split(",")[1];
+
+    const payload = new URLSearchParams();
+
+    payload.append("action","allianceupload");
+    payload.append("allianceName", document.getElementById("allianceName").value);
+    payload.append("municipality", document.getElementById("municipality").value);
+    payload.append("uploaderName", document.getElementById("uploaderName").value);
+    payload.append("contactInfo", document.getElementById("contactInfo").value);
+    payload.append("caption", document.getElementById("caption").value);
+    payload.append("description", document.getElementById("description").value);
+
+    payload.append("fileName", file.name);
+    payload.append("mimeType", file.type);
+    payload.append("fileData", base64);
+
+    try {
+
+      const res = await fetch(WEB_APP_URL,{
+        method:"POST",
+        body:payload
       });
+
+      const data = await res.json();
+
+      if(data.success){
+
+        alert("Alliance logo submitted successfully!");
+
+        form.reset();
+
+      } else {
+
+        alert("Upload failed: " + data.message);
+
+      }
+
+    } catch(err){
+
+      console.error(err);
+      alert("Upload error. Check console.");
+
     }
 
-    allianceForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
+  };
 
-      successMessage.style.display = "none";
-      errorMessage.style.display = "none";
+  reader.readAsDataURL(file);
 
-      try {
-        const file = logoFile.files[0];
+});
 
-        if (!file) {
-          errorMessage.textContent = "Please choose a logo image.";
-          errorMessage.style.display = "block";
-          return;
-        }
-
-        const base64File = await fileToBase64(file);
-
-        const data = new URLSearchParams();
-        data.append("action", "allianceupload");
-        data.append("allianceName", document.getElementById("allianceName").value);
-        data.append("municipality", document.getElementById("municipality").value);
-        data.append("uploaderName", document.getElementById("uploaderName").value);
-        data.append("contactInfo", document.getElementById("contactInfo").value);
-        data.append("caption", document.getElementById("caption").value);
-        data.append("description", document.getElementById("description").value);
-        data.append("consent", document.getElementById("consent").checked ? "Yes" : "No");
-        data.append("fileName", file.name);
-        data.append("mimeType", file.type);
-        data.append("fileData", base64File);
-
-        const response = await fetch(WEB_APP_URL, {
-          method: "POST",
-          body: data
-        });
-
-        const text = await response.text();
-        let result = {};
-
-        try {
-          result = JSON.parse(text);
-        } catch (err) {
-          throw new Error("Invalid server response");
-        }
-
-        if (result.success) {
-          successMessage.style.display = "block";
-          allianceForm.reset();
-          logoFileName.textContent = "No file chosen";
-        } else {
-          errorMessage.textContent = result.message || "Submission failed. Please try again.";
-          errorMessage.style.display = "block";
-        }
-      } catch (error) {
-        errorMessage.textContent = "Submission failed. Please try again.";
-        errorMessage.style.display = "block";
-      }
-    });
-  </script>
+</script>
 </body>
 </html>
