@@ -282,48 +282,51 @@ const memberLookupStatus = document.getElementById("memberLookupStatus");
 let memberLookupTimer = null;
 let lastResolvedMemberId = "";
 
-fetch(api)
-.then(res => res.json())
-.then(data => {
+async function loadFreedomWall() {
+  try {
+    const res = await fetch(api);
+    const data = await res.json();
 
-const container = document.getElementById("freedomWall");
-container.innerHTML = "";
+    const container = document.getElementById("freedomWall");
+    container.innerHTML = "";
 
-if (!data.items || data.items.length === 0) {
-  container.innerHTML = '<div class="empty-message">No approved messages yet.</div>';
-  return;
+    const items = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+
+    if (!items.length) {
+      container.innerHTML = '<div class="empty-message">No approved messages yet.</div>';
+      return;
+    }
+
+    items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "freedom-post";
+
+      const fullName = item.FullName || item.fullName || item.Name || item.name || "Anonymous Member";
+      const message = item.Message || item.message || "";
+      const firstLetter = fullName.trim().charAt(0).toUpperCase() || "?";
+
+      card.innerHTML = `
+        <div class="post-header">
+          <div class="post-avatar">${escapeHtml(firstLetter)}</div>
+          <div>
+            <div class="post-name">${escapeHtml(fullName)}</div>
+          </div>
+        </div>
+
+        <div class="post-message">${escapeHtml(message)}</div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    const container = document.getElementById("freedomWall");
+    container.innerHTML = '<div class="empty-message">Unable to load Freedom Wall posts right now.</div>';
+    console.error(error);
+  }
 }
 
-data.items.forEach(item => {
-
-const card = document.createElement("div");
-card.className = "freedom-post";
-
-const fullName = item.FullName || "Anonymous Member";
-const message = item.Message || "";
-const firstLetter = fullName.trim().charAt(0).toUpperCase();
-
-card.innerHTML = `
-<div class="post-header">
-  <div class="post-avatar">${escapeHtml(firstLetter)}</div>
-  <div>
-    <div class="post-name">${escapeHtml(fullName)}</div>
-  </div>
-</div>
-
-<div class="post-message">${escapeHtml(message)}</div>
-`;
-
-container.appendChild(card);
-
-});
-
-})
-.catch(error => {
-  const container = document.getElementById("freedomWall");
-  container.innerHTML = '<div class="empty-message">Unable to load Freedom Wall posts right now.</div>';
-  console.error(error);
-});
+loadFreedomWall();
 
 
 // QR / URL MemberID autofill
@@ -356,10 +359,6 @@ async function resolveMemberName() {
     return;
   }
 
-  if (memberId === lastResolvedMemberId && fullNameInput.value.trim()) {
-    return;
-  }
-
   memberLookupStatus.textContent = "Checking MemberID...";
   memberLookupStatus.classList.add("member-loading");
 
@@ -372,9 +371,8 @@ async function resolveMemberName() {
       const fullName = data.fullName || data.name || data.memberName || "";
 
       fullNameInput.value = fullName;
-      memberLookupStatus.textContent = fullName ? "Member found." : "Member found.";
+      memberLookupStatus.textContent = "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
-
       lastResolvedMemberId = memberId;
     } else {
       fullNameInput.value = "";
@@ -446,7 +444,14 @@ async function submitFreedomWall() {
       body: JSON.stringify(payload)
     });
 
-    const result = await response.json();
+    const text = await response.text();
+    let result = {};
+
+    try {
+      result = JSON.parse(text);
+    } catch (parseErr) {
+      throw new Error("Invalid server response: " + text);
+    }
 
     if (result.success) {
       status.innerText = "Message submitted successfully. Waiting for admin approval.";
@@ -462,7 +467,7 @@ async function submitFreedomWall() {
     }
 
   } catch (err) {
-    status.innerText = "Submission failed. Please try again.";
+    status.innerText = err.message || "Submission failed. Please try again.";
     status.style.color = "red";
     console.error(err);
   }
