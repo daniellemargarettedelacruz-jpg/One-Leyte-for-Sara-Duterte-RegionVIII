@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Claim My Membership ID</title>
 
 <style>
+
 body{
 font-family:Arial;
 background:#f5f5f5;
@@ -45,6 +47,20 @@ background:#1346a5;
 margin-top:20px;
 text-align:left;
 }
+
+.id-card{
+border:2px solid #1c5fd4;
+border-radius:10px;
+padding:20px;
+margin-top:20px;
+background:#fafafa;
+text-align:center;
+}
+
+.qr{
+margin-top:15px;
+}
+
 </style>
 
 </head>
@@ -55,11 +71,11 @@ text-align:left;
 
 <h2>Claim Your Membership ID</h2>
 
-<p>Enter your Full Name and Birthdate.</p>
+<p>Enter your Full Name and Municipality.</p>
 
 <input id="fullname" placeholder="Full Name">
 
-<input id="birthdate" type="date">
+<input id="municipality" placeholder="Municipality">
 
 <br>
 
@@ -71,14 +87,28 @@ text-align:left;
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxWK3ZIdd4o5Gn1Xh22MzvrvashfzvJ1FugxYbmv7c-vEatdGCtQ6mu6UQa1mzNpNkL/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
 function searchMember(){
 
 const name = document.getElementById("fullname").value;
-const birthdate = document.getElementById("birthdate").value;
+const municipality = document.getElementById("municipality").value;
 
-const url = API_URL + "?action=claim&fullName=" + encodeURIComponent(name) + "&birthdate=" + birthdate;
+if(!name || !municipality){
+
+alert("Please enter Full Name and Municipality");
+
+return;
+
+}
+
+const url =
+API_URL +
+"?action=claimid&fullName=" +
+encodeURIComponent(name) +
+"&municipality=" +
+encodeURIComponent(municipality);
+
 
 fetch(url)
 .then(res => res.json())
@@ -90,24 +120,55 @@ document.getElementById("result").innerHTML =
 "<p style='color:red'>" + data.message + "</p>";
 
 return;
+
 }
 
-const m = data.member;
+const memberId = data.memberId;
+const fullName = data.fullName;
+const muni = data.municipality;
+
+
+/* Generate QR Code */
+
+const qrCode =
+"https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + memberId;
+
 
 document.getElementById("result").innerHTML = `
-<h3>Member Found</h3>
 
-<p><b>Name:</b> ${m.fullName}</p>
-<p><b>Member ID:</b> ${m.memberId}</p>
-<p><b>Municipality:</b> ${m.municipality}</p>
-<p><b>Province:</b> ${m.province}</p>
+<div class="id-card">
 
-<p><a href="${m.verifyUrl}" target="_blank">Verify Membership</a></p>
+<h3>One Leyte Digital Membership</h3>
 
-<p><a href="${m.idCardLink}" target="_blank">Download Digital ID</a></p>
+<p><b>Name:</b> ${fullName}</p>
 
-<p><a href="${m.qrCodeLink}" target="_blank">View QR Code</a></p>
+<p><b>Municipality:</b> ${muni}</p>
+
+<p><b>Member ID:</b> ${memberId}</p>
+
+<div class="qr">
+
+<img src="${qrCode}">
+
+</div>
+
+<p style="margin-top:12px;font-size:14px;">
+Use this QR code when posting on Freedom Wall or Media Uploads.
+</p>
+
+</div>
+
 `;
+
+})
+
+.catch(err => {
+
+console.error(err);
+
+document.getElementById("result").innerHTML =
+"<p style='color:red'>Server error. Please try again later.</p>";
+
 });
 
 }
