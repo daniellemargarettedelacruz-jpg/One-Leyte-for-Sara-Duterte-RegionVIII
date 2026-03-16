@@ -1,179 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claim My Membership ID</title>
 
-<title>Claim My Membership ID</title>
+  <style>
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f5f5f5;
+      padding:40px 16px;
+      text-align:center;
+      margin:0;
+    }
 
-<style>
+    .container{
+      background:white;
+      padding:30px;
+      max-width:500px;
+      margin:auto;
+      border-radius:8px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
 
-body{
-font-family:Arial;
-background:#f5f5f5;
-padding:40px;
-text-align:center;
-}
+    input{
+      width:90%;
+      padding:10px;
+      margin:10px;
+      font-size:16px;
+      box-sizing:border-box;
+    }
 
-.container{
-background:white;
-padding:30px;
-max-width:500px;
-margin:auto;
-border-radius:8px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
+    button{
+      padding:12px 25px;
+      font-size:16px;
+      background:#1c5fd4;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+    }
 
-input{
-width:90%;
-padding:10px;
-margin:10px;
-font-size:16px;
-}
+    button:hover{
+      background:#1346a5;
+    }
 
-button{
-padding:12px 25px;
-font-size:16px;
-background:#1c5fd4;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
+    .result{
+      margin-top:20px;
+      text-align:left;
+    }
 
-button:hover{
-background:#1346a5;
-}
+    .id-card{
+      border:2px solid #1c5fd4;
+      border-radius:10px;
+      padding:20px;
+      margin-top:20px;
+      background:#fafafa;
+      text-align:center;
+    }
 
-.result{
-margin-top:20px;
-text-align:left;
-}
+    .qr{
+      margin-top:15px;
+    }
 
-.id-card{
-border:2px solid #1c5fd4;
-border-radius:10px;
-padding:20px;
-margin-top:20px;
-background:#fafafa;
-text-align:center;
-}
+    .qr img{
+      max-width:180px;
+      height:auto;
+    }
 
-.qr{
-margin-top:15px;
-}
-
-</style>
-
+    .helper{
+      font-size:14px;
+      color:#666;
+      margin-top:8px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-<h2>Claim Your Membership ID</h2>
+    <h2>Claim Your Membership ID</h2>
 
-<p>Enter your Full Name and Municipality.</p>
+    <p>Enter your Full Name and Municipality.</p>
 
-<input id="fullname" placeholder="Full Name">
+    <input id="fullname" placeholder="Full Name" />
+    <input id="municipality" placeholder="Municipality" />
 
-<input id="municipality" placeholder="Municipality">
+    <br>
 
-<br>
+    <button type="button" id="searchBtn">Search</button>
 
-<button onclick="searchMember()">Search</button>
+    <div class="helper">
+      Example: Juan Dela Cruz / Palo
+    </div>
 
-<div class="result" id="result"></div>
+    <div class="result" id="result"></div>
 
-</div>
+  </div>
 
-<script>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+    const fullNameInput = document.getElementById("fullname");
+    const municipalityInput = document.getElementById("municipality");
+    const searchBtn = document.getElementById("searchBtn");
+    const resultBox = document.getElementById("result");
 
-function searchMember(){
+    searchBtn.addEventListener("click", searchMember);
+    fullNameInput.addEventListener("keydown", function(e){
+      if (e.key === "Enter") searchMember();
+    });
+    municipalityInput.addEventListener("keydown", function(e){
+      if (e.key === "Enter") searchMember();
+    });
 
-const name = document.getElementById("fullname").value;
-const municipality = document.getElementById("municipality").value;
+    function searchMember() {
+      const name = fullNameInput.value.trim();
+      const municipality = municipalityInput.value.trim();
 
-if(!name || !municipality){
+      resultBox.innerHTML = "";
 
-alert("Please enter Full Name and Municipality");
+      if (!name || !municipality) {
+        alert("Please enter Full Name and Municipality");
+        return;
+      }
 
-return;
+      const url =
+        API_URL +
+        "?action=claimid&fullName=" +
+        encodeURIComponent(name) +
+        "&municipality=" +
+        encodeURIComponent(municipality);
 
-}
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
 
-const url =
-API_URL +
-"?action=claimid&fullName=" +
-encodeURIComponent(name) +
-"&municipality=" +
-encodeURIComponent(municipality);
+          if (!data.success) {
+            resultBox.innerHTML =
+              "<p style='color:red'>" + data.message + "</p>";
+            return;
+          }
 
+          const memberId = data.memberId || "";
+          const fullName = data.fullName || "";
+          const muni = data.municipality || "";
 
-fetch(url)
-.then(res => res.json())
-.then(data => {
+          const qrCode =
+            "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
+            encodeURIComponent(memberId);
 
-if(!data.success){
+          resultBox.innerHTML = `
+            <div class="id-card">
+              <h3>One Leyte Digital Membership</h3>
 
-document.getElementById("result").innerHTML =
-"<p style='color:red'>" + data.message + "</p>";
+              <p><b>Name:</b> ${fullName}</p>
+              <p><b>Municipality:</b> ${muni}</p>
+              <p><b>Member ID:</b> ${memberId}</p>
 
-return;
+              <div class="qr">
+                <img src="${qrCode}" alt="QR Code">
+              </div>
 
-}
-
-const memberId = data.memberId;
-const fullName = data.fullName;
-const muni = data.municipality;
-
-
-/* Generate QR Code */
-
-const qrCode =
-"https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + memberId;
-
-
-document.getElementById("result").innerHTML = `
-
-<div class="id-card">
-
-<h3>One Leyte Digital Membership</h3>
-
-<p><b>Name:</b> ${fullName}</p>
-
-<p><b>Municipality:</b> ${muni}</p>
-
-<p><b>Member ID:</b> ${memberId}</p>
-
-<div class="qr">
-
-<img src="${qrCode}">
-
-</div>
-
-<p style="margin-top:12px;font-size:14px;">
-Use this QR code when posting on Freedom Wall or Media Uploads.
-</p>
-
-</div>
-
-`;
-
-})
-
-.catch(err => {
-
-console.error(err);
-
-document.getElementById("result").innerHTML =
-"<p style='color:red'>Server error. Please try again later.</p>";
-
-});
-
-}
-
-</script>
+              <p style="margin-top:12px;font-size:14px;">
+                Use this QR code when posting on Freedom Wall or Media Uploads.
+              </p>
+            </div>
+          `;
+        })
+        .catch(err => {
+          console.error(err);
+          resultBox.innerHTML =
+            "<p style='color:red'>Server error. Please try again later.</p>";
+        });
+    }
+  </script>
 
 </body>
 </html>
