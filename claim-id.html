@@ -31,7 +31,9 @@
       box-sizing:border-box;
     }
 
-    button{
+    button,
+    .action-link{
+      display:inline-block;
       padding:12px 25px;
       font-size:16px;
       background:#1c5fd4;
@@ -39,9 +41,12 @@
       border:none;
       border-radius:5px;
       cursor:pointer;
+      text-decoration:none;
+      margin:6px 4px 0;
     }
 
-    button:hover{
+    button:hover,
+    .action-link:hover{
       background:#1346a5;
     }
 
@@ -78,6 +83,10 @@
       color:#666;
       margin-top:8px;
     }
+
+    .action-wrap{
+      margin-top:14px;
+    }
   </style>
 </head>
 
@@ -107,6 +116,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
     const VERIFY_PAGE_URL = "https://daniellemargarettedelacruz-jpg.github.io/One-Leyte-for-Sara-Duterte-RegionVIII/verify.html";
+    const ID_FOLDER_URL = "https://drive.google.com/drive/folders/16Q8OpIYcMHOortsnTm_bfY7NWexbBG9Q";
 
     const fullNameInput = document.getElementById("fullname");
     const municipalityInput = document.getElementById("municipality");
@@ -171,7 +181,6 @@
           const muni = data.municipality || "";
 
           const verifyLink = VERIFY_PAGE_URL + "?memberId=" + encodeURIComponent(memberId);
-
           const qrCode =
             "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
             encodeURIComponent(verifyLink);
@@ -192,8 +201,13 @@
                 Scan this QR code to open the Member Verification page.
               </p>
 
-              <p style="margin-top:10px;font-size:14px;word-break:break-word;">
-                <a href="${verifyLink}" target="_blank" rel="noopener noreferrer">Open Verification Page</a>
+              <div class="action-wrap">
+                <a class="action-link" href="${verifyLink}" target="_blank" rel="noopener noreferrer">Open Verification Page</a>
+                <a class="action-link" href="${ID_FOLDER_URL}" target="_blank" rel="noopener noreferrer">Open ID Folder</a>
+              </div>
+
+              <p style="margin-top:12px;font-size:13px;color:#666;">
+                Your Member ID is confirmed above. To open the actual ID file, check the ID folder.
               </p>
             </div>
           `;
@@ -201,7 +215,7 @@
         .catch(err => {
           console.error(err);
           resultBox.innerHTML =
-            "<p style='color:red'>Server error. Please try again later.</p>";
+            "<p style='color:red'>" + escapeHtml(err.message || "Server error. Please try again later.") + "</p>";
         })
         .finally(() => {
           searchBtn.disabled = false;
