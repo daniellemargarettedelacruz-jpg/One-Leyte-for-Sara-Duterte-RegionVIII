@@ -73,44 +73,45 @@
   </header>
 
   <!-- SECTORAL REPRESENTATION -->
-<section class="sectoral-section" id="sectoral">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Sectoral Membership</h2>
-      <p>One movement. Many voices. United for Leyte, united for the nation.</p>
+  <section class="sectoral-section" id="sectoral">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Sectoral Membership</h2>
+        <p>One movement. Many voices. United for Leyte, united for the nation.</p>
+      </div>
+
+      <div class="sector-grid">
+        <a href="membership.html?sector=Women" class="sector-capsule white"><span>Women</span></a>
+        <a href="membership.html?sector=Youth" class="sector-capsule green"><span>Youth</span></a>
+
+        <a href="membership.html?sector=Senior Citizens" class="sector-capsule white"><span>Senior Citizens</span></a>
+        <a href="membership.html?sector=Farmers" class="sector-capsule green"><span>Farmers</span></a>
+
+        <a href="membership.html?sector=Fisherfolk" class="sector-capsule white"><span>Fisherfolk</span></a>
+        <a href="membership.html?sector=Workers and Laborers" class="sector-capsule green"><span>Workers and Laborers</span></a>
+
+        <a href="membership.html?sector=Transport Sector" class="sector-capsule white"><span>Transport Sector</span></a>
+        <a href="membership.html?sector=Professionals" class="sector-capsule green"><span>Professionals</span></a>
+
+        <a href="membership.html?sector=OFWs and Families" class="sector-capsule white"><span>OFWs and Families</span></a>
+        <a href="membership.html?sector=Solo Parents" class="sector-capsule green"><span>Solo Parents</span></a>
+
+        <a href="membership.html?sector=Persons with Disabilities" class="sector-capsule white"><span>Persons with Disabilities</span></a>
+        <a href="membership.html?sector=LGBTQIA+" class="sector-capsule green"><span>LGBTQIA+</span></a>
+
+        <a href="membership.html?sector=Underserved and Marginalized Communities" class="sector-capsule white"><span>Underserved &amp; Marginalized Communities</span></a>
+        <a href="membership.html?sector=Muslim Community" class="sector-capsule green"><span>Muslim Community</span></a>
+
+        <a href="membership.html?sector=Retirees and Veterans" class="sector-capsule white"><span>Retirees and Veterans</span></a>
+        <a href="membership.html?sector=Entrepreneurs and Small Business Owners" class="sector-capsule green"><span>Entrepreneurs &amp; Small Business Owners</span></a>
+      </div>
+
+      <p class="privacy-note">
+        Sectoral membership details are submitted privately and are not shown publicly on the website.
+      </p>
     </div>
+  </section>
 
-    <div class="sector-grid">
-      <a href="membership.html?sector=Women" class="sector-capsule white"><span>Women</span></a>
-      <a href="membership.html?sector=Youth" class="sector-capsule green"><span>Youth</span></a>
-
-      <a href="membership.html?sector=Senior Citizens" class="sector-capsule white"><span>Senior Citizens</span></a>
-      <a href="membership.html?sector=Farmers" class="sector-capsule green"><span>Farmers</span></a>
-
-      <a href="membership.html?sector=Fisherfolk" class="sector-capsule white"><span>Fisherfolk</span></a>
-      <a href="membership.html?sector=Workers and Laborers" class="sector-capsule green"><span>Workers and Laborers</span></a>
-
-      <a href="membership.html?sector=Transport Sector" class="sector-capsule white"><span>Transport Sector</span></a>
-      <a href="membership.html?sector=Professionals" class="sector-capsule green"><span>Professionals</span></a>
-
-      <a href="membership.html?sector=OFWs and Families" class="sector-capsule white"><span>OFWs and Families</span></a>
-      <a href="membership.html?sector=Solo Parents" class="sector-capsule green"><span>Solo Parents</span></a>
-
-      <a href="membership.html?sector=Persons with Disabilities" class="sector-capsule white"><span>Persons with Disabilities</span></a>
-      <a href="membership.html?sector=LGBTQIA+" class="sector-capsule green"><span>LGBTQIA+</span></a>
-
-      <a href="membership.html?sector=Underserved and Marginalized Communities" class="sector-capsule white"><span>Underserved &amp; Marginalized Communities</span></a>
-      <a href="membership.html?sector=Muslim Community" class="sector-capsule green"><span>Muslim Community</span></a>
-
-      <a href="membership.html?sector=Retirees and Veterans" class="sector-capsule white"><span>Retirees and Veterans</span></a>
-      <a href="membership.html?sector=Entrepreneurs and Small Business Owners" class="sector-capsule green"><span>Entrepreneurs &amp; Small Business Owners</span></a>
-    </div>
-
-    <p class="privacy-note">
-      Sectoral membership details are submitted privately and are not shown publicly on the website.
-    </p>
-  </div>
-</section>
   <!-- ANNOUNCEMENTS -->
   <section class="home-announcement-banner" id="latestBanner" style="display:none;"></section>
 
@@ -269,35 +270,27 @@
   </section>
 
   <!-- REGIONAL ALLIANCES -->
-<script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+  <section class="alliances-section" id="alliances">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Regional Alliances</h2>
+        <p>Alliance groups across Eastern Visayas supporting the movement.</p>
+      </div>
 
-  async function loadAllianceUploads() {
-    const grid = document.getElementById("alliancesGrid");
-    if (!grid) return;
+      <div class="alliances-showcase" id="alliancesGrid">
+        <a href="alliance-upload.html" class="alliance-upload-tile">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>Upload Alliance Logo</span>
+        </a>
+      </div>
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-      const data = await res.json();
+      <p class="privacy-note">
+        Alliance submissions are reviewed privately before appearing publicly on the website.
+      </p>
+    </div>
+  </section>
 
-      if (!Array.isArray(data)) return;
-
-      data.forEach(item => {
-        const tile = document.createElement("div");
-        tile.className = "alliance-logo-tile";
-        tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
-        grid.appendChild(tile);
-      });
-
-    } catch (err) {
-      console.error("Alliance logos failed to load", err);
-    }
-  }
-
-  loadAllianceUploads();
-</script>
-
-   <!-- WHY JOIN -->
+  <!-- WHY JOIN -->
   <section class="why-join">
     <div class="container">
 
@@ -333,7 +326,8 @@
 
       <ul class="principles-list">
         <li>Voluntary Participation</li>
-        <li>Unity and Bayanihan</li>
+        <li>Ibalik and Tapang at Malasakit</li>
+         <li>Unity and Bayanihan</li>
         <li>Community Leadership</li>
         <li>Service to the Nation</li>
         <li>Protecting the Next Generation</li>
@@ -395,7 +389,7 @@
         this.classList.add('sector-capsule-active');
 
         setTimeout(() => {
-          window.open(destination, '_blank');
+          window.location.href = destination;
           this.classList.remove('sector-capsule-active');
         }, 180);
       });
@@ -457,47 +451,32 @@
       .catch(err => {
         console.error("Announcement homepage load error:", err);
       });
-  </script>
-<script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-  async function loadAllianceUploads() {
-    const grid = document.getElementById("alliancesGrid");
-    if (!grid) return;
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    const submitCard = grid.querySelector(".alliance-submit-card");
+    async function loadAllianceUploads() {
+      const grid = document.getElementById("alliancesGrid");
+      if (!grid) return;
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-      const data = await res.json();
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+        const data = await res.json();
 
-      if (!Array.isArray(data) || data.length === 0) return;
+        if (!Array.isArray(data)) return;
 
-      data.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "alliance-card";
+        data.forEach(item => {
+          const tile = document.createElement("div");
+          tile.className = "alliance-logo-tile";
+          tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
+          grid.appendChild(tile);
+        });
 
-        card.innerHTML = `
-          <div class="alliance-image-wrap">
-            <img src="${item.fileUrl}" alt="${item.allianceName}">
-          </div>
-          <h3>${item.allianceName || ""}</h3>
-          <p>${item.location || ""}</p>
-        `;
-
-        if (submitCard) {
-          grid.insertBefore(card, submitCard);
-        } else {
-          grid.appendChild(card);
-        }
-      });
-
-    } catch (err) {
-      console.error("Alliance load failed:", err);
+      } catch (err) {
+        console.error("Alliance logos failed to load", err);
+      }
     }
-  }
 
-  loadAllianceUploads();
-</script>
+    loadAllianceUploads();
+  </script>
 </body>
 </html>
