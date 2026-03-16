@@ -1,55 +1,166 @@
-function verifyMember_(e) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Verification - One Leyte for Sara Duterte Region VIII</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="verify-page">
+    <div class="container narrow card">
+      <h1>Member Verification</h1>
 
-  const memberId = normalizeMemberId_(e.parameter.memberId || "");
-  const fullName = normalizeLookupText_(e.parameter.fullName || "");
+      <p class="verify-text">
+        Use the QR code on the membership ID or the official verification link
+        to confirm a registered member.
+      </p>
 
-  if (!memberId || !fullName) {
-    return {
-      success: false,
-      message: "MemberID and Full Name are required."
-    };
-  }
+      <div class="member-box">
+        <p><strong>Member ID:</strong> <span id="memberIdDisplay">No Member ID Found</span></p>
+      </div>
 
-  const sh = getMemberLookupSheet_();
-  const values = sh.getDataRange().getValues();
+      <div style="margin-top:18px;">
+        <input
+          type="text"
+          id="memberIdInput"
+          placeholder="Enter Member ID"
+          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
+        />
+      </div>
 
-  if (values.length < 2) {
-    return {
-      success: false,
-      message: "No member records found."
-    };
-  }
+      <div style="margin-top:12px;">
+        <input
+          type="text"
+          id="fullNameInput"
+          placeholder="Enter Full Name"
+          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
+        />
+      </div>
 
-  const headers = values[0];
-  const rows = values.slice(1);
+      <div style="margin-top:16px;">
+        <button
+          type="button"
+          id="verifyBtn"
+          class="btn secondary"
+          style="border:none;cursor:pointer;"
+        >
+          Verify Member
+        </button>
+      </div>
 
-  const memberIdCol = findHeaderIndex_(headers, ["MemberID", "Member ID", "ID"]);
-  const fullNameCol = findHeaderIndex_(headers, ["FullName", "Full Name", "Name"]);
+      <div id="verifyResult" style="margin-top:18px;"></div>
 
-  if (memberIdCol === -1) throw new Error("MemberID column not found.");
-  if (fullNameCol === -1) throw new Error("FullName column not found.");
+      <p class="note">
+        If this page was opened through a valid QR code, the Member ID above
+        corresponds to a registered record in the One Leyte for Sara Duterte
+        Region VIII membership system.
+      </p>
 
-  for (let i = 0; i < rows.length; i++) {
+      <div class="cta-group">
+        <a class="btn secondary" href="claim-id.html">Claim My ID</a>
+        <a class="btn secondary" href="index.html">Back to Home</a>
+      </div>
+    </div>
+  </section>
 
-    const rowMemberId = normalizeMemberId_(rows[i][memberIdCol] || "");
-    const rowFullName = normalizeLookupText_(rows[i][fullNameCol] || "");
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    if (rowMemberId === memberId && rowFullName === fullName) {
+    const params = new URLSearchParams(window.location.search);
+    const memberFromUrl = params.get("memberId") || params.get("member") || "";
 
-      return {
-        success: true,
-        memberId: rowMemberId,
-        memberName: rows[i][fullNameCol],
-        message: "Member verified successfully."
-      };
+    const memberIdDisplay = document.getElementById("memberIdDisplay");
+    const memberIdInput = document.getElementById("memberIdInput");
+    const fullNameInput = document.getElementById("fullNameInput");
+    const verifyBtn = document.getElementById("verifyBtn");
+    const verifyResult = document.getElementById("verifyResult");
 
+    function normalizeMemberId(value) {
+      return String(value || "").replace(/\s+/g, "").trim().toUpperCase();
     }
 
-  }
+    function normalizeText(value) {
+      return String(value || "").replace(/\s+/g, " ").trim();
+    }
 
-  return {
-    success: false,
-    message: "Member not found or Full Name does not match."
-  };
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-}
+    function setMemberId(id) {
+      const cleanId = normalizeMemberId(id);
+      memberIdDisplay.textContent = cleanId || "No Member ID Found";
+      memberIdInput.value = cleanId;
+    }
+
+    function verifyMember() {
+      const memberId = normalizeMemberId(memberIdInput.value);
+      const fullName = normalizeText(fullNameInput.value);
+
+      setMemberId(memberId);
+      fullNameInput.value = fullName;
+      verifyResult.innerHTML = "";
+
+      if (!memberId || !fullName) {
+        verifyResult.innerHTML = "<p style='color:red;'>Please enter Member ID and Full Name.</p>";
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = "Verifying...";
+
+      const url =
+        API_URL +
+        "?action=verifymember&memberId=" +
+        encodeURIComponent(memberId) +
+        "&fullName=" +
+        encodeURIComponent(fullName);
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) {
+            verifyResult.innerHTML =
+              "<p style='color:red;'>" + escapeHtml(data.message || "Verification failed.") + "</p>";
+            return;
+          }
+
+          verifyResult.innerHTML = `
+            <div style="margin:0 auto;max-width:420px;padding:18px;border:2px solid #14532d;border-radius:12px;background:#f6fff8;">
+              <p style="margin:0 0 10px 0;color:#14532d;font-weight:700;font-size:20px;">Verified Member</p>
+              <p style="margin:8px 0;"><strong>Member ID:</strong> ${escapeHtml(data.memberId || memberId)}</p>
+              <p style="margin:8px 0;"><strong>Name:</strong> ${escapeHtml(data.memberName || "")}</p>
+            </div>
+          `;
+        })
+        .catch(err => {
+          console.error(err);
+          verifyResult.innerHTML =
+            "<p style='color:red;'>Server error. Please try again later.</p>";
+        })
+        .finally(() => {
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = "Verify Member";
+        });
+    }
+
+    verifyBtn.addEventListener("click", verifyMember);
+
+    memberIdInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") verifyMember();
+    });
+
+    fullNameInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") verifyMember();
+    });
+
+    setMemberId(memberFromUrl);
+  </script>
+</body>
+</html>
