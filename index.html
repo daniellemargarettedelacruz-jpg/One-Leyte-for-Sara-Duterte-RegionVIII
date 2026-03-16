@@ -400,7 +400,7 @@
     fetch(announcementApi)
       .then(res => res.json())
       .then(data => {
-        if (!data.success) return;
+        if (!data) return;
 
         if (data.latest && data.latest.Title) {
           const banner = document.getElementById("latestBanner");
@@ -460,21 +460,18 @@
 
       try {
         const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-        const data = await res.json();
+const data = await res.json();
 
-        if (!Array.isArray(data)) return;
+const items = Array.isArray(data) ? data : data.items;
 
-        data.forEach(item => {
-          const tile = document.createElement("div");
-          tile.className = "alliance-logo-tile";
-          tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
-          grid.appendChild(tile);
-        });
+if (!items || !items.length) return;
 
-      } catch (err) {
-        console.error("Alliance logos failed to load", err);
-      }
-    }
+items.forEach(item => {
+  const tile = document.createElement("div");
+  tile.className = "alliance-logo-tile";
+  tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
+  grid.appendChild(tile);
+});
 
     loadAllianceUploads();
   </script>
