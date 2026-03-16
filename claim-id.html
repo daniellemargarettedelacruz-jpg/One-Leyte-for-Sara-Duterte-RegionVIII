@@ -143,6 +143,12 @@
         .replace(/'/g, "&#039;");
     }
 
+    function extractDriveFileId(url) {
+      const text = String(url || "");
+      const match = text.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : "";
+    }
+
     function searchMember() {
       const name = cleanLookupText(fullNameInput.value);
       const municipality = cleanLookupText(municipalityInput.value);
@@ -185,6 +191,14 @@
             "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
             encodeURIComponent(verifyLink);
 
+          const fileId = extractDriveFileId(idCardLink);
+          const directDownloadLink = fileId
+            ? "https://drive.google.com/uc?export=download&id=" + fileId
+            : "";
+          const directViewLink = fileId
+            ? "https://drive.google.com/uc?export=view&id=" + fileId
+            : idCardLink;
+
           resultBox.innerHTML = `
             <div class="id-card">
               <h3>One Leyte Digital Membership</h3>
@@ -203,17 +217,14 @@
 
               <div class="action-wrap">
                 <a class="action-link" href="${verifyLink}" target="_blank" rel="noopener noreferrer">Open Verification Page</a>
-                ${
-                  idCardLink
-                    ? `<a class="action-link" href="${idCardLink}" target="_blank" rel="noopener noreferrer">Open My ID</a>`
-                    : ""
-                }
+                ${directViewLink ? `<a class="action-link" href="${directViewLink}" target="_blank" rel="noopener noreferrer">View My ID</a>` : ""}
+                ${directDownloadLink ? `<a class="action-link" href="${directDownloadLink}" target="_blank" rel="noopener noreferrer">Download My ID</a>` : ""}
               </div>
 
               <p style="margin-top:12px;font-size:13px;color:#666;">
                 ${
                   idCardLink
-                    ? "Your soft copy ID is ready. Use the button above to open it directly."
+                    ? "Your soft copy ID is ready. Use View My ID or Download My ID."
                     : "Your Member ID is confirmed above. ID soft copy link is not yet available in the record."
                 }
               </p>
