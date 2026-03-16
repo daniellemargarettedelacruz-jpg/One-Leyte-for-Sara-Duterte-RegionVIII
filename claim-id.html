@@ -45,6 +45,11 @@
       background:#1346a5;
     }
 
+    button:disabled{
+      opacity:0.7;
+      cursor:not-allowed;
+    }
+
     .result{
       margin-top:20px;
       text-align:left;
@@ -115,16 +120,34 @@
       if (e.key === "Enter") searchMember();
     });
 
-    function searchMember() {
-      const name = fullNameInput.value.trim();
-      const municipality = municipalityInput.value.trim();
+    function cleanLookupText(value) {
+      return String(value || "").replace(/\s+/g, " ").trim();
+    }
 
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function searchMember() {
+      const name = cleanLookupText(fullNameInput.value);
+      const municipality = cleanLookupText(municipalityInput.value);
+
+      fullNameInput.value = name;
+      municipalityInput.value = municipality;
       resultBox.innerHTML = "";
 
       if (!name || !municipality) {
         alert("Please enter Full Name and Municipality");
         return;
       }
+
+      searchBtn.disabled = true;
+      searchBtn.textContent = "Searching...";
 
       const url =
         API_URL +
@@ -136,10 +159,9 @@
       fetch(url)
         .then(res => res.json())
         .then(data => {
-
           if (!data.success) {
             resultBox.innerHTML =
-              "<p style='color:red'>" + data.message + "</p>";
+              "<p style='color:red'>" + escapeHtml(data.message || "Member not found.") + "</p>";
             return;
           }
 
@@ -155,9 +177,9 @@
             <div class="id-card">
               <h3>One Leyte Digital Membership</h3>
 
-              <p><b>Name:</b> ${fullName}</p>
-              <p><b>Municipality:</b> ${muni}</p>
-              <p><b>Member ID:</b> ${memberId}</p>
+              <p><b>Name:</b> ${escapeHtml(fullName)}</p>
+              <p><b>Municipality:</b> ${escapeHtml(muni)}</p>
+              <p><b>Member ID:</b> ${escapeHtml(memberId)}</p>
 
               <div class="qr">
                 <img src="${qrCode}" alt="QR Code">
@@ -173,6 +195,10 @@
           console.error(err);
           resultBox.innerHTML =
             "<p style='color:red'>Server error. Please try again later.</p>";
+        })
+        .finally(() => {
+          searchBtn.disabled = false;
+          searchBtn.textContent = "Search";
         });
     }
   </script>
