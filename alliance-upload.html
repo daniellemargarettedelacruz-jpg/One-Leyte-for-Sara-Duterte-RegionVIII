@@ -414,77 +414,81 @@
   </section>
 
   <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+    const form = document.getElementById("allianceForm");
+    const fileInput = document.getElementById("logoFile");
+    const pickLogoBtn = document.getElementById("pickLogoBtn");
+    const logoFileName = document.getElementById("logoFileName");
+    const successMessage = document.getElementById("successMessage");
+    const errorMessage = document.getElementById("errorMessage");
 
-const form = document.getElementById("allianceUploadForm");
-const fileInput = document.getElementById("logoFile");
+    pickLogoBtn.addEventListener("click", function () {
+      fileInput.click();
+    });
 
-form.addEventListener("submit", async function(e) {
+    fileInput.addEventListener("change", function () {
+      logoFileName.textContent = this.files && this.files[0] ? this.files[0].name : "No file chosen";
+    });
 
-  e.preventDefault();
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-  const file = fileInput.files[0];
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
 
-  if (!file) {
-    alert("Please select a logo image.");
-    return;
-  }
+      const file = fileInput.files[0];
 
-  const reader = new FileReader();
-
-  reader.onload = async function() {
-
-    const base64 = reader.result.split(",")[1];
-
-    const payload = new URLSearchParams();
-
-    payload.append("action","allianceupload");
-    payload.append("allianceName", document.getElementById("allianceName").value);
-    payload.append("municipality", document.getElementById("municipality").value);
-    payload.append("uploaderName", document.getElementById("uploaderName").value);
-    payload.append("contactInfo", document.getElementById("contactInfo").value);
-    payload.append("caption", document.getElementById("caption").value);
-    payload.append("description", document.getElementById("description").value);
-
-    payload.append("fileName", file.name);
-    payload.append("mimeType", file.type);
-    payload.append("fileData", base64);
-
-    try {
-
-      const res = await fetch(WEB_APP_URL,{
-        method:"POST",
-        body:payload
-      });
-
-      const data = await res.json();
-
-      if(data.success){
-
-        alert("Alliance logo submitted successfully!");
-
-        form.reset();
-
-      } else {
-
-        alert("Upload failed: " + data.message);
-
+      if (!file) {
+        errorMessage.textContent = "Please select a logo image.";
+        errorMessage.style.display = "block";
+        return;
       }
 
-    } catch(err){
+      const reader = new FileReader();
 
-      console.error(err);
-      alert("Upload error. Check console.");
+      reader.onload = async function() {
+        const base64 = reader.result.split(",")[1];
 
-    }
+        const payload = new URLSearchParams();
+        payload.append("action", "allianceupload");
+        payload.append("allianceName", document.getElementById("allianceName").value);
+        payload.append("municipality", document.getElementById("municipality").value);
+        payload.append("uploaderName", document.getElementById("uploaderName").value);
+        payload.append("contactInfo", document.getElementById("contactInfo").value);
+        payload.append("caption", document.getElementById("caption").value);
+        payload.append("description", document.getElementById("description").value);
+        payload.append("consent", document.getElementById("consent").checked ? "Yes" : "No");
+        payload.append("fileName", file.name);
+        payload.append("mimeType", file.type);
+        payload.append("fileData", base64);
 
-  };
+        try {
+          const res = await fetch(WEB_APP_URL, {
+            method: "POST",
+            body: payload
+          });
 
-  reader.readAsDataURL(file);
+          const data = await res.json();
 
-});
+          if (data.success) {
+            successMessage.style.display = "block";
+            form.reset();
+            logoFileName.textContent = "No file chosen";
+          } else {
+            errorMessage.textContent = "Upload failed: " + (data.message || "Unknown error");
+            errorMessage.style.display = "block";
+          }
 
-</script>
+        } catch (err) {
+          console.error(err);
+          errorMessage.textContent = "Upload error. Check browser console.";
+          errorMessage.style.display = "block";
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 </html>
