@@ -106,6 +106,7 @@
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+    const VERIFY_PAGE_URL = "https://daniellemargarettedelacruz-jpg.github.io/One-Leyte-for-Sara-Duterte-RegionVIII/verify.html";
 
     const fullNameInput = document.getElementById("fullname");
     const municipalityInput = document.getElementById("municipality");
@@ -169,9 +170,11 @@
           const fullName = data.fullName || "";
           const muni = data.municipality || "";
 
+          const verifyLink = VERIFY_PAGE_URL + "?memberId=" + encodeURIComponent(memberId);
+
           const qrCode =
             "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
-            encodeURIComponent(memberId);
+            encodeURIComponent(verifyLink);
 
           resultBox.innerHTML = `
             <div class="id-card">
@@ -186,7 +189,11 @@
               </div>
 
               <p style="margin-top:12px;font-size:14px;">
-                Use this QR code when posting on Freedom Wall or Media Uploads.
+                Scan this QR code to open the Member Verification page.
+              </p>
+
+              <p style="margin-top:10px;font-size:14px;word-break:break-word;">
+                <a href="${verifyLink}" target="_blank" rel="noopener noreferrer">Open Verification Page</a>
               </p>
             </div>
           `;
