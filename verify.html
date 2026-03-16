@@ -29,15 +29,6 @@
         />
       </div>
 
-      <div style="margin-top:12px;">
-        <input
-          type="text"
-          id="fullNameInput"
-          placeholder="Enter Full Name"
-          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
-        />
-      </div>
-
       <div style="margin-top:16px;">
         <button
           type="button"
@@ -72,16 +63,11 @@
 
     const memberIdDisplay = document.getElementById("memberIdDisplay");
     const memberIdInput = document.getElementById("memberIdInput");
-    const fullNameInput = document.getElementById("fullNameInput");
     const verifyBtn = document.getElementById("verifyBtn");
     const verifyResult = document.getElementById("verifyResult");
 
     function normalizeMemberId(value) {
       return String(value || "").replace(/\s+/g, "").trim().toUpperCase();
-    }
-
-    function normalizeText(value) {
-      return String(value || "").replace(/\s+/g, " ").trim();
     }
 
     function escapeHtml(text) {
@@ -101,14 +87,12 @@
 
     function verifyMember() {
       const memberId = normalizeMemberId(memberIdInput.value);
-      const fullName = normalizeText(fullNameInput.value);
 
       setMemberId(memberId);
-      fullNameInput.value = fullName;
       verifyResult.innerHTML = "";
 
-      if (!memberId || !fullName) {
-        verifyResult.innerHTML = "<p style='color:red;'>Please enter Member ID and Full Name.</p>";
+      if (!memberId) {
+        verifyResult.innerHTML = "<p style='color:red;'>Please enter Member ID.</p>";
         return;
       }
 
@@ -118,9 +102,7 @@
       const url =
         API_URL +
         "?action=verifymember&memberId=" +
-        encodeURIComponent(memberId) +
-        "&fullName=" +
-        encodeURIComponent(fullName);
+        encodeURIComponent(memberId);
 
       fetch(url)
         .then(res => res.json())
@@ -131,11 +113,20 @@
             return;
           }
 
+          const verifyLink = window.location.origin + window.location.pathname + "?memberId=" + encodeURIComponent(data.memberId || memberId);
+          const qrCode =
+            "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" +
+            encodeURIComponent(verifyLink);
+
           verifyResult.innerHTML = `
-            <div style="margin:0 auto;max-width:420px;padding:18px;border:2px solid #14532d;border-radius:12px;background:#f6fff8;">
+            <div style="margin:0 auto;max-width:420px;padding:18px;border:2px solid #14532d;border-radius:12px;background:#f6fff8;text-align:center;">
               <p style="margin:0 0 10px 0;color:#14532d;font-weight:700;font-size:20px;">Verified Member</p>
               <p style="margin:8px 0;"><strong>Member ID:</strong> ${escapeHtml(data.memberId || memberId)}</p>
               <p style="margin:8px 0;"><strong>Name:</strong> ${escapeHtml(data.memberName || "")}</p>
+              ${data.municipality ? `<p style="margin:8px 0;"><strong>Municipality:</strong> ${escapeHtml(data.municipality)}</p>` : ""}
+              <div style="margin-top:14px;">
+                <img src="${qrCode}" alt="QR Code" style="max-width:180px;height:auto;">
+              </div>
             </div>
           `;
         })
@@ -153,10 +144,6 @@
     verifyBtn.addEventListener("click", verifyMember);
 
     memberIdInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") verifyMember();
-    });
-
-    fullNameInput.addEventListener("keydown", function(e) {
       if (e.key === "Enter") verifyMember();
     });
 
