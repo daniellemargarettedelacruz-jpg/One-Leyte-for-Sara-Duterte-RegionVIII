@@ -389,7 +389,7 @@
           </label>
 
           <div class="button-row">
-            <button type="submit" class="upload-btn primary">
+            <button type="submit" class="upload-btn primary" id="submitBtn">
               <i class="fas fa-paper-plane"></i>
               Submit Alliance Upload
             </button>
@@ -422,6 +422,7 @@
     const logoFileName = document.getElementById("logoFileName");
     const successMessage = document.getElementById("successMessage");
     const errorMessage = document.getElementById("errorMessage");
+    const submitBtn = document.getElementById("submitBtn");
 
     pickLogoBtn.addEventListener("click", function () {
       fileInput.click();
@@ -444,6 +445,9 @@
         errorMessage.style.display = "block";
         return;
       }
+
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = "0.7";
 
       const reader = new FileReader();
 
@@ -469,7 +473,14 @@
             body: payload
           });
 
-          const data = await res.json();
+          const text = await res.text();
+          let data = {};
+
+          try {
+            data = JSON.parse(text);
+          } catch (parseErr) {
+            throw new Error("Invalid server response: " + text);
+          }
 
           if (data.success) {
             successMessage.style.display = "block";
@@ -482,8 +493,11 @@
 
         } catch (err) {
           console.error(err);
-          errorMessage.textContent = "Upload error. Check browser console.";
+          errorMessage.textContent = err.message || "Upload error. Check browser console.";
           errorMessage.style.display = "block";
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
         }
       };
 
