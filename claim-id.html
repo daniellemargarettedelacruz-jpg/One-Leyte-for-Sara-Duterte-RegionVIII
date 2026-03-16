@@ -116,7 +116,6 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
     const VERIFY_PAGE_URL = "https://daniellemargarettedelacruz-jpg.github.io/One-Leyte-for-Sara-Duterte-RegionVIII/verify.html";
-    const ID_FOLDER_URL = "https://drive.google.com/drive/folders/16Q8OpIYcMHOortsnTm_bfY7NWexbBG9Q";
 
     const fullNameInput = document.getElementById("fullname");
     const municipalityInput = document.getElementById("municipality");
@@ -179,6 +178,7 @@
           const memberId = data.memberId || "";
           const fullName = data.fullName || "";
           const muni = data.municipality || "";
+          const idCardLink = data.idCardLink || "";
 
           const verifyLink = VERIFY_PAGE_URL + "?memberId=" + encodeURIComponent(memberId);
           const qrCode =
@@ -203,11 +203,19 @@
 
               <div class="action-wrap">
                 <a class="action-link" href="${verifyLink}" target="_blank" rel="noopener noreferrer">Open Verification Page</a>
-                <a class="action-link" href="${ID_FOLDER_URL}" target="_blank" rel="noopener noreferrer">Open ID Folder</a>
+                ${
+                  idCardLink
+                    ? `<a class="action-link" href="${idCardLink}" target="_blank" rel="noopener noreferrer">Open My ID</a>`
+                    : ""
+                }
               </div>
 
               <p style="margin-top:12px;font-size:13px;color:#666;">
-                Your Member ID is confirmed above. To open the actual ID file, check the ID folder.
+                ${
+                  idCardLink
+                    ? "Your soft copy ID is ready. Use the button above to open it directly."
+                    : "Your Member ID is confirmed above. ID soft copy link is not yet available in the record."
+                }
               </p>
             </div>
           `;
