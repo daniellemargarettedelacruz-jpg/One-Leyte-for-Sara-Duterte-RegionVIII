@@ -477,75 +477,33 @@
       }
     }
 
-    async function loadAllianceUploads() {
-      const grid = document.getElementById("alliancesGrid");
-      if (!grid) return;
+<script>
+  async function loadAllianceUploads() {
+    const grid = document.getElementById("alliancesGrid");
+    if (!grid) return;
 
-      try {
-        const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-        const data = await res.json();
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : data.items;
 
-        const items = Array.isArray(data) ? data : data.items;
+      if (!items || !items.length) return;
 
-        if (!items || !items.length) return;
-
-        items.slice(0, 8).forEach(item => {
-          const tile = document.createElement("div");
-          tile.className = "alliance-logo-tile";
-          tile.innerHTML = `
-            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
-          `;
-          grid.appendChild(tile);
-        });
-      } catch (err) {
-        console.error("Alliance homepage load error:", err);
-      }
+      items.slice(0, 8).forEach(item => {
+        const tile = document.createElement("div");
+        tile.className = "alliance-logo-tile";
+        tile.innerHTML = `
+          <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+          <div class="alliance-logo-name">${item.allianceName || ""}</div>
+          <div class="alliance-logo-location">${item.location || ""}</div>
+        `;
+        grid.appendChild(tile);
+      });
+    } catch (err) {
+      console.error("Alliance homepage load error:", err);
     }
-
-    async function loadMediaPreview() {
-  const grid = document.getElementById("mediaPreviewGrid");
-  if (!grid) return;
-
-  try {
-    const res = await fetch(`${WEB_APP_URL}?action=mediaposts`);
-    const data = await res.json();
-
-    const items = Array.isArray(data) ? data : data.items;
-
-    if (!items || !items.length) {
-      grid.innerHTML = `<div class="announcement-slider-empty">No community media yet.</div>`;
-      return;
-    }
-
-    grid.innerHTML = "";
-
-    items.slice(0,3).forEach(item => {
-
-      const img =
-        item.Photo1 ||
-        item.Photo2 ||
-        item.Photo3 ||
-        item.videoThumb ||
-        "";
-
-      const caption = item.Caption || "";
-
-      const card = document.createElement("div");
-      card.className = "media-preview-card";
-
-      card.innerHTML = `
-        <img src="${img}" class="media-preview-img">
-        <div class="media-preview-caption">${caption}</div>
-      `;
-
-      grid.appendChild(card);
-
-    });
-
-  } catch(err) {
-    console.error("Media preview load error:", err);
   }
-}
+</script>
     loadAnnouncements();
     loadAllianceUploads();
   </script>
