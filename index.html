@@ -374,6 +374,8 @@
   </footer>
 
   <script>
+
+      <script>
     const cards = document.querySelectorAll('.community-card');
 
     cards.forEach((card) => {
@@ -429,28 +431,34 @@
 
         if (data.latest && data.latest.Title) {
           const banner = document.getElementById("latestBanner");
-          banner.style.display = "block";
-          banner.innerHTML = `📢 Latest Announcement: <a href="announcements.html">${data.latest.Title}</a>`;
+          if (banner) {
+            banner.style.display = "block";
+            banner.innerHTML = `📢 Latest Announcement: <a href="announcements.html">${data.latest.Title}</a>`;
+          }
         }
 
         if (data.featured && data.featured.Title) {
           const featuredSection = document.getElementById("featuredAnnouncementSection");
           const featuredCard = document.getElementById("featuredAnnouncementCard");
 
-          featuredSection.style.display = "block";
+          if (featuredSection && featuredCard) {
+            featuredSection.style.display = "block";
 
-          featuredCard.innerHTML = `
-            <div class="featured-announcement-label">Featured Announcement</div>
-            <div class="featured-announcement-title">${data.featured.Title || ""}</div>
-            <div class="featured-announcement-meta">
-              ${(data.featured.DatePosted || "")}${data.featured.Category ? ` • ${data.featured.Category}` : ""}
-            </div>
-            <div class="featured-announcement-summary">${data.featured.Summary || ""}</div>
-            <a class="featured-announcement-btn" href="announcements.html">Read Full Announcement</a>
-          `;
+            featuredCard.innerHTML = `
+              <div class="featured-announcement-label">Featured Announcement</div>
+              <div class="featured-announcement-title">${data.featured.Title || ""}</div>
+              <div class="featured-announcement-meta">
+                ${(data.featured.DatePosted || "")}${data.featured.Category ? ` • ${data.featured.Category}` : ""}
+              </div>
+              <div class="featured-announcement-summary">${data.featured.Summary || ""}</div>
+              <a class="featured-announcement-btn" href="announcements.html">Read Full Announcement</a>
+            `;
+          }
         }
 
         const sliderTrack = document.getElementById("announcementSliderTrack");
+        if (!sliderTrack) return;
+
         sliderTrack.innerHTML = "";
 
         if (!data.items || !data.items.length) {
@@ -474,38 +482,85 @@
         });
       } catch (err) {
         console.error("Announcement homepage load error:", err);
+        const sliderTrack = document.getElementById("announcementSliderTrack");
+        if (sliderTrack) {
+          sliderTrack.innerHTML = `<div class="announcement-slider-empty">Failed to load announcements.</div>`;
+        }
       }
     }
 
-<script>
-  async function loadAllianceUploads() {
-    const grid = document.getElementById("alliancesGrid");
-    if (!grid) return;
+    async function loadAllianceUploads() {
+      const grid = document.getElementById("alliancesGrid");
+      if (!grid) return;
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-      const data = await res.json();
-      const items = Array.isArray(data) ? data : data.items;
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : data.items;
 
-      if (!items || !items.length) return;
+        if (!items || !items.length) return;
 
-      items.slice(0, 8).forEach(item => {
-        const tile = document.createElement("div");
-        tile.className = "alliance-logo-tile";
-        tile.innerHTML = `
-          <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
-          <div class="alliance-logo-name">${item.allianceName || ""}</div>
-          <div class="alliance-logo-location">${item.location || ""}</div>
-        `;
-        grid.appendChild(tile);
-      });
-    } catch (err) {
-      console.error("Alliance homepage load error:", err);
+        items.slice(0, 8).forEach(item => {
+          const tile = document.createElement("div");
+          tile.className = "alliance-logo-tile";
+          tile.innerHTML = `
+            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+            <div class="alliance-logo-name">${item.allianceName || ""}</div>
+            <div class="alliance-logo-location">${item.location || ""}</div>
+          `;
+          grid.appendChild(tile);
+        });
+      } catch (err) {
+        console.error("Alliance homepage load error:", err);
+      }
     }
-  }
-</script>
+
+    async function loadMediaPreview() {
+      const grid = document.getElementById("mediaPreviewGrid");
+      if (!grid) return;
+
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=mediaposts`);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : data.items;
+
+        if (!items || !items.length) {
+          grid.innerHTML = `<div class="announcement-slider-empty">No community media yet.</div>`;
+          return;
+        }
+
+        grid.innerHTML = "";
+
+        items.slice(0, 3).forEach(item => {
+          const img =
+            item.Photo1URL ||
+            item.Photo2URL ||
+            item.Photo3URL ||
+            item.VideoThumbnail ||
+            item.VideoThumb ||
+            "";
+
+          const caption = item.Caption || "";
+
+          const card = document.createElement("div");
+          card.className = "media-preview-card";
+
+          card.innerHTML = `
+            <img src="${img}" class="media-preview-img" alt="Community Media">
+            <div class="media-preview-caption">${caption}</div>
+          `;
+
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Media preview load error:", err);
+        grid.innerHTML = `<div class="announcement-slider-empty">Failed to load community media.</div>`;
+      }
+    }
+
     loadAnnouncements();
     loadAllianceUploads();
+    loadMediaPreview();
   </script>
 </body>
 </html>
