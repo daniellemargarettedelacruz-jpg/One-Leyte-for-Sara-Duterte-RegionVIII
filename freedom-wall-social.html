@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freedom Wall Social | One Leyte</title>
+  <style>
+    :root{
+      --green:#0f3b2e;
+      --green-2:#184d3b;
+      --beige:#efe4cf;
+      --beige-2:#f7f1e7;
+      --white:#ffffff;
+      --black:#111111;
+      --gray:#6b6b6b;
+      --line:#d8ccb7;
+      --shadow:0 8px 24px rgba(0,0,0,0.08);
+      --radius:18px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--beige-2);
+      color:var(--black);
+      line-height:1.5;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:var(--green);
+      color:var(--white);
+      box-shadow:0 4px 14px rgba(0,0,0,0.12);
+    }
+
+    .topbar-inner{
+      width:min(100%, 1100px);
+      margin:0 auto;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand-badge{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      background:var(--beige);
+      color:var(--green);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:16px;
+    }
+
+    .brand-text h1{
+      font-size:18px;
+      line-height:1.2;
+    }
+
+    .brand-text p{
+      font-size:12px;
+      opacity:0.88;
+    }
+
+    .page-wrap{
+      width:min(100%, 1100px);
+      margin:0 auto;
+      padding:24px 16px 48px;
+      display:grid;
+      grid-template-columns:1fr minmax(0, 680px) 1fr;
+      gap:20px;
+    }
+
+    .side-card,
+    .composer,
+    .post-card{
+      background:var(--white);
+      border:1px solid rgba(15,59,46,0.08);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .side-card{
+      padding:18px;
+      position:sticky;
+      top:84px;
+      height:fit-content;
+    }
+
+    .side-card h3{
+      font-size:16px;
+      margin-bottom:8px;
+      color:var(--green);
+    }
+
+    .side-card p{
+      font-size:14px;
+      color:#333;
+    }
+
+    .feed-column{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .composer{
+      padding:18px;
+    }
+
+    .composer h2{
+      font-size:18px;
+      color:var(--green);
+      margin-bottom:6px;
+    }
+
+    .composer p{
+      font-size:14px;
+      color:var(--gray);
+      margin-bottom:14px;
+    }
+
+    .composer-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .composer input,
+    .composer textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+
+    .composer textarea{
+      min-height:100px;
+      resize:vertical;
+      grid-column:1 / -1;
+    }
+
+    .composer input:focus,
+    .composer textarea:focus{
+      border-color:var(--green);
+      box-shadow:0 0 0 3px rgba(15,59,46,0.08);
+    }
+
+    .composer-actions{
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:11px 18px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .btn-primary{
+      background:var(--green);
+      color:var(--white);
+    }
+
+    .btn-primary:hover{
+      background:var(--green-2);
+    }
+
+    .btn-light{
+      background:var(--beige);
+      color:var(--green);
+    }
+
+    .btn-light:hover{
+      filter:brightness(0.98);
+    }
+
+    .post-card{
+      overflow:hidden;
+    }
+
+    .post-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding:16px 18px 10px;
+    }
+
+    .post-head-left{
+      display:flex;
+      gap:12px;
+      min-width:0;
+    }
+
+    .avatar{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:var(--green);
+      color:var(--white);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:16px;
+      flex-shrink:0;
+    }
+
+    .post-meta{
+      min-width:0;
+    }
+
+    .post-name{
+      font-size:15px;
+      font-weight:700;
+      color:var(--black);
+    }
+
+    .post-sub{
+      font-size:12px;
+      color:var(--gray);
+      margin-top:2px;
+    }
+
+    .post-body{
+      padding:0 18px 14px;
+    }
+
+    .post-message{
+      white-space:pre-wrap;
+      font-size:15px;
+      color:#1b1b1b;
+      margin-bottom:12px;
+    }
+
+    .post-image-wrap{
+      margin-top:10px;
+      border-radius:16px;
+      overflow:hidden;
+      background:#f2f2f2;
+      border:1px solid rgba(0,0,0,0.05);
+    }
+
+    .post-image{
+      display:block;
+      width:100%;
+      max-height:480px;
+      object-fit:cover;
+    }
+
+    .post-stats{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:10px 18px;
+      border-top:1px solid #f0ece5;
+      color:var(--gray);
+      font-size:13px;
+    }
+
+    .reaction-total{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .reaction-pill-mini{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:26px;
+      height:26px;
+      border-radius:999px;
+      background:var(--beige);
+      color:var(--green);
+      font-size:12px;
+      font-weight:700;
+      padding:0 8px;
+    }
+
+    .post-actions{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:8px;
+      padding:10px 12px 14px;
+      border-top:1px solid #f3efe9;
+    }
+
+    .react-btn,
+    .comment-toggle-btn{
+      border:none;
+      background:#f7f4ee;
+      color:var(--green);
+      padding:10px 8px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .react-btn:hover,
+    .comment-toggle-btn:hover{
+      background:var(--beige);
+    }
+
+    .react-btn.active{
+      background:var(--green);
+      color:var(--white);
+    }
+
+    .comments-area{
+      border-top:1px solid #f3efe9;
+      padding:0 18px 16px;
+      display:none;
+    }
+
+    .comments-area.open{
+      display:block;
+    }
+
+    .comment-form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-top:14px;
+      padding-bottom:14px;
+    }
+
+    .comment-form input,
+    .comment-form textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:14px;
+      outline:none;
+    }
+
+    .comment-form textarea{
+      min-height:72px;
+      resize:vertical;
+    }
+
+    .comment-item{
+      background:#faf8f4;
+      border:1px solid #eee6d9;
+      border-radius:14px;
+      padding:12px;
+      margin-top:10px;
+    }
+
+    .comment-item-name{
+      font-weight:700;
+      font-size:14px;
+      color:var(--green);
+    }
+
+    .comment-item-time{
+      font-size:12px;
+      color:var(--gray);
+      margin-top:2px;
+      margin-bottom:6px;
+    }
+
+    .comment-item-text{
+      font-size:14px;
+      color:#222;
+      white-space:pre-wrap;
+    }
+
+    .load-more-wrap{
+      display:flex;
+      justify-content:center;
+      padding-top:8px;
+    }
+
+    .empty-state{
+      background:var(--white);
+      border:1px dashed var(--line);
+      border-radius:18px;
+      padding:30px 20px;
+      text-align:center;
+      color:var(--gray);
+    }
+
+    .status-note{
+      font-size:13px;
+      color:var(--gray);
+      margin-top:8px;
+    }
+
+    @media (max-width: 980px){
+      .page-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .side-left,
+      .side-right{
+        display:none;
+      }
+    }
+
+    @media (max-width: 640px){
+      .post-actions{
+        grid-template-columns:repeat(2, 1fr);
+      }
+
+      .composer-grid{
+        grid-template-columns:1fr;
+      }
+
+      .topbar-inner{
+        padding:12px 14px;
+      }
+
+      .brand-text h1{
+        font-size:16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">OL</div>
+        <div class="brand-text">
+          <h1>Freedom Wall Social</h1>
+          <p>One Leyte community feed</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <aside class="side-left">
+      <div class="side-card">
+        <h3>Community Space</h3>
+        <p>
+          This page displays approved Freedom Wall posts with reactions and comments.
+          Clean, light, and built for growth.
+        </p>
+      </div>
+    </aside>
+
+    <section class="feed-column">
+      <div class="composer">
+        <h2>Freedom Wall Feed</h2>
+        <p>Approved voices from the community, now with reactions and comments.</p>
+        <div class="status-note" id="feedStatus">Loading posts...</div>
+      </div>
+
+      <div id="feedContainer"></div>
+
+      <div class="load-more-wrap">
+        <button class="btn btn-light" id="loadMoreBtn" style="display:none;">Load More Posts</button>
+      </div>
+    </section>
+
+    <aside class="side-right">
+      <div class="side-card">
+        <h3>One Leyte Style</h3>
+        <p>
+          Inspired by familiar social feed layouts, but branded in darkest green,
+          beige, white, and black for a warmer and stronger movement identity.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const API_BASE = "PASTE_YOUR_WEB_APP_URL_HERE";
+    const FEED_LIMIT = 5;
+
+    let nextOffset = 0;
+    let hasMore = false;
+    let loading = false;
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getInitials(name) {
+      const safe = String(name || "Anonymous").trim();
+      if (!safe) return "A";
+      const parts = safe.split(/\s+/).slice(0, 2);
+      return parts.map(p => p.charAt(0).toUpperCase()).join("");
+    }
+
+    function formatDate(value) {
+      if (!value) return "No date";
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return String(value);
+      return date.toLocaleString();
+    }
+
+    async function fetchJSON(url, options = {}) {
+      const res = await fetch(url, options);
+      return await res.json();
+    }
+
+    function renderPost(post) {
+      const totalReactions =
+        (post.reactions?.like || 0) +
+        (post.reactions?.support || 0) +
+        (post.reactions?.strong || 0);
+
+      const imageBlock = post.imageUrl
+        ? `
+          <div class="post-image-wrap">
+            <img class="post-image" src="${escapeHtml(post.imageUrl)}" alt="Post image">
+          </div>
+        `
+        : "";
+
+      const commentsHtml = (post.comments || []).map(comment => `
+        <div class="comment-item">
+          <div class="comment-item-name">${escapeHtml(comment.name)}</div>
+          <div class="comment-item-time">${escapeHtml(formatDate(comment.timestamp))}</div>
+          <div class="comment-item-text">${escapeHtml(comment.comment)}</div>
+        </div>
+      `).join("");
+
+      return `
+        <article class="post-card" id="post-${escapeHtml(post.postId)}">
+          <div class="post-head">
+            <div class="post-head-left">
+              <div class="avatar">${escapeHtml(getInitials(post.fullName))}</div>
+              <div class="post-meta">
+                <div class="post-name">${escapeHtml(post.fullName || "Anonymous")}</div>
+                <div class="post-sub">
+                  ${escapeHtml(post.municipality || "Leyte")} • ${escapeHtml(formatDate(post.postedAt))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="post-body">
+            <div class="post-message">${escapeHtml(post.message || "")}</div>
+            ${imageBlock}
+          </div>
+
+          <div class="post-stats">
+            <div class="reaction-total">
+              <span class="reaction-pill-mini">Like ${post.reactions?.like || 0}</span>
+              <span class="reaction-pill-mini">Support ${post.reactions?.support || 0}</span>
+              <span class="reaction-pill-mini">Strong ${post.reactions?.strong || 0}</span>
+            </div>
+            <div>${totalReactions} reactions • ${post.commentCount || 0} comments</div>
+          </div>
+
+          <div class="post-actions">
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','like', this)">Like</button>
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','support', this)">Support</button>
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','strong', this)">Strong</button>
+            <button class="comment-toggle-btn" onclick="toggleComments('${escapeHtml(post.postId)}')">Comments</button>
+          </div>
+
+          <div class="comments-area" id="comments-${escapeHtml(post.postId)}">
+            <form class="comment-form" onsubmit="submitComment(event, '${escapeHtml(post.postId)}')">
+              <input type="text" id="name-${escapeHtml(post.postId)}" placeholder="Your name" required>
+              <textarea id="comment-${escapeHtml(post.postId)}" placeholder="Write a respectful comment..." required></textarea>
+              <div style="display:flex; justify-content:flex-end;">
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+              </div>
+            </form>
+
+            <div id="commentList-${escapeHtml(post.postId)}">
+              ${commentsHtml || '<div class="status-note">No comments yet.</div>'}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadFeed(reset = false) {
+      if (loading) return;
+      loading = true;
+
+      const status = document.getElementById("feedStatus");
+      const container = document.getElementById("feedContainer");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+      if (reset) {
+        nextOffset = 0;
+        hasMore = false;
+        container.innerHTML = "";
+      }
+
+      status.textContent = "Loading posts...";
+
+      try {
+        const url = `${API_BASE}?action=freedomwallfeed&limit=${FEED_LIMIT}&offset=${nextOffset}`;
+        const data = await fetchJSON(url);
+
+        if (!data.success) {
+          status.textContent = data.message || "Failed to load posts.";
+          return;
+        }
+
+        const items = data.items || [];
+
+        if (reset && items.length === 0) {
+          container.innerHTML = `<div class="empty-state">No approved Freedom Wall posts yet.</div>`;
+          status.textContent = "No posts available.";
+          loadMoreBtn.style.display = "none";
+          return;
+        }
+
+        container.insertAdjacentHTML("beforeend", items.map(renderPost).join(""));
+
+        hasMore = !!(data.paging && data.paging.hasMore);
+        nextOffset = data.paging && data.paging.nextOffset ? data.paging.nextOffset : 0;
+
+        loadMoreBtn.style.display = hasMore ? "inline-flex" : "none";
+        status.textContent = "Feed loaded.";
+      } catch (err) {
+        status.textContent = "Error loading feed.";
+        console.error(err);
+      } finally {
+        loading = false;
+      }
+    }
+
+    function toggleComments(postId) {
+      const box = document.getElementById(`comments-${postId}`);
+      if (!box) return;
+      box.classList.toggle("open");
+      if (box.classList.contains("open")) {
+        loadComments(postId);
+      }
+    }
+
+    async function loadComments(postId) {
+      const list = document.getElementById(`commentList-${postId}`);
+      if (!list) return;
+
+      try {
+        const url = `${API_BASE}?action=freedomwallcomments&postId=${encodeURIComponent(postId)}`;
+        const data = await fetchJSON(url);
+
+        if (!data.success) {
+          list.innerHTML = `<div class="status-note">${escapeHtml(data.message || "Failed to load comments.")}</div>`;
+          return;
+        }
+
+        const items = data.items || [];
+        if (!items.length) {
+          list.innerHTML = `<div class="status-note">No comments yet.</div>`;
+          return;
+        }
+
+        list.innerHTML = items.map(comment => `
+          <div class="comment-item">
+            <div class="comment-item-name">${escapeHtml(comment.name)}</div>
+            <div class="comment-item-time">${escapeHtml(formatDate(comment.timestamp))}</div>
+            <div class="comment-item-text">${escapeHtml(comment.comment)}</div>
+          </div>
+        `).join("");
+      } catch (err) {
+        list.innerHTML = `<div class="status-note">Error loading comments.</div>`;
+        console.error(err);
+      }
+    }
+
+    async function sendReaction(postId, reaction, btn) {
+      try {
+        btn.disabled = true;
+
+        const data = await fetchJSON(API_BASE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "freedomwallreact",
+            postId,
+            reaction
+          })
+        });
+
+        if (!data.success) {
+          alert(data.message || "Failed to react.");
+          return;
+        }
+
+        btn.classList.add("active");
+        await refreshSinglePost(postId);
+      } catch (err) {
+        console.error(err);
+        alert("Error sending reaction.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function submitComment(event, postId) {
+      event.preventDefault();
+
+      const nameEl = document.getElementById(`name-${postId}`);
+      const commentEl = document.getElementById(`comment-${postId}`);
+
+      const name = nameEl.value.trim();
+      const comment = commentEl.value.trim();
+
+      if (!name || !comment) {
+        alert("Please enter your name and comment.");
+        return;
+      }
+
+      try {
+        const data = await fetchJSON(API_BASE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "freedomwallcomment",
+            postId,
+            name,
+            comment
+          })
+        });
+
+        if (!data.success) {
+          alert(data.message || "Failed to post comment.");
+          return;
+        }
+
+        commentEl.value = "";
+        await loadComments(postId);
+        await refreshSinglePost(postId);
+      } catch (err) {
+        console.error(err);
+        alert("Error posting comment.");
+      }
+    }
+
+    async function refreshSinglePost(postId) {
+      try {
+        const url = `${API_BASE}?action=freedomwallfeed&limit=50&offset=0`;
+        const data = await fetchJSON(url);
+        if (!data.success) return;
+
+        const post = (data.items || []).find(item => String(item.postId) === String(postId));
+        if (!post) return;
+
+        const oldCard = document.getElementById(`post-${postId}`);
+        if (!oldCard) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = renderPost(post);
+        oldCard.replaceWith(wrapper.firstElementChild);
+
+        const commentsBox = document.getElementById(`comments-${postId}`);
+        if (commentsBox) {
+          commentsBox.classList.add("open");
+          await loadComments(postId);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.getElementById("loadMoreBtn").addEventListener("click", function() {
+      loadFeed(false);
+    });
+
+    loadFeed(true);
+  </script>
+</body>
+</html>
