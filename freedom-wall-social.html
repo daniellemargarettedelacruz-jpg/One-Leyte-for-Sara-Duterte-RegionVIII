@@ -449,17 +449,24 @@
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">OL</div>
-        <div class="brand-text">
-          <h1>Freedom Wall Social</h1>
-          <p>One Leyte community feed</p>
-        </div>
+ <header class="topbar">
+  <div class="topbar-inner" style="flex-direction:column; align-items:flex-start; gap:10px;">
+
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="brand-badge">OL</div>
+      <div class="brand-text">
+        <h1>Freedom Wall Social</h1>
+        <p>One Leyte community feed</p>
       </div>
     </div>
-  </header>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <a href="freedom-wall.html" class="btn btn-primary">+ Share Your Voice</a>
+      <a href="index.html" class="btn btn-light">← Back to Home</a>
+    </div>
+
+  </div>
+</header>
 
   <main class="page-wrap">
     <aside class="side-left">
@@ -477,7 +484,6 @@
   <h2>Freedom Wall Feed</h2>
 
   <div style="margin-top:10px; margin-bottom:10px;">
-    <a href="freedom-wall.html" class="btn btn-primary">+ Share Your Voice</a>
   </div>
         <p>Approved voices from the community, now with reactions and comments.</p>
         <div class="status-note" id="feedStatus">Loading posts...</div>
