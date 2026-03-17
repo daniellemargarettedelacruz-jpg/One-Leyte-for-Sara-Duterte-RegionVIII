@@ -61,7 +61,7 @@
 .media-main img{
   width:100%;
   display:block;
-  max-height:560px;
+  max-height:480px;
   object-fit:cover;
   background:#000;
 }
@@ -77,7 +77,7 @@
   width:100%;
   height:100%;
   min-height:220px;
-  max-height:560px;
+  max-height:480px;
   object-fit:cover;
   display:block;
 }
@@ -561,7 +561,7 @@
       <span>I allow One Leyte for Sara Duterte to review and publish this media submission if approved.</span>
     </label>
 
-    <button type="button" id="uploadBtn" onclick="submitMediaPost()">Submit Media</button>
+    <button type="button" id="uploadBtn">Submit Media</button>
 
     <div id="uploadStatus" class="upload-status"></div>
 
@@ -607,10 +607,13 @@ const memberLookupStatus = document.getElementById("memberLookupStatus");
 const uploadStatus = document.getElementById("uploadStatus");
 const uploadBtn = document.getElementById("uploadBtn");
 
+const INITIAL_BATCH = 9;
+const LOAD_MORE_BATCH = 9;
+
 let allMediaItems = [];
-let visibleCount = 6;
+let renderedCount = 0;
 let memberLookupTimer = null;
-let lastResolvedMemberId = "";
+let isSubmittingMedia = false;
 
 async function loadMediaFeed() {
   try {
@@ -621,132 +624,148 @@ async function loadMediaFeed() {
 
     if (!items.length) {
       mediaFeed.innerHTML = "<div class='empty-message'>No approved media posts yet.</div>";
+      loadMoreWrap.style.display = "none";
       return;
     }
 
     allMediaItems = items;
-    renderMediaItems();
+    renderedCount = 0;
+    mediaFeed.innerHTML = "";
+    renderNextBatch(INITIAL_BATCH);
   } catch (err) {
     console.error(err);
     mediaFeed.innerHTML = "<div class='empty-message'>Unable to load media right now.</div>";
+    loadMoreWrap.style.display = "none";
   }
 }
 
 loadMediaFeed();
 
 function convertDriveVideoToPreviewUrl(url) {
-  const match = String(url || "").match(/id=([^&]+)/);
-  if (!match || !match[1]) return url;
-  return "https://drive.google.com/file/d/" + match[1] + "/preview";
+  const matchParam = String(url || "").match(/id=([^&]+)/);
+  if (matchParam && matchParam[1]) {
+    return "https://drive.google.com/file/d/" + matchParam[1] + "/preview";
+  }
+
+  const matchPath = String(url || "").match(/\/d\/([^\/]+)/);
+  if (matchPath && matchPath[1]) {
+    return "https://drive.google.com/file/d/" + matchPath[1] + "/preview";
+  }
+
+  return url;
 }
 
-function renderMediaItems() {
-  mediaFeed.innerHTML = "";
+function renderNextBatch(batchSize) {
+  const fragment = document.createDocumentFragment();
+  const end = Math.min(renderedCount + batchSize, allMediaItems.length);
 
-  const itemsToShow = allMediaItems.slice(0, visibleCount);
+  for (let i = renderedCount; i < end; i++) {
+    fragment.appendChild(createMediaCard(allMediaItems[i]));
+  }
 
-  itemsToShow.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "media-post";
+  mediaFeed.appendChild(fragment);
+  renderedCount = end;
+  loadMoreWrap.style.display = renderedCount < allMediaItems.length ? "block" : "none";
+}
 
-    const fullName = item.FullName || item.fullName || "Member";
-    const municipality = item.Municipality || item.municipality || "";
-    const caption = item.Caption || item.caption || "";
-    const description = item.Description || item.description || "";
-    const dateText = item.PostedDate || item.postedDate || item.ApprovedAt || item.approvedAt || "";
+function createMediaCard(item) {
+  const card = document.createElement("div");
+  card.className = "media-post";
 
-    const photo1 = item.Photo1URL || item.photo1Url || "";
-    const photo2 = item.Photo2URL || item.photo2Url || "";
-    const photo3 = item.Photo3URL || item.photo3Url || "";
-    const videoUrl = item.VideoURL || item.videoUrl || "";
-    const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || item.videoThumbnail || "";
+  const fullName = item.FullName || item.fullName || "Member";
+  const municipality = item.Municipality || item.municipality || "";
+  const caption = item.Caption || item.caption || "";
+  const description = item.Description || item.description || "";
+  const dateText = item.PostedDate || item.postedDate || item.ApprovedAt || item.approvedAt || "";
 
-    let mainMediaHtml = "";
-    if (videoUrl) {
-      mainMediaHtml = `
-        <div class="media-video-main">
-          <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Preview" loading="lazy">
-          <div class="video-badge">▶</div>
-        </div>
-      `;
-    } else if (photo1) {
-      mainMediaHtml = `
-        <img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">
-      `;
-    } else {
-      mainMediaHtml = `
-        <div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>
-      `;
-    }
+  const photo1 = item.Photo1URL || item.photo1Url || "";
+  const photo2 = item.Photo2URL || item.photo2Url || "";
+  const photo3 = item.Photo3URL || item.photo3Url || "";
+  const videoUrl = item.VideoURL || item.videoUrl || "";
+  const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || item.VideoThumb || item.videoThumbnail || "";
 
-    let thumbs = "";
-
-    if (photo2) {
-      thumbs += `
-        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-          <img src="${escapeAttr(photo2)}" alt="Photo 2" loading="lazy">
-        </div>
-      `;
-    }
-
-    if (photo3) {
-      thumbs += `
-        <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-          <img src="${escapeAttr(photo3)}" alt="Photo 3" loading="lazy">
-        </div>
-      `;
-    }
-
-    if (videoUrl) {
-      thumbs += `
-        <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-          <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Thumbnail" loading="lazy">
-          <div class="video-badge">▶</div>
-        </div>
-      `;
-    }
-
-    card.innerHTML = `
-      <div class="media-main">${mainMediaHtml}</div>
-
-      <div class="media-info">
-        <div class="media-name">${escapeHtml(fullName)}</div>
-        <div class="media-meta">${escapeHtml(municipality)}${municipality && dateText ? " • " : ""}${escapeHtml(dateText)}</div>
-        <div class="media-caption">${escapeHtml(caption)}</div>
-        ${description ? `<div class="media-description">${escapeHtml(description)}</div>` : ""}
+  let mainMediaHtml = "";
+  if (videoUrl) {
+    mainMediaHtml = `
+      <div class="media-video-main">
+        <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Preview" loading="lazy">
+        <div class="video-badge">▶</div>
       </div>
-
-      ${thumbs ? `<div class="media-thumbs">${thumbs}</div>` : ""}
     `;
+  } else if (photo1) {
+    mainMediaHtml = `
+      <img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">
+    `;
+  } else {
+    mainMediaHtml = `
+      <div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>
+    `;
+  }
 
-    const mainMediaEl = card.querySelector(".media-main");
-    mainMediaEl.addEventListener("click", () => {
-      if (videoUrl) {
-        openMediaModal("video", videoUrl, fullName, caption + (description ? "\n\n" + description : ""));
-      } else if (photo1) {
-        openMediaModal("image", photo1, fullName, caption + (description ? "\n\n" + description : ""));
-      }
-    });
+  let thumbs = "";
 
-    card.querySelectorAll(".media-thumb-item").forEach(thumb => {
-      thumb.addEventListener("click", () => {
-        const type = thumb.getAttribute("data-type");
-        const src = thumb.getAttribute("data-src");
-        const name = thumb.getAttribute("data-name");
-        const text = thumb.getAttribute("data-text");
-        openMediaModal(type, src, name, text);
-      });
-    });
+  if (photo2) {
+    thumbs += `
+      <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
+        <img src="${escapeAttr(photo2)}" alt="Photo 2" loading="lazy">
+      </div>
+    `;
+  }
 
-    mediaFeed.appendChild(card);
+  if (photo3) {
+    thumbs += `
+      <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
+        <img src="${escapeAttr(photo3)}" alt="Photo 3" loading="lazy">
+      </div>
+    `;
+  }
+
+  if (videoUrl) {
+    thumbs += `
+      <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
+        <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Thumbnail" loading="lazy">
+        <div class="video-badge">▶</div>
+      </div>
+    `;
+  }
+
+  card.innerHTML = `
+    <div class="media-main">${mainMediaHtml}</div>
+
+    <div class="media-info">
+      <div class="media-name">${escapeHtml(fullName)}</div>
+      <div class="media-meta">${escapeHtml(municipality)}${municipality && dateText ? " • " : ""}${escapeHtml(dateText)}</div>
+      <div class="media-caption">${escapeHtml(caption)}</div>
+      ${description ? `<div class="media-description">${escapeHtml(description)}</div>` : ""}
+    </div>
+
+    ${thumbs ? `<div class="media-thumbs">${thumbs}</div>` : ""}
+  `;
+
+  const mainMediaEl = card.querySelector(".media-main");
+  mainMediaEl.addEventListener("click", () => {
+    if (videoUrl) {
+      openMediaModal("video", videoUrl, fullName, caption + (description ? "\n\n" + description : ""));
+    } else if (photo1) {
+      openMediaModal("image", photo1, fullName, caption + (description ? "\n\n" + description : ""));
+    }
   });
 
-  loadMoreWrap.style.display = visibleCount < allMediaItems.length ? "block" : "none";
+  card.querySelectorAll(".media-thumb-item").forEach(thumb => {
+    thumb.addEventListener("click", () => {
+      const type = thumb.getAttribute("data-type");
+      const src = thumb.getAttribute("data-src");
+      const name = thumb.getAttribute("data-name");
+      const text = thumb.getAttribute("data-text");
+      openMediaModal(type, src, name, text);
+    });
+  });
+
+  return card;
 }
 
 loadMoreBtn.addEventListener("click", () => {
-  visibleCount += 6;
-  renderMediaItems();
+  renderNextBatch(LOAD_MORE_BATCH);
 });
 
 function openMediaModal(type, src, fullName, text) {
@@ -806,6 +825,7 @@ memberIdInput.addEventListener("input", function() {
 
 memberIdInput.addEventListener("change", resolveMemberName);
 memberIdInput.addEventListener("blur", resolveMemberName);
+uploadBtn.addEventListener("click", submitMediaPost);
 
 async function resolveMemberName() {
   const memberId = memberIdInput.value.trim();
@@ -815,7 +835,6 @@ async function resolveMemberName() {
   memberLookupStatus.className = "lookup-status";
 
   if (!memberId) {
-    lastResolvedMemberId = "";
     return;
   }
 
@@ -839,18 +858,15 @@ async function resolveMemberName() {
 
       memberLookupStatus.textContent = "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
-      lastResolvedMemberId = memberId;
     } else {
       fullNameInput.value = "";
       memberLookupStatus.textContent = data.message || "MemberID not found.";
       memberLookupStatus.className = "lookup-status member-bad";
-      lastResolvedMemberId = "";
     }
   } catch (err) {
     fullNameInput.value = "";
     memberLookupStatus.textContent = "Unable to verify MemberID right now.";
     memberLookupStatus.className = "lookup-status member-bad";
-    lastResolvedMemberId = "";
     console.error(err);
   }
 }
@@ -906,6 +922,8 @@ function updatePreview() {
 }
 
 async function submitMediaPost() {
+  if (isSubmittingMedia) return;
+
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
   const municipality = municipalityInput.value.trim();
@@ -995,6 +1013,7 @@ async function submitMediaPost() {
     }
   }
 
+  isSubmittingMedia = true;
   uploadBtn.disabled = true;
   uploadBtn.innerText = "Uploading...";
   uploadStatus.innerText = "Uploading media. Please wait...";
@@ -1049,7 +1068,7 @@ async function submitMediaPost() {
     }
 
     if (result.success) {
-      uploadStatus.innerText = "Upload successful. Waiting for admin approval.";
+      uploadStatus.innerText = result.duplicate ? "Duplicate media post ignored." : "Upload successful. Waiting for admin approval.";
       uploadStatus.style.color = "green";
 
       municipalityInput.value = "";
@@ -1072,10 +1091,11 @@ async function submitMediaPost() {
     uploadStatus.innerText = err.message || "Upload failed. Please try again.";
     uploadStatus.style.color = "red";
     console.error(err);
+  } finally {
+    isSubmittingMedia = false;
+    uploadBtn.disabled = false;
+    uploadBtn.innerText = "Submit Media";
   }
-
-  uploadBtn.disabled = false;
-  uploadBtn.innerText = "Submit Media";
 }
 
 function validateVideoDuration(file, maxSeconds) {
