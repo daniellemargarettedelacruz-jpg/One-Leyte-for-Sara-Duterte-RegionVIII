@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Media Uploads | One Leyte</title>
-
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -496,7 +493,6 @@
 </section>
 
 <section class="submit-section">
-
   <h3>Submit Your Media</h3>
   <p class="submit-note">
     Members may upload <strong>either up to 3 photos</strong> or <strong>1 video</strong> per submission.
@@ -505,9 +501,7 @@
   </p>
 
   <div class="upload-form">
-
     <div class="upload-grid">
-
       <div>
         <label for="memberId">Member ID</label>
         <input type="text" id="memberId" placeholder="Enter your MemberID">
@@ -553,7 +547,6 @@
           <div class="preview-grid" id="previewGrid"></div>
         </div>
       </div>
-
     </div>
 
     <label class="checkbox-wrap">
@@ -562,11 +555,8 @@
     </label>
 
     <button type="button" id="uploadBtn">Submit Media</button>
-
     <div id="uploadStatus" class="upload-status"></div>
-
   </div>
-
 </section>
 
 <div class="media-modal" id="mediaModal">
@@ -615,6 +605,21 @@ let renderedCount = 0;
 let memberLookupTimer = null;
 let isSubmittingMedia = false;
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function escapeAttr(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 async function loadMediaFeed() {
   try {
     const res = await fetch(MEDIA_API);
@@ -638,8 +643,6 @@ async function loadMediaFeed() {
     loadMoreWrap.style.display = "none";
   }
 }
-
-loadMediaFeed();
 
 function convertDriveVideoToPreviewUrl(url) {
   const matchParam = String(url || "").match(/id=([^&]+)/);
@@ -693,13 +696,9 @@ function createMediaCard(item) {
       </div>
     `;
   } else if (photo1) {
-    mainMediaHtml = `
-      <img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">
-    `;
+    mainMediaHtml = `<img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">`;
   } else {
-    mainMediaHtml = `
-      <div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>
-    `;
+    mainMediaHtml = `<div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>`;
   }
 
   let thumbs = "";
@@ -764,10 +763,6 @@ function createMediaCard(item) {
   return card;
 }
 
-loadMoreBtn.addEventListener("click", () => {
-  renderNextBatch(LOAD_MORE_BATCH);
-});
-
 function openMediaModal(type, src, fullName, text) {
   if (type === "video") {
     const previewUrl = convertDriveVideoToPreviewUrl(src);
@@ -797,36 +792,6 @@ function closeMediaModal() {
   mediaModalBody.innerHTML = "";
 }
 
-mediaModalClose.addEventListener("click", closeMediaModal);
-mediaModal.addEventListener("click", function(e) {
-  if (e.target === mediaModal) closeMediaModal();
-});
-
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape" && mediaModal.style.display === "block") {
-    closeMediaModal();
-  }
-});
-
-(function autofillMemberIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const memberIdFromUrl = (params.get("memberId") || params.get("MemberID") || "").trim();
-
-  if (memberIdFromUrl) {
-    memberIdInput.value = memberIdFromUrl;
-    resolveMemberName();
-  }
-})();
-
-memberIdInput.addEventListener("input", function() {
-  clearTimeout(memberLookupTimer);
-  memberLookupTimer = setTimeout(resolveMemberName, 500);
-});
-
-memberIdInput.addEventListener("change", resolveMemberName);
-memberIdInput.addEventListener("blur", resolveMemberName);
-uploadBtn.addEventListener("click", submitMediaPost);
-
 async function resolveMemberName() {
   const memberId = memberIdInput.value.trim();
 
@@ -834,9 +799,7 @@ async function resolveMemberName() {
   memberLookupStatus.textContent = "";
   memberLookupStatus.className = "lookup-status";
 
-  if (!memberId) {
-    return;
-  }
+  if (!memberId) return;
 
   memberLookupStatus.textContent = "Checking MemberID...";
   memberLookupStatus.classList.add("member-loading");
@@ -870,9 +833,6 @@ async function resolveMemberName() {
     console.error(err);
   }
 }
-
-photoFilesInput.addEventListener("change", updatePreview);
-videoFileInput.addEventListener("change", updatePreview);
 
 function updatePreview() {
   previewGrid.innerHTML = "";
@@ -919,6 +879,33 @@ function updatePreview() {
   }
 
   previewWrap.style.display = "block";
+}
+
+function validateVideoDuration(file, maxSeconds) {
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.preload = "metadata";
+
+    video.onloadedmetadata = function() {
+      URL.revokeObjectURL(video.src);
+      resolve(video.duration <= maxSeconds);
+    };
+
+    video.onerror = function() {
+      resolve(false);
+    };
+
+    video.src = URL.createObjectURL(file);
+  });
+}
+
+function fileToBase64WithPrefix(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+  });
 }
 
 async function submitMediaPost() {
@@ -1098,47 +1085,40 @@ async function submitMediaPost() {
   }
 }
 
-function validateVideoDuration(file, maxSeconds) {
-  return new Promise((resolve) => {
-    const video = document.createElement("video");
-    video.preload = "metadata";
+(function autofillMemberIdFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const memberIdFromUrl = (params.get("memberId") || params.get("MemberID") || "").trim();
 
-    video.onloadedmetadata = function() {
-      URL.revokeObjectURL(video.src);
-      resolve(video.duration <= maxSeconds);
-    };
+  if (memberIdFromUrl) {
+    memberIdInput.value = memberIdFromUrl;
+    resolveMemberName();
+  }
+})();
 
-    video.onerror = function() {
-      resolve(false);
-    };
+memberIdInput.addEventListener("input", function() {
+  clearTimeout(memberLookupTimer);
+  memberLookupTimer = setTimeout(resolveMemberName, 500);
+});
 
-    video.src = URL.createObjectURL(file);
-  });
-}
+memberIdInput.addEventListener("change", resolveMemberName);
+memberIdInput.addEventListener("blur", resolveMemberName);
+uploadBtn.addEventListener("click", submitMediaPost);
+photoFilesInput.addEventListener("change", updatePreview);
+videoFileInput.addEventListener("change", updatePreview);
+loadMoreBtn.addEventListener("click", () => renderNextBatch(LOAD_MORE_BATCH));
+mediaModalClose.addEventListener("click", closeMediaModal);
 
-function fileToBase64WithPrefix(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-    reader.readAsDataURL(file);
-  });
-}
+mediaModal.addEventListener("click", function(e) {
+  if (e.target === mediaModal) closeMediaModal();
+});
 
-function escapeHtml(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape" && mediaModal.style.display === "block") {
+    closeMediaModal();
+  }
+});
 
-function escapeAttr(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+loadMediaFeed();
 </script>
 
 </body>
