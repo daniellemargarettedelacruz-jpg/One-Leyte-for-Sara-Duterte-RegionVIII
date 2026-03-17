@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Freedom Wall Social | One Leyte</title>
+
   <style>
     :root{
       --green:#0f3b2e;
@@ -16,6 +17,7 @@
       --line:#d8ccb7;
       --shadow:0 8px 24px rgba(0,0,0,0.08);
       --radius:18px;
+      --gold:#d4af37;
     }
 
     *{
@@ -31,58 +33,125 @@
       line-height:1.5;
     }
 
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:50;
-      background:var(--green);
-      color:var(--white);
-      box-shadow:0 4px 14px rgba(0,0,0,0.12);
-    }
-
-    .topbar-inner{
-      width:min(100%, 1100px);
-      margin:0 auto;
-      padding:14px 16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .brand-badge{
-      width:42px;
-      height:42px;
-      border-radius:50%;
-      background:var(--beige);
+    .site-top-ribbon{
+      background:#ffffff;
       color:var(--green);
+      text-align:center;
+      font-family:Georgia, "Times New Roman", serif;
+      font-weight:700;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      font-size:26px;
+      padding:18px 12px;
+      border-bottom:4px solid var(--green);
+    }
+
+    .fw-hero{
+      min-height:560px;
+      background:
+        linear-gradient(rgba(8,35,27,0.58), rgba(8,35,27,0.72)),
+        url("assets/images/banner-main.jpg") center center / cover no-repeat;
+      color:var(--white);
       display:flex;
       align-items:center;
       justify-content:center;
+      text-align:center;
+      padding:40px 20px 50px;
+    }
+
+    .fw-hero-inner{
+      width:min(100%, 1100px);
+      margin:0 auto;
+    }
+
+    .fw-hero-logo{
+      width:108px;
+      height:108px;
+      object-fit:cover;
+      border-radius:50%;
+      background:#fff;
+      padding:6px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.22);
+      margin:0 auto 18px;
+      display:block;
+    }
+
+    .fw-hero h1{
+      font-size:70px;
+      line-height:0.98;
+      font-weight:900;
+      color:#ffffff;
+      max-width:980px;
+      margin:0 auto 18px;
+      text-transform:uppercase;
+      text-shadow:0 3px 14px rgba(0,0,0,0.28);
+    }
+
+    .fw-hero-tagline{
+      font-size:22px;
+      font-weight:800;
+      color:var(--gold);
+      margin-bottom:20px;
+    }
+
+    .fw-hero p{
+      max-width:900px;
+      margin:0 auto;
+      font-size:17px;
+      line-height:1.75;
+      color:#f8f4ec;
+    }
+
+    .fw-hero-actions{
+      margin-top:28px;
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .hero-note{
+      margin-top:16px;
+      font-size:14px;
+      color:#f5f0e7;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 22px;
+      font-size:15px;
       font-weight:700;
-      font-size:16px;
+      cursor:pointer;
+      transition:0.2s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .brand-text h1{
-      font-size:18px;
-      line-height:1.2;
+    .btn-primary{
+      background:var(--gold);
+      color:var(--green);
     }
 
-    .brand-text p{
-      font-size:12px;
-      opacity:0.88;
+    .btn-primary:hover{
+      filter:brightness(0.96);
+    }
+
+    .btn-light{
+      background:rgba(255,255,255,0.92);
+      color:var(--green);
+    }
+
+    .btn-light:hover{
+      filter:brightness(0.98);
     }
 
     .page-wrap{
       width:min(100%, 1100px);
       margin:0 auto;
-      padding:24px 16px 48px;
+      padding:30px 16px 48px;
       display:grid;
       grid-template-columns:1fr minmax(0, 680px) 1fr;
       gap:20px;
@@ -100,19 +169,21 @@
     .side-card{
       padding:18px;
       position:sticky;
-      top:84px;
+      top:20px;
       height:fit-content;
     }
 
     .side-card h3{
-      font-size:16px;
-      margin-bottom:8px;
+      font-size:20px;
+      margin-bottom:10px;
       color:var(--green);
+      line-height:1.35;
     }
 
     .side-card p{
-      font-size:14px;
+      font-size:15px;
       color:#333;
+      line-height:1.7;
     }
 
     .feed-column{
@@ -122,82 +193,27 @@
     }
 
     .composer{
-      padding:18px;
+      padding:22px;
     }
 
     .composer h2{
-      font-size:18px;
+      font-size:30px;
       color:var(--green);
-      margin-bottom:6px;
+      margin-bottom:8px;
+      font-weight:800;
     }
 
     .composer p{
-      font-size:14px;
+      font-size:16px;
       color:var(--gray);
-      margin-bottom:14px;
+      margin-bottom:10px;
+      line-height:1.7;
     }
 
-    .composer-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-bottom:12px;
-    }
-
-    .composer input,
-    .composer textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px 14px;
-      font-size:14px;
-      outline:none;
-      background:#fff;
-    }
-
-    .composer textarea{
-      min-height:100px;
-      resize:vertical;
-      grid-column:1 / -1;
-    }
-
-    .composer input:focus,
-    .composer textarea:focus{
-      border-color:var(--green);
-      box-shadow:0 0 0 3px rgba(15,59,46,0.08);
-    }
-
-    .composer-actions{
-      display:flex;
-      justify-content:flex-end;
-    }
-
-    .btn{
-      border:none;
-      border-radius:999px;
-      padding:11px 18px;
-      font-size:14px;
-      font-weight:700;
-      cursor:pointer;
-      transition:0.2s ease;
-    }
-
-    .btn-primary{
-      background:var(--green);
-      color:var(--white);
-    }
-
-    .btn-primary:hover{
-      background:var(--green-2);
-    }
-
-    .btn-light{
-      background:var(--beige);
-      color:var(--green);
-    }
-
-    .btn-light:hover{
-      filter:brightness(0.98);
+    .status-note{
+      font-size:13px;
+      color:var(--gray);
+      margin-top:8px;
     }
 
     .post-card{
@@ -412,13 +428,24 @@
       color:var(--gray);
     }
 
-    .status-note{
-      font-size:13px;
-      color:var(--gray);
-      margin-top:8px;
-    }
-
     @media (max-width: 980px){
+      .site-top-ribbon{
+        font-size:18px;
+        padding:14px 10px;
+      }
+
+      .fw-hero{
+        min-height:480px;
+      }
+
+      .fw-hero h1{
+        font-size:46px;
+      }
+
+      .fw-hero-tagline{
+        font-size:18px;
+      }
+
       .page-wrap{
         grid-template-columns:1fr;
       }
@@ -430,43 +457,70 @@
     }
 
     @media (max-width: 640px){
+      .site-top-ribbon{
+        font-size:15px;
+        letter-spacing:0.5px;
+      }
+
+      .fw-hero{
+        min-height:420px;
+        padding:28px 16px 36px;
+      }
+
+      .fw-hero-logo{
+        width:82px;
+        height:82px;
+      }
+
+      .fw-hero h1{
+        font-size:34px;
+      }
+
+      .fw-hero-tagline{
+        font-size:16px;
+      }
+
+      .fw-hero p{
+        font-size:14px;
+      }
+
       .post-actions{
         grid-template-columns:repeat(2, 1fr);
-      }
-
-      .composer-grid{
-        grid-template-columns:1fr;
-      }
-
-      .topbar-inner{
-        padding:12px 14px;
-      }
-
-      .brand-text h1{
-        font-size:16px;
       }
     }
   </style>
 </head>
 <body>
-<header class="fw-hero">
-  <div class="fw-hero-overlay">
+
+  <div class="site-top-ribbon">
+    REGION VIII ALLIANCE OF VOLUNTEERS FOR SARA DUTERTE
+  </div>
+
+  <header class="fw-hero">
     <div class="fw-hero-inner">
-      <div class="fw-hero-badge">OL</div>
+      <img src="assets/images/oneleyte-logo.jpg" alt="One Leyte Logo" class="fw-hero-logo">
 
       <h1>Freedom Wall Social</h1>
+
+      <div class="fw-hero-tagline">
+        Voices of Unity • Support • Community
+      </div>
+
       <p>
-        A community space where approved voices can be seen, supported,
-        and engaged with through respectful reactions and comments.
+        A community space where approved Freedom Wall messages are shared,
+        seen, supported, and engaged with through respectful reactions and comments.
       </p>
 
       <div class="fw-hero-actions">
         <a href="freedom-wall.html" class="btn btn-primary">+ Share Your Voice</a>
         <a href="index.html" class="btn btn-light">← Back to Home</a>
       </div>
+
+      <div class="hero-note">
+        🔒 Posts are reviewed first before appearing publicly.
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
   <main class="page-wrap">
     <aside class="side-left">
@@ -474,17 +528,14 @@
         <h3>Community Space</h3>
         <p>
           This page displays approved Freedom Wall posts with reactions and comments.
-          Clean, light, and built for growth.
+          Members can read, support, and engage respectfully with community voices.
         </p>
       </div>
     </aside>
 
     <section class="feed-column">
       <div class="composer">
-  <h2>Freedom Wall Feed</h2>
-
-  <div style="margin-top:10px; margin-bottom:10px;">
-  </div>
+        <h2>Freedom Wall Feed</h2>
         <p>Approved voices from the community, now with reactions and comments.</p>
         <div class="status-note" id="feedStatus">Loading posts...</div>
       </div>
@@ -496,16 +547,17 @@
       </div>
     </section>
 
-   <aside class="side-right">
-  <div class="side-card">
-    <h3>Community Guidelines</h3>
-    <p>
-      Please keep messages respectful and aligned with unity, volunteerism,
-      and service. All posts are reviewed before publishing.
-    </p>
+    <aside class="side-right">
+      <div class="side-card">
+        <h3>Community Guidelines</h3>
+        <p>
+          Please keep messages respectful and aligned with unity, volunteerism,
+          and service. All posts are reviewed before publishing.
+        </p>
+      </div>
+    </aside>
+  </main>
 
-  </div>
-</aside>
   <script>
     const API_BASE = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
     const FEED_LIMIT = 5;
@@ -593,9 +645,9 @@
           </div>
 
           <div class="post-actions">
-            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','like', this)">Like</button>
-            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','support', this)">Support</button>
-            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}','strong', this)">Strong</button>
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}', 'like', this)">Like</button>
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}', 'support', this)">Support</button>
+            <button class="react-btn" onclick="sendReaction('${escapeHtml(post.postId)}', 'strong', this)">Strong</button>
             <button class="comment-toggle-btn" onclick="toggleComments('${escapeHtml(post.postId)}')">Comments</button>
           </div>
 
