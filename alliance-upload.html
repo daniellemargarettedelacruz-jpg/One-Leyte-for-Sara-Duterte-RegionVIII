@@ -210,6 +210,13 @@
       background:#085332;
     }
 
+    .upload-btn.primary:disabled{
+      background:#7ea08e;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
     .upload-btn.secondary{
       background:#d4af37;
       color:#102118;
@@ -424,7 +431,10 @@
     const errorMessage = document.getElementById("errorMessage");
     const submitBtn = document.getElementById("submitBtn");
 
+    let isSubmitting = false;
+
     pickLogoBtn.addEventListener("click", function () {
+      if (isSubmitting) return;
       fileInput.click();
     });
 
@@ -435,6 +445,9 @@
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
 
+      if (isSubmitting) return;
+      isSubmitting = true;
+
       successMessage.style.display = "none";
       errorMessage.style.display = "none";
 
@@ -443,66 +456,82 @@
       if (!file) {
         errorMessage.textContent = "Please select a logo image.";
         errorMessage.style.display = "block";
+        isSubmitting = false;
         return;
       }
 
       submitBtn.disabled = true;
       submitBtn.style.opacity = "0.7";
 
-      const reader = new FileReader();
-
-      reader.onload = async function() {
-        const base64 = reader.result.split(",")[1];
+      try {
+        const base64 = await readFileAsBase64(file);
 
         const payload = new URLSearchParams();
         payload.append("action", "allianceupload");
-        payload.append("allianceName", document.getElementById("allianceName").value);
-        payload.append("municipality", document.getElementById("municipality").value);
-        payload.append("uploaderName", document.getElementById("uploaderName").value);
-        payload.append("contactInfo", document.getElementById("contactInfo").value);
-        payload.append("caption", document.getElementById("caption").value);
-        payload.append("description", document.getElementById("description").value);
+        payload.append("allianceName", document.getElementById("allianceName").value.trim());
+        payload.append("municipality", document.getElementById("municipality").value.trim());
+        payload.append("uploaderName", document.getElementById("uploaderName").value.trim());
+        payload.append("contactInfo", document.getElementById("contactInfo").value.trim());
+        payload.append("caption", document.getElementById("caption").value.trim());
+        payload.append("description", document.getElementById("description").value.trim());
         payload.append("consent", document.getElementById("consent").checked ? "Yes" : "No");
         payload.append("fileName", file.name);
         payload.append("mimeType", file.type);
         payload.append("fileData", base64);
 
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: payload
+        });
+
+        const text = await res.text();
+        let data = {};
+
         try {
-          const res = await fetch(WEB_APP_URL, {
-            method: "POST",
-            body: payload
-          });
-
-          const text = await res.text();
-          let data = {};
-
-          try {
-            data = JSON.parse(text);
-          } catch (parseErr) {
-            throw new Error("Invalid server response: " + text);
-          }
-
-          if (data.success) {
-            successMessage.style.display = "block";
-            form.reset();
-            logoFileName.textContent = "No file chosen";
-          } else {
-            errorMessage.textContent = "Upload failed: " + (data.message || "Unknown error");
-            errorMessage.style.display = "block";
-          }
-
-        } catch (err) {
-          console.error(err);
-          errorMessage.textContent = err.message || "Upload error. Check browser console.";
-          errorMessage.style.display = "block";
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = "1";
+          data = JSON.parse(text);
+        } catch (parseErr) {
+          throw new Error("Invalid server response: " + text);
         }
-      };
 
-      reader.readAsDataURL(file);
+        if (data.success) {
+          successMessage.style.display = "block";
+          form.reset();
+          logoFileName.textContent = "No file chosen";
+        } else {
+          errorMessage.textContent = "Upload failed: " + (data.message || "Unknown error");
+          errorMessage.style.display = "block";
+        }
+      } catch (err) {
+        console.error(err);
+        errorMessage.textContent = err.message || "Upload error. Check browser console.";
+        errorMessage.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = "1";
+        isSubmitting = false;
+      }
     });
+
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function() {
+          try {
+            const result = String(reader.result || "");
+            resolve(result.split(",")[1] || "");
+          } catch (err) {
+            reject(err);
+          }
+        };
+
+        reader.onerror = function() {
+          reject(new Error("Failed to read file."));
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
   </script>
 </body>
 </html>
