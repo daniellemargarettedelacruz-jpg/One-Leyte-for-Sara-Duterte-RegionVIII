@@ -193,6 +193,29 @@
     </div>
   </section>
 
+  <!-- COMMUNITY MEDIA PREVIEW -->
+<section class="media-preview">
+  <div class="container">
+
+    <div class="section-heading">
+      <h2>Community Media</h2>
+      <p>Recent photos and videos shared by members of the movement.</p>
+    </div>
+
+    <div class="media-preview-grid" id="mediaPreviewGrid">
+      <div class="announcement-slider-empty">Loading community media...</div>
+    </div>
+
+    <div style="text-align:center;margin-top:25px;">
+      <a href="media-uploads.html" class="btn secondary">
+        View More Media
+      </a>
+    </div>
+
+  </div>
+</section>
+
+  
   <!-- ABOUT -->
   <section class="about">
     <div class="container narrow">
@@ -479,6 +502,50 @@
       }
     }
 
+    async function loadMediaPreview() {
+  const grid = document.getElementById("mediaPreviewGrid");
+  if (!grid) return;
+
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=mediaposts`);
+    const data = await res.json();
+
+    const items = Array.isArray(data) ? data : data.items;
+
+    if (!items || !items.length) {
+      grid.innerHTML = `<div class="announcement-slider-empty">No community media yet.</div>`;
+      return;
+    }
+
+    grid.innerHTML = "";
+
+    items.slice(0,3).forEach(item => {
+
+      const img =
+        item.Photo1 ||
+        item.Photo2 ||
+        item.Photo3 ||
+        item.videoThumb ||
+        "";
+
+      const caption = item.Caption || "";
+
+      const card = document.createElement("div");
+      card.className = "media-preview-card";
+
+      card.innerHTML = `
+        <img src="${img}" class="media-preview-img">
+        <div class="media-preview-caption">${caption}</div>
+      `;
+
+      grid.appendChild(card);
+
+    });
+
+  } catch(err) {
+    console.error("Media preview load error:", err);
+  }
+}
     loadAnnouncements();
     loadAllianceUploads();
   </script>
