@@ -1,290 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Freedom Wall | One Leyte</title>
-
 <link rel="stylesheet" href="style.css">
 
 <style>
-
 .page-header{
-text-align:center;
-padding:70px 20px 40px 20px;
-background:#08110c;
-color:white;
+  text-align:center;
+  padding:70px 20px 40px 20px;
+  background:#08110c;
+  color:white;
 }
 
 .page-header h1{
-font-size:34px;
-margin-bottom:10px;
+  font-size:34px;
+  margin-bottom:10px;
 }
 
 .page-header p{
-color:#cfd7d2;
-max-width:700px;
-margin:auto;
+  color:#cfd7d2;
+  max-width:700px;
+  margin:auto;
 }
 
 .freedom-container{
-padding:60px 20px;
-background:#eef1ed;
+  padding:60px 20px;
+  background:#eef1ed;
 }
 
 .freedom-feed{
-max-width:720px;
-margin:auto;
-display:flex;
-flex-direction:column;
-gap:22px;
+  max-width:720px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
 }
 
 .freedom-post{
-background:white;
-border-radius:12px;
-padding:22px;
-box-shadow:0 6px 16px rgba(0,0,0,0.08);
-border-left:4px solid #0a6b3f;
+  background:white;
+  border-radius:12px;
+  padding:22px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
+  border-left:4px solid #0a6b3f;
 }
 
 .post-header{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
 }
 
 .post-avatar{
-width:38px;
-height:38px;
-border-radius:50%;
-background:#0a6b3f;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-weight:700;
-font-size:16px;
-flex-shrink:0;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#0a6b3f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:700;
+  font-size:16px;
+  flex-shrink:0;
 }
 
 .post-name{
-font-weight:700;
-color:#0a6b3f;
+  font-weight:700;
+  color:#0a6b3f;
 }
 
 .post-message{
-margin-top:10px;
-color:#333;
-line-height:1.6;
-white-space:pre-wrap;
+  margin-top:10px;
+  color:#333;
+  line-height:1.6;
+  white-space:pre-wrap;
 }
 
 .submit-section{
-text-align:center;
-padding:50px 20px;
-background:white;
+  text-align:center;
+  padding:50px 20px;
+  background:white;
 }
 
 .submit-section h3{
-color:#102118;
-margin-bottom:8px;
+  color:#102118;
+  margin-bottom:8px;
 }
 
 .submit-section p{
-color:#555;
+  color:#555;
 }
 
 .empty-message{
-text-align:center;
-color:#666;
-padding:30px 20px;
+  text-align:center;
+  color:#666;
+  padding:30px 20px;
 }
 
 .wall-form{
-max-width:650px;
-margin:30px auto 0 auto;
-text-align:left;
-background:#f8faf8;
-padding:24px;
-border-radius:14px;
-box-shadow:0 6px 16px rgba(0,0,0,0.06);
+  max-width:650px;
+  margin:30px auto 0 auto;
+  text-align:left;
+  background:#f8faf8;
+  padding:24px;
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.06);
 }
 
 .wall-form input,
 .wall-form textarea{
-width:100%;
-padding:12px;
-margin-top:6px;
-margin-bottom:16px;
-border:1px solid #cfd7d2;
-border-radius:8px;
-box-sizing:border-box;
-font-size:14px;
-color:#111;
-background:#fff;
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  margin-bottom:16px;
+  border:1px solid #cfd7d2;
+  border-radius:8px;
+  box-sizing:border-box;
+  font-size:14px;
+  color:#111;
+  background:#fff;
 }
 
 .wall-form input[readonly]{
-background:#f2f4f2;
+  background:#f2f4f2;
 }
 
 .wall-form textarea{
-min-height:140px;
-resize:vertical;
+  min-height:140px;
+  resize:vertical;
 }
 
 .wall-form label{
-display:block;
-font-weight:600;
-color:#183325;
+  display:block;
+  font-weight:600;
+  color:#183325;
 }
 
 .wall-form .checkbox-wrap{
-display:flex;
-gap:10px;
-align-items:flex-start;
-margin-bottom:18px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:18px;
 }
 
 .wall-form .checkbox-wrap input{
-width:auto;
-margin-top:2px;
-margin-bottom:0;
+  width:auto;
+  margin-top:2px;
+  margin-bottom:0;
 }
 
 .wall-form button{
-padding:12px 22px;
-background:#0a6b3f;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
+  padding:12px 22px;
+  background:#0a6b3f;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
 }
 
 .wall-form button:hover{
-background:#084c2c;
+  background:#084c2c;
 }
 
 .wall-form button:disabled{
-background:#7aa892;
-cursor:not-allowed;
+  background:#7aa892;
+  cursor:not-allowed;
 }
 
 .wall-status{
-margin-top:15px;
-font-weight:600;
-min-height:24px;
-color:#111;
+  margin-top:15px;
+  font-weight:600;
+  min-height:24px;
+  color:#111;
 }
 
 .lookup-status{
-font-size:12px;
-color:#555;
-margin-top:-8px;
-margin-bottom:14px;
-min-height:16px;
+  font-size:12px;
+  color:#555;
+  margin-top:-8px;
+  margin-bottom:14px;
+  min-height:16px;
 }
 
 .member-good{
-color:#0a6b3f;
+  color:#0a6b3f;
 }
 
 .member-bad{
-color:#b42318;
+  color:#b42318;
 }
 
 .member-loading{
-color:#555;
+  color:#555;
 }
 
 .field-note{
-font-size:12px;
-color:#666;
-margin-top:-8px;
-margin-bottom:14px;
+  font-size:12px;
+  color:#666;
+  margin-top:-8px;
+  margin-bottom:14px;
 }
-
 </style>
-
 </head>
 
 <body>
 
 <section class="page-header">
-
-<h1>Freedom Wall</h1>
-
-<p>
-Messages of support from members of the movement across Region VIII.
-All posts are reviewed before being displayed publicly.
-</p>
-
+  <h1>Freedom Wall</h1>
+  <p>
+    Messages of support from members of the movement across Region VIII.
+    All posts are reviewed before being displayed publicly.
+  </p>
 </section>
-
 
 <section class="freedom-container">
-
-<div class="freedom-feed" id="freedomWall">
-<div class="empty-message">Loading messages...</div>
-</div>
-
+  <div class="freedom-feed" id="freedomWall">
+    <div class="empty-message">Loading messages...</div>
+  </div>
 </section>
-
 
 <section class="submit-section">
+  <h3>Share Your Message</h3>
+  <p>Members may post their message of support using MemberID or QR access.</p>
 
-<h3>Share Your Message</h3>
+  <div class="wall-form">
+    <label for="memberId">Member ID</label>
+    <input type="text" id="memberId" placeholder="Enter your MemberID">
+    <div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
+    <div id="memberLookupStatus" class="lookup-status"></div>
 
-<p>Members may post their message of support using MemberID or QR access.</p>
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
 
-<div class="wall-form">
+    <label for="message">Your Message</label>
+    <textarea id="message" placeholder="Write your message here..."></textarea>
 
-<label for="memberId">Member ID</label>
-<input type="text" id="memberId" placeholder="Enter your MemberID">
-<div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
-<div id="memberLookupStatus" class="lookup-status"></div>
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="consent">
+      <span>I confirm that this message is submitted voluntarily and may be reviewed before public posting.</span>
+    </label>
 
-<label for="fullName">Full Name</label>
-<input type="text" id="fullName" placeholder="Full Name will appear here" readonly>
-
-<label for="message">Your Message</label>
-<textarea id="message" placeholder="Write your message here..."></textarea>
-
-<label class="checkbox-wrap">
-<input type="checkbox" id="consent">
-<span>I confirm that this message is submitted voluntarily and may be reviewed before public posting.</span>
-</label>
-
-<button type="button" id="wallSubmitBtn" onclick="submitFreedomWall()">Submit Message</button>
-
-<div id="wallStatus" class="wall-status"></div>
-
-</div>
-
+    <button type="button" id="wallSubmitBtn">Submit Message</button>
+    <div id="wallStatus" class="wall-status"></div>
+  </div>
 </section>
 
-
 <script>
-
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
-const api = WEB_APP_URL + "?action=freedomwall";
+const FEED_API = WEB_APP_URL + "?action=freedomwall";
 
 const memberIdInput = document.getElementById("memberId");
 const fullNameInput = document.getElementById("fullName");
 const memberLookupStatus = document.getElementById("memberLookupStatus");
+const wallSubmitBtn = document.getElementById("wallSubmitBtn");
+const wallStatus = document.getElementById("wallStatus");
 
 let memberLookupTimer = null;
-let lastResolvedMemberId = "";
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
 async function loadFreedomWall() {
   try {
-    const res = await fetch(api);
+    const res = await fetch(FEED_API);
     const data = await res.json();
 
     const container = document.getElementById("freedomWall");
@@ -312,40 +298,17 @@ async function loadFreedomWall() {
             <div class="post-name">${escapeHtml(fullName)}</div>
           </div>
         </div>
-
         <div class="post-message">${escapeHtml(message)}</div>
       `;
 
       container.appendChild(card);
     });
-
   } catch (error) {
     const container = document.getElementById("freedomWall");
     container.innerHTML = '<div class="empty-message">Unable to load Freedom Wall posts right now.</div>';
     console.error(error);
   }
 }
-
-loadFreedomWall();
-
-
-// QR / URL MemberID autofill
-(function autofillMemberIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const memberId = (params.get("memberId") || params.get("MemberID") || "").trim();
-  if (memberId) {
-    memberIdInput.value = memberId;
-    resolveMemberName();
-  }
-})();
-
-memberIdInput.addEventListener("input", function() {
-  clearTimeout(memberLookupTimer);
-  memberLookupTimer = setTimeout(resolveMemberName, 500);
-});
-
-memberIdInput.addEventListener("change", resolveMemberName);
-memberIdInput.addEventListener("blur", resolveMemberName);
 
 async function resolveMemberName() {
   const memberId = memberIdInput.value.trim();
@@ -354,10 +317,7 @@ async function resolveMemberName() {
   memberLookupStatus.textContent = "";
   memberLookupStatus.className = "lookup-status";
 
-  if (!memberId) {
-    lastResolvedMemberId = "";
-    return;
-  }
+  if (!memberId) return;
 
   memberLookupStatus.textContent = "Checking MemberID...";
   memberLookupStatus.classList.add("member-loading");
@@ -369,65 +329,58 @@ async function resolveMemberName() {
 
     if (data.success) {
       const fullName = data.fullName || data.name || data.memberName || "";
-
       fullNameInput.value = fullName;
       memberLookupStatus.textContent = "Member found.";
       memberLookupStatus.className = "lookup-status member-good";
-      lastResolvedMemberId = memberId;
     } else {
       fullNameInput.value = "";
       memberLookupStatus.textContent = data.message || "MemberID not found.";
       memberLookupStatus.className = "lookup-status member-bad";
-      lastResolvedMemberId = "";
     }
   } catch (err) {
     fullNameInput.value = "";
     memberLookupStatus.textContent = "Unable to verify MemberID right now.";
     memberLookupStatus.className = "lookup-status member-bad";
-    lastResolvedMemberId = "";
     console.error(err);
   }
 }
 
 async function submitFreedomWall() {
-  const status = document.getElementById("wallStatus");
-  const button = document.getElementById("wallSubmitBtn");
-
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
   const message = document.getElementById("message").value.trim();
   const consent = document.getElementById("consent").checked;
 
-  status.style.color = "#111";
+  wallStatus.style.color = "#111";
 
   if (!memberId) {
-    status.innerText = "Please enter your MemberID.";
-    status.style.color = "red";
+    wallStatus.innerText = "Please enter your MemberID.";
+    wallStatus.style.color = "red";
     return;
   }
 
   if (!fullName) {
-    status.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
-    status.style.color = "red";
+    wallStatus.innerText = "Please use a valid MemberID first so your Full Name can be verified.";
+    wallStatus.style.color = "red";
     return;
   }
 
   if (!message) {
-    status.innerText = "Please write your message.";
-    status.style.color = "red";
+    wallStatus.innerText = "Please write your message.";
+    wallStatus.style.color = "red";
     return;
   }
 
   if (!consent) {
-    status.innerText = "Please confirm the consent checkbox.";
-    status.style.color = "red";
+    wallStatus.innerText = "Please confirm the consent checkbox.";
+    wallStatus.style.color = "red";
     return;
   }
 
-  button.disabled = true;
-  button.innerText = "Submitting...";
-  status.innerText = "Submitting...";
-  status.style.color = "#111";
+  wallSubmitBtn.disabled = true;
+  wallSubmitBtn.innerText = "Submitting...";
+  wallStatus.innerText = "Submitting...";
+  wallStatus.style.color = "#111";
 
   try {
     const payload = {
@@ -454,35 +407,45 @@ async function submitFreedomWall() {
     }
 
     if (result.success) {
-      status.innerText = "Message submitted successfully. Waiting for admin approval.";
-      status.style.color = "green";
-
+      wallStatus.innerText = "Message submitted successfully. Waiting for admin approval.";
+      wallStatus.style.color = "green";
       document.getElementById("message").value = "";
       document.getElementById("consent").checked = false;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
     } else {
-      status.innerText = result.message || "Submission failed.";
-      status.style.color = "red";
+      wallStatus.innerText = result.message || "Submission failed.";
+      wallStatus.style.color = "red";
     }
-
   } catch (err) {
-    status.innerText = err.message || "Submission failed. Please try again.";
-    status.style.color = "red";
+    wallStatus.innerText = err.message || "Submission failed. Please try again.";
+    wallStatus.style.color = "red";
     console.error(err);
   }
 
-  button.disabled = false;
-  button.innerText = "Submit Message";
+  wallSubmitBtn.disabled = false;
+  wallSubmitBtn.innerText = "Submit Message";
 }
 
-function escapeHtml(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+(function autofillMemberIdFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const memberId = (params.get("memberId") || params.get("MemberID") || "").trim();
+  if (memberId) {
+    memberIdInput.value = memberId;
+    resolveMemberName();
+  }
+})();
 
+memberIdInput.addEventListener("input", function() {
+  clearTimeout(memberLookupTimer);
+  memberLookupTimer = setTimeout(resolveMemberName, 500);
+});
+
+memberIdInput.addEventListener("change", resolveMemberName);
+memberIdInput.addEventListener("blur", resolveMemberName);
+wallSubmitBtn.addEventListener("click", submitFreedomWall);
+
+loadFreedomWall();
 </script>
 
 </body>
