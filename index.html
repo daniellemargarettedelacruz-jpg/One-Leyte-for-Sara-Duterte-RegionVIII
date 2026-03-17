@@ -395,11 +395,13 @@
       });
     });
 
-    const announcementApi = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    fetch(announcementApi)
-      .then(res => res.json())
-      .then(data => {
+    async function loadAnnouncements() {
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+        const data = await res.json();
+
         if (!data) return;
 
         if (data.latest && data.latest.Title) {
@@ -447,12 +449,10 @@
 
           sliderTrack.appendChild(card);
         });
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("Announcement homepage load error:", err);
-      });
-
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
+      }
+    }
 
     async function loadAllianceUploads() {
       const grid = document.getElementById("alliancesGrid");
@@ -460,19 +460,26 @@
 
       try {
         const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-const data = await res.json();
+        const data = await res.json();
 
-const items = Array.isArray(data) ? data : data.items;
+        const items = Array.isArray(data) ? data : data.items;
 
-if (!items || !items.length) return;
+        if (!items || !items.length) return;
 
-items.forEach(item => {
-  const tile = document.createElement("div");
-  tile.className = "alliance-logo-tile";
-  tile.innerHTML = `<img src="${item.fileUrl}" alt="Alliance Logo">`;
-  grid.appendChild(tile);
-});
+        items.slice(0, 8).forEach(item => {
+          const tile = document.createElement("div");
+          tile.className = "alliance-logo-tile";
+          tile.innerHTML = `
+            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+          `;
+          grid.appendChild(tile);
+        });
+      } catch (err) {
+        console.error("Alliance homepage load error:", err);
+      }
+    }
 
+    loadAnnouncements();
     loadAllianceUploads();
   </script>
 </body>
