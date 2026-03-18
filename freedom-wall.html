@@ -79,6 +79,21 @@
   white-space:pre-wrap;
 }
 
+.post-image-wrap{
+  margin-top:14px;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid #d7ddd8;
+  background:#f5f5f5;
+}
+
+.post-image{
+  display:block;
+  width:100%;
+  max-height:420px;
+  object-fit:cover;
+}
+
 .submit-section{
   text-align:center;
   padding:50px 20px;
@@ -239,6 +254,10 @@
     <label for="message">Your Message</label>
     <textarea id="message" placeholder="Write your message here..."></textarea>
 
+    <label for="imageUrl">Photo URL (optional)</label>
+    <input type="text" id="imageUrl" placeholder="Paste image link here if you want to include a photo">
+    <div class="field-note">You may submit text only, image only, or text with image.</div>
+
     <label class="checkbox-wrap">
       <input type="checkbox" id="consent">
       <span>I confirm that this message is submitted voluntarily and may be reviewed before public posting.</span>
@@ -268,6 +287,14 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;");
 }
 
+function escapeAttr(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 async function loadFreedomWall() {
   try {
     const res = await fetch(FEED_API);
@@ -289,6 +316,7 @@ async function loadFreedomWall() {
 
       const fullName = item.FullName || item.fullName || item.Name || item.name || "Anonymous Member";
       const message = item.Message || item.message || "";
+      const imageUrl = item.ImageURL || item.imageUrl || item.PhotoURL || item.photoUrl || "";
       const firstLetter = fullName.trim().charAt(0).toUpperCase() || "?";
 
       card.innerHTML = `
@@ -298,7 +326,14 @@ async function loadFreedomWall() {
             <div class="post-name">${escapeHtml(fullName)}</div>
           </div>
         </div>
-        <div class="post-message">${escapeHtml(message)}</div>
+
+        ${message ? `<div class="post-message">${escapeHtml(message)}</div>` : ""}
+
+        ${imageUrl ? `
+          <div class="post-image-wrap">
+            <img class="post-image" src="${escapeAttr(imageUrl)}" alt="Freedom Wall Photo">
+          </div>
+        ` : ""}
       `;
 
       container.appendChild(card);
@@ -349,6 +384,7 @@ async function submitFreedomWall() {
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
   const message = document.getElementById("message").value.trim();
+  const imageUrl = document.getElementById("imageUrl").value.trim();
   const consent = document.getElementById("consent").checked;
 
   wallStatus.style.color = "#111";
@@ -365,8 +401,8 @@ async function submitFreedomWall() {
     return;
   }
 
-  if (!message) {
-    wallStatus.innerText = "Please write your message.";
+  if (!message && !imageUrl) {
+    wallStatus.innerText = "Please write a message or provide an image link.";
     wallStatus.style.color = "red";
     return;
   }
@@ -388,6 +424,7 @@ async function submitFreedomWall() {
       memberId: memberId,
       fullName: fullName,
       message: message,
+      imageUrl: imageUrl,
       consent: "Yes"
     };
 
@@ -407,9 +444,10 @@ async function submitFreedomWall() {
     }
 
     if (result.success) {
-      wallStatus.innerText = "Message submitted successfully. Waiting for admin approval.";
+      wallStatus.innerText = "Post submitted successfully. Waiting for admin approval.";
       wallStatus.style.color = "green";
       document.getElementById("message").value = "";
+      document.getElementById("imageUrl").value = "";
       document.getElementById("consent").checked = false;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
