@@ -6,7 +6,7 @@
 
   <title>One Leyte for Sara Duterte Region VIII</title>
 
-  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="assets/css/sectoral.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -81,7 +81,24 @@
       </div>
 
       <div class="sector-grid">
-        <a href="membership.html?sector=Women" class="sector-capsule white"><span>Women</span></a>
+       <div class="sector-card">
+  <div class="sector-inner">
+
+    <div class="sector-front">
+      <h3>Women</h3>
+      <p>Empowering women leaders</p>
+      <button onclick="flipCard(this)">Show QR</button>
+    </div>
+
+    <div class="sector-back">
+      <img src="assets/images/sector-qr/women-qr.png">
+      <p>Scan to Join</p>
+      <a href="membership.html?sector=Women" target="_blank">Open Form</a>
+      <button onclick="flipCard(this)">Back</button>
+    </div>
+
+  </div>
+</div>
         <a href="membership.html?sector=Youth" class="sector-capsule green"><span>Youth</span></a>
 
         <a href="membership.html?sector=Senior Citizens" class="sector-capsule white"><span>Senior Citizens</span></a>
@@ -550,5 +567,7 @@
       loadMediaPreview();
     });
   </script>
+
+  <script src="assets/js/sectoral.js"></script>
 </body>
 </html>
