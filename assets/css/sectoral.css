@@ -1,1 +1,48 @@
+/* SECTOR QR FLIP CARD */
+.sector-card {
+  perspective: 1000px;
+  min-height: 260px;
+}
 
+.sector-inner {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  transition: transform 0.7s ease;
+  transform-style: preserve-3d;
+}
+
+.sector-card.flip .sector-inner {
+  transform: rotateY(180deg);
+}
+
+.sector-front,
+.sector-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sector-front {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.sector-back {
+  background: #fff;
+  color: #000;
+  transform: rotateY(180deg);
+}
+
+.sector-back img {
+  width: 120px;
+  margin: 10px auto;
+}
