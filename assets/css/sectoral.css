@@ -1,21 +1,21 @@
 /* =========================
-   PREMIUM SECTORAL SECTION
+   NEON SECTORAL GRID
 ========================= */
 .premium-sector-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 22px;
-  align-items: stretch;
+  gap: 24px;
   margin-top: 28px;
+  align-items: stretch;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .premium-sector-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 860px) {
   .premium-sector-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -27,110 +27,300 @@
   }
 }
 
-.sector-card.premium {
+/* =========================
+   MASTER NEON CARD
+========================= */
+.neon-card {
+  --sector-glow: #ff3ca6;
+  --sector-glow-soft: rgba(255, 60, 166, 0.22);
+  --sector-ring: rgba(255, 60, 166, 0.42);
+
   position: relative;
-  min-height: 390px;
-  padding: 24px 18px 20px;
-  border-radius: 28px;
+  min-height: 420px;
+  border-radius: 30px;
+  padding: 26px 18px 22px;
   text-align: center;
-  color: #ffffff;
+  color: #fff;
   overflow: hidden;
   background:
-    radial-gradient(circle at top, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 30%, rgba(0,0,0,0) 58%),
-    linear-gradient(180deg, #101717 0%, #08110c 100%);
-  border: 1px solid rgba(255,255,255,0.09);
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 30%, rgba(0,0,0,0) 52%),
+    radial-gradient(circle at 50% 100%, var(--sector-glow-soft), transparent 38%),
+    linear-gradient(180deg, #140d17 0%, #0b0d12 48%, #090b10 100%);
+  border: 2px solid color-mix(in srgb, var(--sector-glow) 65%, #ffffff 10%);
   box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.03),
-    0 14px 30px rgba(0,0,0,0.26);
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 0 18px var(--sector-glow-soft),
+    0 0 42px color-mix(in srgb, var(--sector-glow) 40%, transparent),
+    0 20px 35px rgba(0,0,0,0.35);
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
-.sector-card.premium:hover {
-  transform: translateY(-5px);
-}
-
-.sector-card.premium::before {
+.neon-card::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: 28px;
+  inset: 10px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
   pointer-events: none;
 }
 
-/* =========================
-   ULTRA PREMIUM EFFECTS
-========================= */
+.neon-card::after {
+  content: "";
+  position: absolute;
+  left: -35%;
+  top: -20%;
+  width: 170%;
+  height: 70%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--sector-glow) 24%, transparent) 0%, transparent 62%);
+  pointer-events: none;
+  opacity: 0.95;
+}
 
-/* Hover Lift + Glow Boost */
-.sector-card.premium:hover {
-  transform: translateY(-8px) scale(1.02);
+.neon-card:hover {
+  transform: translateY(-8px) scale(1.015);
   box-shadow:
-    0 0 35px rgba(0,255,150,0.25),
-    0 15px 35px rgba(0,0,0,0.35);
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 0 26px color-mix(in srgb, var(--sector-glow) 35%, transparent),
+    0 0 58px color-mix(in srgb, var(--sector-glow) 55%, transparent),
+    0 26px 42px rgba(0,0,0,0.40);
 }
 
-/* ICON GLOW */
+/* =========================
+   ICON RING
+========================= */
+.sector-icon-wrap {
+  position: relative;
+  margin: 4px auto 18px;
+  z-index: 2;
+}
+
 .sector-icon {
-  font-size: 26px;
-  margin-bottom: 10px;
-  transition: all 0.3s ease;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 40px;
+  color: color-mix(in srgb, var(--sector-glow) 80%, #ffffff 18%);
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.16), rgba(255,255,255,0.04) 45%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.08));
+  border: 3px solid color-mix(in srgb, var(--sector-glow) 70%, #ffffff 10%);
+  box-shadow:
+    0 0 0 10px color-mix(in srgb, var(--sector-glow) 9%, transparent),
+    0 0 20px color-mix(in srgb, var(--sector-glow) 36%, transparent),
+    0 0 52px color-mix(in srgb, var(--sector-glow) 26%, transparent);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
-.sector-card.premium:hover .sector-icon {
-  transform: scale(1.2);
-  text-shadow: 0 0 12px rgba(255,255,255,0.6);
-}
-
-/* QR IMAGE STYLE */
-.sector-qr img {
-  width: 120px;
-  border-radius: 12px;
-  margin: 12px 0;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 15px rgba(255,255,255,0.1);
-}
-
-/* QR ZOOM ON HOVER */
-.sector-card.premium:hover .sector-qr img {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px rgba(255,255,255,0.3);
-}
-
-/* BUTTON STYLE */
-.sector-btn {
-  display: inline-block;
-  margin-top: auto;
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  color: #fff;
-  background: linear-gradient(135deg, #00c853, #009624);
-  box-shadow: 0 0 15px rgba(0,255,150,0.3);
-  transition: all 0.3s ease;
-}
-
-/* BUTTON HOVER */
-.sector-btn:hover {
+.neon-card:hover .sector-icon {
   transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(0,255,150,0.6);
+  box-shadow:
+    0 0 0 12px color-mix(in srgb, var(--sector-glow) 11%, transparent),
+    0 0 28px color-mix(in srgb, var(--sector-glow) 48%, transparent),
+    0 0 62px color-mix(in srgb, var(--sector-glow) 35%, transparent);
 }
 
-/* TITLE STYLE */
-.sector-card h3 {
-  font-size: 16px;
-  margin: 8px 0 4px;
-  font-weight: 700;
+/* =========================
+   TEXT
+========================= */
+.neon-card h3 {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 10px;
+  font-size: 1.7rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #fff3fb;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--sector-glow) 28%, transparent);
 }
 
-/* DESCRIPTION */
 .sector-desc {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+  max-width: 270px;
+  min-height: 60px;
+  margin: 0 0 18px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.90);
 }
-.sector-icon
+
+/* =========================
+   QR FRAME
+========================= */
+.sector-qr {
+  position: relative;
+  z-index: 2;
+  width: 180px;
+  background: linear-gradient(180deg, #fffefe 0%, #f7eef2 100%);
+  border-radius: 20px;
+  padding: 12px;
+  margin: 0 auto 20px;
+  border: 3px solid color-mix(in srgb, var(--sector-glow) 62%, #ffffff 8%);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--sector-glow) 28%, transparent),
+    0 0 34px color-mix(in srgb, var(--sector-glow) 18%, transparent),
+    0 12px 24px rgba(0,0,0,0.26);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.sector-qr img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.neon-card:hover .sector-qr {
+  transform: scale(1.03);
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--sector-glow) 36%, transparent),
+    0 0 44px color-mix(in srgb, var(--sector-glow) 24%, transparent),
+    0 16px 30px rgba(0,0,0,0.30);
+}
+
+/* =========================
+   BUTTON
+========================= */
+.sector-btn {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #261500;
+  background: linear-gradient(180deg, #ffd86b 0%, #e1a72a 100%);
+  box-shadow:
+    0 0 14px rgba(255, 214, 97, 0.22),
+    0 8px 16px rgba(225, 167, 42, 0.28),
+    inset 0 1px 0 rgba(255,255,255,0.38);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+}
+
+.sector-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.04);
+  box-shadow:
+    0 0 22px rgba(255, 214, 97, 0.34),
+    0 12px 24px rgba(225, 167, 42, 0.34),
+    inset 0 1px 0 rgba(255,255,255,0.42);
+}
+
+/* =========================
+   16 SECTOR COLOR THEMES
+========================= */
+.women {
+  --sector-glow: #ff4fb2;
+  --sector-glow-soft: rgba(255, 79, 178, 0.23);
+}
+
+.youth {
+  --sector-glow: #2cff83;
+  --sector-glow-soft: rgba(44, 255, 131, 0.20);
+}
+
+.senior {
+  --sector-glow: #f3c84a;
+  --sector-glow-soft: rgba(243, 200, 74, 0.22);
+}
+
+.farmers {
+  --sector-glow: #79ff4d;
+  --sector-glow-soft: rgba(121, 255, 77, 0.20);
+}
+
+.fisherfolk {
+  --sector-glow: #38b8ff;
+  --sector-glow-soft: rgba(56, 184, 255, 0.22);
+}
+
+.workers {
+  --sector-glow: #ff9c2f;
+  --sector-glow-soft: rgba(255, 156, 47, 0.22);
+}
+
+.transport {
+  --sector-glow: #ffb347;
+  --sector-glow-soft: rgba(255, 179, 71, 0.22);
+}
+
+.professionals {
+  --sector-glow: #4a8dff;
+  --sector-glow-soft: rgba(74, 141, 255, 0.22);
+}
+
+.ofw {
+  --sector-glow: #3df5ff;
+  --sector-glow-soft: rgba(61, 245, 255, 0.22);
+}
+
+.solo {
+  --sector-glow: #b76cff;
+  --sector-glow-soft: rgba(183, 108, 255, 0.22);
+}
+
+.pwd {
+  --sector-glow: #37e0c5;
+  --sector-glow-soft: rgba(55, 224, 197, 0.22);
+}
+
+.lgbtqia {
+  --sector-glow: #ff4ed8;
+  --sector-glow-soft: rgba(255, 78, 216, 0.23);
+}
+
+.underserved {
+  --sector-glow: #ffc247;
+  --sector-glow-soft: rgba(255, 194, 71, 0.22);
+}
+
+.muslim {
+  --sector-glow: #17e06f;
+  --sector-glow-soft: rgba(23, 224, 111, 0.22);
+}
+
+.retirees {
+  --sector-glow: #d9c27f;
+  --sector-glow-soft: rgba(217, 194, 127, 0.22);
+}
+
+.entrepreneurs {
+  --sector-glow: #ffd34d;
+  --sector-glow-soft: rgba(255, 211, 77, 0.24);
+}
+
+/* =========================
+   SMALL TWEAKS
+========================= */
+.sectoral-section .privacy-note {
+  margin-top: 22px;
+}
+
+@media (max-width: 560px) {
+  .neon-card {
+    min-height: 390px;
+  }
+
+  .neon-card h3 {
+    font-size: 1.45rem;
+  }
+
+  .sector-desc {
+    font-size: 0.95rem;
+    min-height: auto;
+  }
+
+  .sector-qr {
+    width: 165px;
+  }
+}
