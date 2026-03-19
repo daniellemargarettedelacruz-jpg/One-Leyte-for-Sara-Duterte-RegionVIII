@@ -1,48 +1,190 @@
-/* SECTOR QR FLIP CARD */
-.sector-card {
-  perspective: 1000px;
-  min-height: 260px;
+/* =========================
+   SECTOR GRID UPGRADE
+========================= */
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  align-items: stretch;
 }
 
-.sector-inner {
+@media (max-width: 768px) {
+  .sector-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   PREMIUM SECTOR CARD
+========================= */
+.sector-card.premium {
   position: relative;
-  width: 100%;
-  height: 260px;
-  transition: transform 0.7s ease;
-  transform-style: preserve-3d;
-}
-
-.sector-card.flip .sector-inner {
-  transform: rotateY(180deg);
-}
-
-.sector-front,
-.sector-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 18px;
-  padding: 20px;
+  min-height: 320px;
+  padding: 22px 20px 20px;
+  border-radius: 28px;
   text-align: center;
+  color: #ffffff;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 35%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, #101418 0%, #08110c 100%);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    0 14px 30px rgba(0,0,0,0.28);
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.sector-card.premium:hover {
+  transform: translateY(-4px);
+}
+
+/* soft glow ring */
+.sector-card.premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  pointer-events: none;
+}
+
+/* icon badge */
+.sector-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  margin: 2px auto 14px;
+  font-size: 34px;
+  position: relative;
+  z-index: 1;
 }
 
-.sector-front {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+/* title */
+.sector-card.premium h3 {
+  margin: 0 0 10px;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
 }
 
-.sector-back {
-  background: #fff;
-  color: #000;
-  transform: rotateY(180deg);
+/* description */
+.sector-desc {
+  margin: 0 0 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.88);
+  max-width: 260px;
+  min-height: 44px;
+  position: relative;
+  z-index: 1;
 }
 
-.sector-back img {
-  width: 120px;
-  margin: 10px auto;
+/* QR box */
+.sector-qr {
+  width: 150px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 10px;
+  margin: 4px auto 16px;
+  box-shadow:
+    0 8px 22px rgba(0,0,0,0.22),
+    inset 0 0 0 1px rgba(0,0,0,0.05);
+  position: relative;
+  z-index: 1;
+}
+
+.sector-qr img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* button */
+.sector-btn {
+  display: inline-block;
+  margin-top: auto;
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.96rem;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.sector-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}
+
+/* =========================
+   WOMEN CARD THEME
+========================= */
+.sector-card.premium.women {
+  border-color: rgba(255, 90, 170, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    0 14px 30px rgba(0,0,0,0.28),
+    0 0 18px rgba(255, 70, 170, 0.16);
+}
+
+.sector-card.premium.women::before {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 130, 200, 0.10),
+    0 0 34px rgba(255, 60, 170, 0.18);
+}
+
+.sector-card.premium.women:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    0 16px 34px rgba(0,0,0,0.30),
+    0 0 30px rgba(255, 60, 170, 0.24);
+}
+
+.sector-card.premium.women .sector-icon {
+  color: #ff8bc8;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), rgba(255,255,255,0.05) 35%, rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, rgba(255, 90, 170, 0.26), rgba(255, 60, 150, 0.10));
+  border: 1px solid rgba(255, 120, 190, 0.38);
+  box-shadow:
+    0 0 0 6px rgba(255, 60, 160, 0.06),
+    0 0 24px rgba(255, 60, 160, 0.28);
+}
+
+.sector-card.premium.women h3 {
+  color: #ffe8f4;
+}
+
+.sector-card.premium.women .sector-qr {
+  border: 2px solid rgba(255, 115, 185, 0.45);
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.22),
+    0 0 18px rgba(255, 70, 170, 0.16);
+}
+
+.sector-card.premium.women .sector-btn {
+  color: #2b1800;
+  background: linear-gradient(180deg, #ffd977 0%, #d8a52c 100%);
+  box-shadow:
+    0 8px 18px rgba(216, 165, 44, 0.28),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+/* =========================
+   KEEP OLD CAPSULES SAFE
+========================= */
+.sector-capsule {
+  text-decoration: none;
 }
