@@ -279,20 +279,6 @@
   font-weight:600;
 }
 
-.upload-form input[type="checkbox"]{
-  width:auto;
-  margin-right:8px;
-  margin-top:2px;
-  margin-bottom:0;
-}
-
-.checkbox-wrap{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin-bottom:18px;
-}
-
 .empty-message{
   text-align:center;
   color:#666;
@@ -497,7 +483,7 @@
   <p class="submit-note">
     Members may upload <strong>either up to 3 photos</strong> or <strong>1 video</strong> per submission.
     Video should be <strong>1 minute or less</strong>. Mixed photo + video in one submission is not allowed.
-    All uploads are reviewed before publishing.
+    Verified member uploads appear live and may be moderated if needed.
   </p>
 
   <div class="upload-form">
@@ -548,11 +534,6 @@
         </div>
       </div>
     </div>
-
-    <label class="checkbox-wrap">
-      <input type="checkbox" id="consent">
-      <span>I allow One Leyte for Sara Duterte to review and publish this media submission if approved.</span>
-    </label>
 
     <button type="button" id="uploadBtn">Submit Media</button>
     <div id="uploadStatus" class="upload-status"></div>
@@ -628,7 +609,7 @@ async function loadMediaFeed() {
     const items = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
 
     if (!items.length) {
-      mediaFeed.innerHTML = "<div class='empty-message'>No approved media posts yet.</div>";
+      mediaFeed.innerHTML = "<div class='empty-message'>No media posts yet.</div>";
       loadMoreWrap.style.display = "none";
       return;
     }
@@ -675,16 +656,16 @@ function createMediaCard(item) {
   const card = document.createElement("div");
   card.className = "media-post";
 
-  const fullName = item.FullName || item.fullName || "Member";
+  const fullName = item.FullName || item.fullName || item.DisplayName || item.displayName || "Member";
   const municipality = item.Municipality || item.municipality || "";
   const caption = item.Caption || item.caption || "";
   const description = item.Description || item.description || "";
-  const dateText = item.PostedDate || item.postedDate || item.ApprovedAt || item.approvedAt || "";
+  const dateText = item.PostedDate || item.postedDate || item.postedAt || item.Timestamp || item.timestamp || "";
 
   const photo1 = item.Photo1URL || item.photo1Url || "";
   const photo2 = item.Photo2URL || item.photo2Url || "";
   const photo3 = item.Photo3URL || item.photo3Url || "";
-  const videoUrl = item.VideoURL || item.videoUrl || "";
+  const videoUrl = item.VideoURL || item.videoUrl || item.MediaURL || item.mediaUrl || "";
   const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || item.VideoThumb || item.videoThumbnail || "";
 
   let mainMediaHtml = "";
@@ -697,6 +678,8 @@ function createMediaCard(item) {
     `;
   } else if (photo1) {
     mainMediaHtml = `<img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">`;
+  } else if (item.mediaUrl) {
+    mainMediaHtml = `<img src="${escapeAttr(item.mediaUrl)}" alt="Media Post" loading="lazy">`;
   } else {
     mainMediaHtml = `<div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>`;
   }
@@ -747,6 +730,8 @@ function createMediaCard(item) {
       openMediaModal("video", videoUrl, fullName, caption + (description ? "\n\n" + description : ""));
     } else if (photo1) {
       openMediaModal("image", photo1, fullName, caption + (description ? "\n\n" + description : ""));
+    } else if (item.mediaUrl) {
+      openMediaModal("image", item.mediaUrl, fullName, caption + (description ? "\n\n" + description : ""));
     }
   });
 
@@ -916,7 +901,6 @@ async function submitMediaPost() {
   const municipality = municipalityInput.value.trim();
   const caption = captionInput.value.trim();
   const description = descriptionInput.value.trim();
-  const consent = document.getElementById("consent").checked;
 
   const photoFiles = Array.from(photoFilesInput.files || []);
   const videoFile = (videoFileInput.files || [])[0];
@@ -955,12 +939,6 @@ async function submitMediaPost() {
 
   if (photoFiles.length > 0 && videoFile) {
     uploadStatus.innerText = "Please choose either up to 3 photos OR 1 video only, not both in one submission.";
-    uploadStatus.style.color = "red";
-    return;
-  }
-
-  if (!consent) {
-    uploadStatus.innerText = "Please check the consent box.";
     uploadStatus.style.color = "red";
     return;
   }
@@ -1034,7 +1012,6 @@ async function submitMediaPost() {
       municipality: municipality,
       caption: caption,
       description: description,
-      consent: "Yes",
       photos: photoPayloads,
       video: videoPayload
     };
@@ -1055,7 +1032,7 @@ async function submitMediaPost() {
     }
 
     if (result.success) {
-      uploadStatus.innerText = result.duplicate ? "Duplicate media post ignored." : "Upload successful. Waiting for admin approval.";
+      uploadStatus.innerText = result.duplicate ? "Duplicate media post ignored." : "Your media is now live.";
       uploadStatus.style.color = "green";
 
       municipalityInput.value = "";
@@ -1063,13 +1040,14 @@ async function submitMediaPost() {
       descriptionInput.value = "";
       photoFilesInput.value = "";
       videoFileInput.value = "";
-      document.getElementById("consent").checked = false;
       previewGrid.innerHTML = "";
       previewWrap.style.display = "none";
 
       fullNameInput.value = result.fullName || fullName;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
+
+      loadMediaFeed();
     } else {
       uploadStatus.innerText = result.message || "Upload failed.";
       uploadStatus.style.color = "red";
