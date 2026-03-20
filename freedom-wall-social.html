@@ -507,7 +507,7 @@
       </div>
 
       <p>
-        A community space where approved Freedom Wall messages are shared,
+        A community space where Freedom Wall messages from verified members are shared,
         seen, supported, and engaged with through respectful reactions and comments.
       </p>
 
@@ -517,7 +517,7 @@
       </div>
 
       <div class="hero-note">
-        🔒 Posts are reviewed first before appearing publicly.
+        ✅ Verified member posts appear live and may be moderated if needed.
       </div>
     </div>
   </header>
@@ -527,7 +527,7 @@
       <div class="side-card">
         <h3>Community Space</h3>
         <p>
-          This page displays approved Freedom Wall posts with reactions and comments.
+          This page displays live Freedom Wall posts with reactions and comments.
           Members can read, support, and engage respectfully with community voices.
         </p>
       </div>
@@ -536,7 +536,7 @@
     <section class="feed-column">
       <div class="composer">
         <h2>Freedom Wall Feed</h2>
-        <p>Approved voices from the community, now with reactions and comments.</p>
+        <p>Live voices from the community, now with reactions and comments.</p>
         <div class="status-note" id="feedStatus">Loading posts...</div>
       </div>
 
@@ -552,7 +552,7 @@
         <h3>Community Guidelines</h3>
         <p>
           Please keep messages respectful and aligned with unity, volunteerism,
-          and service. All posts are reviewed before publishing.
+          and service. Posts may be moderated and removed if needed.
         </p>
       </div>
     </aside>
@@ -696,7 +696,7 @@
         const items = data.items || [];
 
         if (reset && items.length === 0) {
-          container.innerHTML = `<div class="empty-state">No approved Freedom Wall posts yet.</div>`;
+          container.innerHTML = `<div class="empty-state">No Freedom Wall posts yet.</div>`;
           status.textContent = "No posts available.";
           loadMoreBtn.style.display = "none";
           return;
@@ -764,7 +764,7 @@
 
         const data = await fetchJSON(API_BASE, {
           method: "POST",
-         headers: { "Content-Type": "text/plain;charset=utf-8" },
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({
             action: "freedomwallreact",
             postId,
