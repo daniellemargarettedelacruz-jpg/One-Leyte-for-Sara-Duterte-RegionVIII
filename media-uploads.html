@@ -63,26 +63,6 @@
   background:#000;
 }
 
-.media-video-main{
-  position:relative;
-  width:100%;
-  min-height:220px;
-  background:#000;
-}
-
-.media-video-main img{
-  width:100%;
-  height:100%;
-  min-height:220px;
-  max-height:480px;
-  object-fit:cover;
-  display:block;
-}
-
-.media-video-main .video-badge{
-  font-size:42px;
-}
-
 .media-info{
   padding:16px 16px 14px;
 }
@@ -113,41 +93,6 @@
   color:#555;
   line-height:1.55;
   white-space:pre-line;
-}
-
-.media-thumbs{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:6px;
-  padding:0 16px 16px;
-}
-
-.media-thumb-item{
-  position:relative;
-  height:92px;
-  border-radius:10px;
-  overflow:hidden;
-  background:#eef1ee;
-  cursor:pointer;
-}
-
-.media-thumb-item img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.video-badge{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,0.25);
-  color:#fff;
-  font-size:26px;
-  font-weight:bold;
 }
 
 .media-loadmore-wrap{
@@ -208,8 +153,7 @@
 }
 
 .upload-form input,
-.upload-form textarea,
-.upload-form select{
+.upload-form textarea{
   width:100%;
   padding:10px;
   margin-top:5px;
@@ -313,8 +257,7 @@
   min-height:110px;
 }
 
-.preview-card img,
-.preview-card video{
+.preview-card img{
   width:100%;
   height:120px;
   object-fit:cover;
@@ -405,14 +348,6 @@
   background:#000;
 }
 
-.media-modal-iframe{
-  width:100%;
-  height:75vh;
-  border:none;
-  background:#000;
-  display:block;
-}
-
 .media-modal-caption{
   background:white;
   padding:18px;
@@ -450,10 +385,6 @@
   .upload-form{
     padding:18px;
   }
-
-  .media-modal-iframe{
-    height:60vh;
-  }
 }
 </style>
 </head>
@@ -463,7 +394,7 @@
 <section class="page-header">
   <h1>Community Media</h1>
   <p>
-    Photos and videos shared by members from events, gatherings,
+    Photos shared by members from events, gatherings,
     and activities across the region.
   </p>
 </section>
@@ -481,8 +412,7 @@
 <section class="submit-section">
   <h3>Submit Your Media</h3>
   <p class="submit-note">
-    Members may upload <strong>either up to 3 photos</strong> or <strong>1 video</strong> per submission.
-    Video should be <strong>1 minute or less</strong>. Mixed photo + video in one submission is not allowed.
+    Members may upload <strong>1 photo per submission</strong>.
     Verified member uploads appear live and may be moderated if needed.
   </p>
 
@@ -516,15 +446,9 @@
       </div>
 
       <div class="upload-full">
-        <label for="photoFiles">Choose Photos (up to 3)</label>
-        <input type="file" id="photoFiles" accept="image/*" multiple>
-        <div class="field-note">Choose up to 3 photos only. Do not combine with video in the same submission.</div>
-      </div>
-
-      <div class="upload-full">
-        <label for="videoFile">Choose Video (optional, max 1 minute)</label>
-        <input type="file" id="videoFile" accept="video/mp4,video/webm,video/quicktime">
-        <div class="field-note">Choose 1 video only. Do not combine with photos in the same submission.</div>
+        <label for="photoFile">Choose Photo</label>
+        <input type="file" id="photoFile" accept="image/*">
+        <div class="field-note">Upload 1 photo only.</div>
       </div>
 
       <div class="upload-full">
@@ -570,8 +494,7 @@ const fullNameInput = document.getElementById("fullName");
 const municipalityInput = document.getElementById("municipality");
 const captionInput = document.getElementById("caption");
 const descriptionInput = document.getElementById("description");
-const photoFilesInput = document.getElementById("photoFiles");
-const videoFileInput = document.getElementById("videoFile");
+const photoFileInput = document.getElementById("photoFile");
 const previewWrap = document.getElementById("previewWrap");
 const previewGrid = document.getElementById("previewGrid");
 const memberLookupStatus = document.getElementById("memberLookupStatus");
@@ -625,20 +548,6 @@ async function loadMediaFeed() {
   }
 }
 
-function convertDriveVideoToPreviewUrl(url) {
-  const matchParam = String(url || "").match(/id=([^&]+)/);
-  if (matchParam && matchParam[1]) {
-    return "https://drive.google.com/file/d/" + matchParam[1] + "/preview";
-  }
-
-  const matchPath = String(url || "").match(/\/d\/([^\/]+)/);
-  if (matchPath && matchPath[1]) {
-    return "https://drive.google.com/file/d/" + matchPath[1] + "/preview";
-  }
-
-  return url;
-}
-
 function renderNextBatch(batchSize) {
   const fragment = document.createDocumentFragment();
   const end = Math.min(renderedCount + batchSize, allMediaItems.length);
@@ -661,55 +570,11 @@ function createMediaCard(item) {
   const caption = item.Caption || item.caption || "";
   const description = item.Description || item.description || "";
   const dateText = item.PostedDate || item.postedDate || item.postedAt || item.Timestamp || item.timestamp || "";
+  const photo1 = item.Photo1URL || item.photo1Url || item.MediaURL || item.mediaUrl || "";
 
-  const photo1 = item.Photo1URL || item.photo1Url || "";
-  const photo2 = item.Photo2URL || item.photo2Url || "";
-  const photo3 = item.Photo3URL || item.photo3Url || "";
-  const videoUrl = item.VideoURL || item.videoUrl || item.MediaURL || item.mediaUrl || "";
-  const videoThumbnail = item.VideoThumbnail || item.VideoThumbnailURL || item.VideoThumb || item.videoThumbnail || "";
-
-  let mainMediaHtml = "";
-  if (videoUrl) {
-    mainMediaHtml = `
-      <div class="media-video-main">
-        <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Preview" loading="lazy">
-        <div class="video-badge">▶</div>
-      </div>
-    `;
-  } else if (photo1) {
-    mainMediaHtml = `<img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">`;
-  } else if (item.mediaUrl) {
-    mainMediaHtml = `<img src="${escapeAttr(item.mediaUrl)}" alt="Media Post" loading="lazy">`;
-  } else {
-    mainMediaHtml = `<div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>`;
-  }
-
-  let thumbs = "";
-
-  if (photo2) {
-    thumbs += `
-      <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo2)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-        <img src="${escapeAttr(photo2)}" alt="Photo 2" loading="lazy">
-      </div>
-    `;
-  }
-
-  if (photo3) {
-    thumbs += `
-      <div class="media-thumb-item" data-type="image" data-src="${escapeAttr(photo3)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-        <img src="${escapeAttr(photo3)}" alt="Photo 3" loading="lazy">
-      </div>
-    `;
-  }
-
-  if (videoUrl) {
-    thumbs += `
-      <div class="media-thumb-item" data-type="video" data-src="${escapeAttr(videoUrl)}" data-name="${escapeAttr(fullName)}" data-text="${escapeAttr(caption + (description ? "\n\n" + description : ""))}">
-        <img src="${escapeAttr(videoThumbnail || photo1 || '')}" alt="Video Thumbnail" loading="lazy">
-        <div class="video-badge">▶</div>
-      </div>
-    `;
-  }
+  const mainMediaHtml = photo1
+    ? `<img src="${escapeAttr(photo1)}" alt="Media Post" loading="lazy">`
+    : `<div style="padding:40px 20px;text-align:center;color:#666;">No media preview</div>`;
 
   card.innerHTML = `
     <div class="media-main">${mainMediaHtml}</div>
@@ -720,52 +585,24 @@ function createMediaCard(item) {
       <div class="media-caption">${escapeHtml(caption)}</div>
       ${description ? `<div class="media-description">${escapeHtml(description)}</div>` : ""}
     </div>
-
-    ${thumbs ? `<div class="media-thumbs">${thumbs}</div>` : ""}
   `;
 
   const mainMediaEl = card.querySelector(".media-main");
   mainMediaEl.addEventListener("click", () => {
-    if (videoUrl) {
-      openMediaModal("video", videoUrl, fullName, caption + (description ? "\n\n" + description : ""));
-    } else if (photo1) {
-      openMediaModal("image", photo1, fullName, caption + (description ? "\n\n" + description : ""));
-    } else if (item.mediaUrl) {
-      openMediaModal("image", item.mediaUrl, fullName, caption + (description ? "\n\n" + description : ""));
+    if (photo1) {
+      openMediaModal(photo1, fullName, caption + (description ? "\n\n" + description : ""));
     }
-  });
-
-  card.querySelectorAll(".media-thumb-item").forEach(thumb => {
-    thumb.addEventListener("click", () => {
-      const type = thumb.getAttribute("data-type");
-      const src = thumb.getAttribute("data-src");
-      const name = thumb.getAttribute("data-name");
-      const text = thumb.getAttribute("data-text");
-      openMediaModal(type, src, name, text);
-    });
   });
 
   return card;
 }
 
-function openMediaModal(type, src, fullName, text) {
-  if (type === "video") {
-    const previewUrl = convertDriveVideoToPreviewUrl(src);
-    mediaModalBody.innerHTML = `
-      <iframe
-        class="media-modal-iframe"
-        src="${escapeAttr(previewUrl)}"
-        allow="autoplay; fullscreen"
-        allowfullscreen>
-      </iframe>
-    `;
-  } else {
-    mediaModalBody.innerHTML = `
-      <div class="media-modal-image-wrap">
-        <img id="mediaModalImage" class="media-modal-image" src="${escapeAttr(src)}" alt="Full Media">
-      </div>
-    `;
-  }
+function openMediaModal(src, fullName, text) {
+  mediaModalBody.innerHTML = `
+    <div class="media-modal-image-wrap">
+      <img class="media-modal-image" src="${escapeAttr(src)}" alt="Full Media">
+    </div>
+  `;
 
   mediaModalName.textContent = fullName || "Member";
   mediaModalText.textContent = text || "";
@@ -822,66 +659,31 @@ async function resolveMemberName() {
 function updatePreview() {
   previewGrid.innerHTML = "";
 
-  const photoFiles = Array.from(photoFilesInput.files || []).slice(0, 3);
-  const videoFile = (videoFileInput.files || [])[0];
+  const file = photoFileInput.files[0];
 
-  if (photoFiles.length > 0 && videoFile) {
+  if (!file) {
     previewWrap.style.display = "none";
-    uploadStatus.innerText = "Please choose either photos or one video only, not both.";
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    previewWrap.style.display = "none";
+    uploadStatus.innerText = "Only image files are allowed.";
     uploadStatus.style.color = "red";
     return;
   }
 
   uploadStatus.innerText = "";
 
-  if (!photoFiles.length && !videoFile) {
-    previewWrap.style.display = "none";
-    return;
-  }
-
-  photoFiles.forEach(file => {
-    if (!file.type.startsWith("image/")) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const card = document.createElement("div");
-      card.className = "preview-card";
-      card.innerHTML = `<img src="${e.target.result}" alt="Photo Preview">`;
-      previewGrid.appendChild(card);
-    };
-    reader.readAsDataURL(file);
-  });
-
-  if (videoFile && videoFile.type.startsWith("video/")) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const card = document.createElement("div");
-      card.className = "preview-card";
-      card.innerHTML = `<video controls><source src="${e.target.result}"></video>`;
-      previewGrid.appendChild(card);
-    };
-    reader.readAsDataURL(videoFile);
-  }
-
-  previewWrap.style.display = "block";
-}
-
-function validateVideoDuration(file, maxSeconds) {
-  return new Promise((resolve) => {
-    const video = document.createElement("video");
-    video.preload = "metadata";
-
-    video.onloadedmetadata = function() {
-      URL.revokeObjectURL(video.src);
-      resolve(video.duration <= maxSeconds);
-    };
-
-    video.onerror = function() {
-      resolve(false);
-    };
-
-    video.src = URL.createObjectURL(file);
-  });
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const card = document.createElement("div");
+    card.className = "preview-card";
+    card.innerHTML = `<img src="${e.target.result}" alt="Photo Preview">`;
+    previewGrid.appendChild(card);
+    previewWrap.style.display = "block";
+  };
+  reader.readAsDataURL(file);
 }
 
 function fileToBase64WithPrefix(file) {
@@ -901,9 +703,7 @@ async function submitMediaPost() {
   const municipality = municipalityInput.value.trim();
   const caption = captionInput.value.trim();
   const description = descriptionInput.value.trim();
-
-  const photoFiles = Array.from(photoFilesInput.files || []);
-  const videoFile = (videoFileInput.files || [])[0];
+  const file = photoFileInput.files[0];
 
   uploadStatus.style.color = "#111";
 
@@ -925,57 +725,22 @@ async function submitMediaPost() {
     return;
   }
 
-  if (photoFiles.length > 3) {
-    uploadStatus.innerText = "You may upload up to 3 photos only.";
+  if (!file) {
+    uploadStatus.innerText = "Please choose one photo.";
     uploadStatus.style.color = "red";
     return;
   }
 
-  if (!photoFiles.length && !videoFile) {
-    uploadStatus.innerText = "Please choose either photo(s) or one video.";
+  if (!file.type.startsWith("image/")) {
+    uploadStatus.innerText = "Only image files are allowed.";
     uploadStatus.style.color = "red";
     return;
   }
 
-  if (photoFiles.length > 0 && videoFile) {
-    uploadStatus.innerText = "Please choose either up to 3 photos OR 1 video only, not both in one submission.";
+  if (file.size > 5 * 1024 * 1024) {
+    uploadStatus.innerText = "Photo must be below 5MB.";
     uploadStatus.style.color = "red";
     return;
-  }
-
-  for (const file of photoFiles) {
-    if (!file.type.startsWith("image/")) {
-      uploadStatus.innerText = "Only image files are allowed in the photo field.";
-      uploadStatus.style.color = "red";
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      uploadStatus.innerText = "Each photo must be below 5MB.";
-      uploadStatus.style.color = "red";
-      return;
-    }
-  }
-
-  if (videoFile) {
-    if (!videoFile.type.startsWith("video/")) {
-      uploadStatus.innerText = "The video field only accepts video files.";
-      uploadStatus.style.color = "red";
-      return;
-    }
-
-    if (videoFile.size > 25 * 1024 * 1024) {
-      uploadStatus.innerText = "Video must be below 25MB.";
-      uploadStatus.style.color = "red";
-      return;
-    }
-
-    const durationOk = await validateVideoDuration(videoFile, 60);
-    if (!durationOk) {
-      uploadStatus.innerText = "Video must be 1 minute or less.";
-      uploadStatus.style.color = "red";
-      return;
-    }
   }
 
   isSubmittingMedia = true;
@@ -985,35 +750,18 @@ async function submitMediaPost() {
   uploadStatus.style.color = "#111";
 
   try {
-    const photoPayloads = [];
-    for (const file of photoFiles.slice(0, 3)) {
-      const base64 = await fileToBase64WithPrefix(file);
-      photoPayloads.push({
-        fileName: file.name,
-        mimeType: file.type,
-        base64: base64
-      });
-    }
-
-    let videoPayload = null;
-    if (videoFile) {
-      const base64 = await fileToBase64WithPrefix(videoFile);
-      videoPayload = {
-        fileName: videoFile.name,
-        mimeType: videoFile.type,
-        base64: base64
-      };
-    }
+    const base64 = await fileToBase64WithPrefix(file);
 
     const payload = {
-      action: "submitmediapost",
+      action: "uploadmedia",
       memberId: memberId,
       fullName: fullName,
       municipality: municipality,
       caption: caption,
       description: description,
-      photos: photoPayloads,
-      video: videoPayload
+      fileName: file.name,
+      mimeType: file.type,
+      fileData: base64
     };
 
     const response = await fetch(WEB_APP_URL, {
@@ -1032,14 +780,13 @@ async function submitMediaPost() {
     }
 
     if (result.success) {
-      uploadStatus.innerText = result.duplicate ? "Duplicate media post ignored." : "Your media is now live.";
+      uploadStatus.innerText = "Your media is now live.";
       uploadStatus.style.color = "green";
 
       municipalityInput.value = "";
       captionInput.value = "";
       descriptionInput.value = "";
-      photoFilesInput.value = "";
-      videoFileInput.value = "";
+      photoFileInput.value = "";
       previewGrid.innerHTML = "";
       previewWrap.style.display = "none";
 
@@ -1081,8 +828,7 @@ memberIdInput.addEventListener("input", function() {
 memberIdInput.addEventListener("change", resolveMemberName);
 memberIdInput.addEventListener("blur", resolveMemberName);
 uploadBtn.addEventListener("click", submitMediaPost);
-photoFilesInput.addEventListener("change", updatePreview);
-videoFileInput.addEventListener("change", updatePreview);
+photoFileInput.addEventListener("change", updatePreview);
 loadMoreBtn.addEventListener("click", () => renderNextBatch(LOAD_MORE_BATCH));
 mediaModalClose.addEventListener("click", closeMediaModal);
 
