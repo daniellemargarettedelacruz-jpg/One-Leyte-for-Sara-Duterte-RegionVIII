@@ -154,19 +154,6 @@
   color:#183325;
 }
 
-.wall-form .checkbox-wrap{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin-bottom:18px;
-}
-
-.wall-form .checkbox-wrap input{
-  width:auto;
-  margin-top:2px;
-  margin-bottom:0;
-}
-
 .wall-form button{
   padding:12px 22px;
   background:#0a6b3f;
@@ -228,7 +215,7 @@
   <h1>Freedom Wall</h1>
   <p>
     Messages of support from members of the movement across Region VIII.
-    All posts are reviewed before being displayed publicly.
+    Verified member posts appear on the wall right away.
   </p>
 </section>
 
@@ -257,11 +244,6 @@
     <label for="imageUrl">Photo URL (optional)</label>
     <input type="text" id="imageUrl" placeholder="Paste image link here if you want to include a photo">
     <div class="field-note">You may submit text only, image only, or text with image.</div>
-
-    <label class="checkbox-wrap">
-      <input type="checkbox" id="consent">
-      <span>I confirm that this message is submitted voluntarily and may be reviewed before public posting.</span>
-    </label>
 
     <button type="button" id="wallSubmitBtn">Submit Message</button>
     <div id="wallStatus" class="wall-status"></div>
@@ -303,10 +285,12 @@ async function loadFreedomWall() {
     const container = document.getElementById("freedomWall");
     container.innerHTML = "";
 
-    const items = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
+    const items = Array.isArray(data)
+      ? data
+      : (Array.isArray(data.items) ? data.items : (Array.isArray(data.posts) ? data.posts : []));
 
     if (!items.length) {
-      container.innerHTML = '<div class="empty-message">No approved messages yet.</div>';
+      container.innerHTML = '<div class="empty-message">No messages yet.</div>';
       return;
     }
 
@@ -314,8 +298,8 @@ async function loadFreedomWall() {
       const card = document.createElement("div");
       card.className = "freedom-post";
 
-      const fullName = item.FullName || item.fullName || item.Name || item.name || "Anonymous Member";
-      const message = item.Message || item.message || "";
+      const fullName = item.FullName || item.fullName || item.DisplayName || item.displayName || item.Name || item.name || "Anonymous Member";
+      const message = item.Message || item.message || item.PostText || item.postText || "";
       const imageUrl = item.ImageURL || item.imageUrl || item.PhotoURL || item.photoUrl || "";
       const firstLetter = fullName.trim().charAt(0).toUpperCase() || "?";
 
@@ -385,7 +369,6 @@ async function submitFreedomWall() {
   const fullName = fullNameInput.value.trim();
   const message = document.getElementById("message").value.trim();
   const imageUrl = document.getElementById("imageUrl").value.trim();
-  const consent = document.getElementById("consent").checked;
 
   wallStatus.style.color = "#111";
 
@@ -407,12 +390,6 @@ async function submitFreedomWall() {
     return;
   }
 
-  if (!consent) {
-    wallStatus.innerText = "Please confirm the consent checkbox.";
-    wallStatus.style.color = "red";
-    return;
-  }
-
   wallSubmitBtn.disabled = true;
   wallSubmitBtn.innerText = "Submitting...";
   wallStatus.innerText = "Submitting...";
@@ -422,10 +399,10 @@ async function submitFreedomWall() {
     const payload = {
       action: "submitfreedomwall",
       memberId: memberId,
+      displayName: fullName,
       fullName: fullName,
       message: message,
-      imageUrl: imageUrl,
-      consent: "Yes"
+      imageUrl: imageUrl
     };
 
     const response = await fetch(WEB_APP_URL, {
@@ -444,13 +421,13 @@ async function submitFreedomWall() {
     }
 
     if (result.success) {
-      wallStatus.innerText = "Post submitted successfully. Waiting for admin approval.";
+      wallStatus.innerText = "Your post is now live.";
       wallStatus.style.color = "green";
       document.getElementById("message").value = "";
       document.getElementById("imageUrl").value = "";
-      document.getElementById("consent").checked = false;
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
+      loadFreedomWall();
     } else {
       wallStatus.innerText = result.message || "Submission failed.";
       wallStatus.style.color = "red";
