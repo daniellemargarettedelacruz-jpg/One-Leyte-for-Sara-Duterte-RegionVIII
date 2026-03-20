@@ -161,19 +161,6 @@
       border:1px solid #d9e8df;
     }
 
-    .checkbox-row{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      font-size:14px;
-      color:#2c4337;
-      line-height:1.6;
-    }
-
-    .checkbox-row input{
-      margin-top:3px;
-    }
-
     .button-row{
       display:flex;
       gap:14px;
@@ -282,8 +269,8 @@
         <div class="alliance-header">
           <h1>Alliance Upload</h1>
           <p>
-            Submit your alliance logo image for private admin review.
-            Approved submissions may appear in the Regional Alliances section of the website.
+            Submit your alliance logo image for the Regional Alliances section of the website.
+            Uploaded alliance entries may be moderated and removed if needed.
           </p>
         </div>
 
@@ -384,16 +371,8 @@
           </div>
 
           <div class="privacy-box">
-            Submitted information is kept private and reviewed by administrators first.
-            Nothing is shown publicly unless approved. Public display, if approved, will only show the alliance name, image, location, and approved caption/description.
+            Submitted information is kept private in the system. Public display may show only the alliance name, image, location, and submitted caption or description.
           </div>
-
-          <label class="checkbox-row">
-            <input type="checkbox" id="consent" name="consent" value="Yes" required>
-            <span>
-              I confirm that this submission is authorized by our alliance/group and may be reviewed for possible public display.
-            </span>
-          </label>
 
           <div class="button-row">
             <button type="submit" class="upload-btn primary" id="submitBtn">
@@ -408,7 +387,7 @@
           </div>
 
           <div id="successMessage" class="success-message">
-            Alliance submission sent successfully and is now pending admin review.
+            Alliance upload submitted successfully and is now live.
           </div>
 
           <div id="errorMessage" class="error-message">
@@ -474,7 +453,6 @@
         payload.append("contactInfo", document.getElementById("contactInfo").value.trim());
         payload.append("caption", document.getElementById("caption").value.trim());
         payload.append("description", document.getElementById("description").value.trim());
-        payload.append("consent", document.getElementById("consent").checked ? "Yes" : "No");
         payload.append("fileName", file.name);
         payload.append("mimeType", file.type);
         payload.append("fileData", base64);
