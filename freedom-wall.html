@@ -206,6 +206,55 @@
   margin-top:-8px;
   margin-bottom:14px;
 }
+
+.important-note{
+  background:#fff7df;
+  border:1px solid #e5d18d;
+  color:#5e4c17;
+  padding:12px 14px;
+  border-radius:10px;
+  margin-bottom:18px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.file-upload-wrap{
+  border:1px dashed #a9b8b0;
+  border-radius:10px;
+  padding:14px;
+  background:#fff;
+  margin-top:6px;
+  margin-bottom:16px;
+}
+
+.file-upload-wrap input[type="file"]{
+  margin:0;
+  padding:0;
+  border:none;
+  background:transparent;
+}
+
+.image-preview-wrap{
+  display:none;
+  margin-top:10px;
+}
+
+.image-preview-wrap img{
+  width:100%;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #d7ddd8;
+}
+
+.remove-image-btn{
+  margin-top:10px;
+  background:#b42318;
+}
+
+.remove-image-btn:hover{
+  background:#8f1c13;
+}
 </style>
 </head>
 
@@ -230,6 +279,11 @@
   <p>Members may post their message of support using MemberID or QR access.</p>
 
   <div class="wall-form">
+    <div class="important-note">
+      <strong>Important:</strong> Please save your Member ID.
+      You will need it for posting and future member-related features.
+    </div>
+
     <label for="memberId">Member ID</label>
     <input type="text" id="memberId" placeholder="Enter your MemberID">
     <div class="field-note">If opened from your QR code, MemberID may already be filled.</div>
@@ -241,9 +295,16 @@
     <label for="message">Your Message</label>
     <textarea id="message" placeholder="Write your message here..."></textarea>
 
-    <label for="imageUrl">Photo URL (optional)</label>
-    <input type="text" id="imageUrl" placeholder="Paste image link here if you want to include a photo">
+    <label for="imageFile">Upload Photo (optional)</label>
+    <div class="file-upload-wrap">
+      <input type="file" id="imageFile" accept="image/png,image/jpeg,image/jpg,image/webp">
+    </div>
     <div class="field-note">You may submit text only, image only, or text with image.</div>
+
+    <div class="image-preview-wrap" id="imagePreviewWrap">
+      <img id="imagePreview" alt="Selected image preview">
+      <button type="button" id="removeImageBtn" class="remove-image-btn">Remove Photo</button>
+    </div>
 
     <button type="button" id="wallSubmitBtn">Submit Message</button>
     <div id="wallStatus" class="wall-status"></div>
@@ -259,8 +320,15 @@ const fullNameInput = document.getElementById("fullName");
 const memberLookupStatus = document.getElementById("memberLookupStatus");
 const wallSubmitBtn = document.getElementById("wallSubmitBtn");
 const wallStatus = document.getElementById("wallStatus");
+const imageFileInput = document.getElementById("imageFile");
+const imagePreviewWrap = document.getElementById("imagePreviewWrap");
+const imagePreview = document.getElementById("imagePreview");
+const removeImageBtn = document.getElementById("removeImageBtn");
 
 let memberLookupTimer = null;
+let selectedImageBase64 = "";
+let selectedImageMimeType = "";
+let selectedImageFileName = "";
 
 function escapeHtml(value) {
   return String(value || "")
@@ -364,11 +432,55 @@ async function resolveMemberName() {
   }
 }
 
+function clearSelectedImage() {
+  selectedImageBase64 = "";
+  selectedImageMimeType = "";
+  selectedImageFileName = "";
+  imageFileInput.value = "";
+  imagePreview.src = "";
+  imagePreviewWrap.style.display = "none";
+}
+
+function handleImageSelection(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) {
+    clearSelectedImage();
+    return;
+  }
+
+  const allowed = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+  if (!allowed.includes(file.type)) {
+    wallStatus.innerText = "Only PNG, JPG, JPEG, and WEBP are allowed.";
+    wallStatus.style.color = "red";
+    clearSelectedImage();
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    wallStatus.innerText = "Please upload an image smaller than 5MB.";
+    wallStatus.style.color = "red";
+    clearSelectedImage();
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(loadEvent) {
+    const result = String(loadEvent.target.result || "");
+    selectedImageBase64 = result;
+    selectedImageMimeType = file.type;
+    selectedImageFileName = file.name;
+
+    imagePreview.src = result;
+    imagePreviewWrap.style.display = "block";
+    wallStatus.innerText = "";
+  };
+  reader.readAsDataURL(file);
+}
+
 async function submitFreedomWall() {
   const memberId = memberIdInput.value.trim();
   const fullName = fullNameInput.value.trim();
   const message = document.getElementById("message").value.trim();
-  const imageUrl = document.getElementById("imageUrl").value.trim();
 
   wallStatus.style.color = "#111";
 
@@ -384,8 +496,8 @@ async function submitFreedomWall() {
     return;
   }
 
-  if (!message && !imageUrl) {
-    wallStatus.innerText = "Please write a message or provide an image link.";
+  if (!message && !selectedImageBase64) {
+    wallStatus.innerText = "Please write a message or upload a photo.";
     wallStatus.style.color = "red";
     return;
   }
@@ -402,7 +514,10 @@ async function submitFreedomWall() {
       displayName: fullName,
       fullName: fullName,
       message: message,
-      imageUrl: imageUrl
+      imageUrl: "",
+      imageName: selectedImageFileName,
+      imageMimeType: selectedImageMimeType,
+      imageData: selectedImageBase64
     };
 
     const response = await fetch(WEB_APP_URL, {
@@ -424,7 +539,7 @@ async function submitFreedomWall() {
       wallStatus.innerText = "Your post is now live.";
       wallStatus.style.color = "green";
       document.getElementById("message").value = "";
-      document.getElementById("imageUrl").value = "";
+      clearSelectedImage();
       memberLookupStatus.textContent = "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
       loadFreedomWall();
@@ -458,6 +573,8 @@ memberIdInput.addEventListener("input", function() {
 
 memberIdInput.addEventListener("change", resolveMemberName);
 memberIdInput.addEventListener("blur", resolveMemberName);
+imageFileInput.addEventListener("change", handleImageSelection);
+removeImageBtn.addEventListener("click", clearSelectedImage);
 wallSubmitBtn.addEventListener("click", submitFreedomWall);
 
 loadFreedomWall();
