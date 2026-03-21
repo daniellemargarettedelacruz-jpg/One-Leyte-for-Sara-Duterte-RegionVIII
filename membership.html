@@ -1,4 +1,22 @@
 <!DOCTYPE html>
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const sector = params.get("sector");
+
+  if (!sector) return;
+
+  const baseForm = "https://docs.google.com/forms/d/e/1FAIpQLSfYAsZGrjOIgDlebHaHilp5VFqSp77yeRKcEUFkocgQy3n8sw/viewform?usp=pp_url";
+
+  const sectorField = "entry.1563449340";
+
+  const encodedSector = encodeURIComponent(sector);
+
+  const redirectUrl = baseForm + "&" + sectorField + "=" + encodedSector;
+
+  window.location.href = redirectUrl;
+})();
+</script>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
