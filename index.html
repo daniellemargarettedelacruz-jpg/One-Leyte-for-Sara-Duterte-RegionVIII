@@ -296,7 +296,9 @@
       Sectoral membership details are submitted privately and are not shown publicly on the website.
     </p>
   </div>
-</section>  <!-- ANNOUNCEMENTS -->
+</section>  
+  
+  <!-- ANNOUNCEMENTS -->
   <section class="home-announcement-banner" id="latestBanner" style="display:none;"></section>
 
   <section class="home-featured-announcement" id="featuredAnnouncementSection" style="display:none;">
@@ -380,6 +382,7 @@
       </p>
     </div>
   </section>
+ 
   <!-- ABOUT -->
   <section class="about">
     <div class="container narrow">
@@ -456,27 +459,7 @@
     </div>
   </section>
 
-   <!-- REGIONAL ALLIANCE SHOWCASE -->
-  <section class="alliances-section" id="alliances">
-    <div class="container">
-      <div class="section-heading alliances-heading">
-        <h2>Regional Alliance Showcase</h2>
-        <p>
-          A growing visual wall of alliance logos and banners across Eastern Visayas supporting the movement.
-        </p>
-      </div>
-
-      <div class="alliances-toolbar">
-        <a href="alliance-upload.html" class="btn primary">Upload Alliance Logo or Banner</a>
-      </div>
-
-      <div class="alliances-showcase freestyle-alliances" id="alliancesGrid"></div>
-
-      <p class="privacy-note alliance-note-live">
-        Alliance uploads are displayed publicly on the website after submission. Please ensure that submitted logos and banners are appropriate for public viewing.
-      </p>
-    </div>
-  </section>
+ 
 
   <!-- WHY JOIN -->
   <section class="why-join">
@@ -652,15 +635,7 @@
           const items = Array.isArray(data) ? data : data.items;
 
           grid.innerHTML = "";
-
-          const uploadCard = document.createElement("a");
-          uploadCard.href = "alliance-upload.html";
-          uploadCard.className = "alliance-upload-tile freestyle-upload-tile";
-          uploadCard.innerHTML = `
-            <i class="fas fa-cloud-upload-alt"></i>
-            <span>Upload Alliance</span>
-          `;
-          grid.appendChild(uploadCard);
+          
 
           if (!items || !items.length) {
             const empty = document.createElement("div");
