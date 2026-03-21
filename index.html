@@ -315,90 +315,71 @@
     </div>
   </section>
 
-  <!-- COMMUNITY -->
-  <section class="community">
+    <!-- COMMUNITY FEATURES -->
+  <section class="community-features">
     <div class="container">
+      <div class="section-heading community-features-heading">
+        <h2>Community Participation</h2>
+        <p>
+          Stay informed, share your voice, and showcase your alliance in one
+          growing movement across Region VIII.
+        </p>
+      </div>
 
-      <h2 class="community-title">Community Participation</h2>
+      <div class="feature-stack">
 
-      <p class="community-intro">
-        Members of the movement can actively participate through community engagement
-        features available on this platform.
+        <a href="announcements.html" class="feature-block announcements-block">
+          <div class="feature-block-text">
+            <div class="feature-kicker">Official Updates</div>
+            <h3>Announcements</h3>
+            <p>
+              Read official notices, public advisories, and important updates
+              from the movement.
+            </p>
+            <span class="feature-btn">View Updates</span>
+          </div>
+          <div class="feature-block-icon">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+        </a>
+
+        <a href="freedom-wall-social.html" class="feature-block freedom-block">
+          <div class="feature-block-text">
+            <div class="feature-kicker">Community Voice</div>
+            <h3>Freedom Wall</h3>
+            <p>
+              Share your message of support and upload a photo. Please save your
+              Member ID because it will be required for posting and future member features.
+            </p>
+            <span class="feature-btn">Post Now</span>
+          </div>
+          <div class="feature-block-icon">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+        </a>
+
+        <a href="alliance-upload.html" class="feature-block alliance-block">
+          <div class="feature-block-text">
+            <div class="feature-kicker">Alliance Showcase</div>
+            <h3>Alliance Logos</h3>
+            <p>
+              Submit your alliance logo or banner and help build a growing visual wall
+              of support across Eastern Visayas.
+            </p>
+            <span class="feature-btn">Upload Alliance</span>
+          </div>
+          <div class="feature-block-icon">
+            <i class="fa-solid fa-images"></i>
+          </div>
+        </a>
+
+      </div>
+
+      <p class="community-member-note">
+        Important: Please take note of your Member ID and keep it saved. It will be asked for in member-related activities and submissions.
       </p>
-
-      <div class="community-grid">
-
-        <a href="freedom-wall-social.html" class="community-card card-link">
-          <div class="icon-orbit">
-            <div class="icon-badge magnetic-icon">
-              <i class="fa-solid fa-comments"></i>
-            </div>
-          </div>
-          <h3>Freedom Wall</h3>
-          <p>Members can share their messages of support and solidarity with the community.</p>
-          <span class="community-btn">Explore</span>
-        </a>
-
-        <a href="media-uploads.html" class="community-card card-link">
-          <div class="icon-orbit">
-            <div class="icon-badge magnetic-icon">
-              <i class="fa-solid fa-camera"></i>
-            </div>
-          </div>
-          <h3>Media Uploads</h3>
-          <p>Upload photos and videos from activities, gatherings, and community events.</p>
-          <span class="community-btn">View Media</span>
-        </a>
-
-        <a href="announcements.html" class="community-card card-link">
-          <div class="icon-orbit">
-            <div class="icon-badge magnetic-icon">
-              <i class="fa-solid fa-bullhorn"></i>
-            </div>
-          </div>
-          <h3>Announcements</h3>
-          <p>Stay updated with official updates and announcements from the movement.</p>
-          <span class="community-btn">Read Updates</span>
-        </a>
-
-        <a href="claim-id.html" class="community-card card-link">
-          <div class="icon-orbit">
-            <div class="icon-badge magnetic-icon">
-              <i class="fa-solid fa-id-card"></i>
-            </div>
-          </div>
-          <h3>Member Digital ID</h3>
-          <p>Every registered member receives a digital membership ID with QR verification.</p>
-          <span class="community-btn">Claim ID</span>
-        </a>
-
-      </div>
-
     </div>
   </section>
-
-  <!-- COMMUNITY MEDIA PREVIEW -->
-  <section class="media-preview">
-    <div class="container">
-
-      <div class="section-heading">
-        <h2>Community Media</h2>
-        <p>Recent photos and videos shared by members of the movement.</p>
-      </div>
-
-      <div class="media-preview-grid" id="mediaPreviewGrid">
-        <div class="announcement-slider-empty">Loading community media...</div>
-      </div>
-
-      <div style="text-align:center;margin-top:25px;">
-        <a href="media-uploads.html" class="btn secondary">
-          View More Media
-        </a>
-      </div>
-
-    </div>
-  </section>
-
   <!-- ABOUT -->
   <section class="about">
     <div class="container narrow">
@@ -475,23 +456,24 @@
     </div>
   </section>
 
-  <!-- REGIONAL ALLIANCES -->
+   <!-- REGIONAL ALLIANCE SHOWCASE -->
   <section class="alliances-section" id="alliances">
     <div class="container">
-      <div class="section-heading">
-        <h2>Regional Alliances</h2>
-        <p>Alliance groups across Eastern Visayas supporting the movement.</p>
+      <div class="section-heading alliances-heading">
+        <h2>Regional Alliance Showcase</h2>
+        <p>
+          A growing visual wall of alliance logos and banners across Eastern Visayas supporting the movement.
+        </p>
       </div>
 
-      <div class="alliances-showcase" id="alliancesGrid">
-        <a href="alliance-upload.html" class="alliance-upload-tile">
-          <i class="fas fa-cloud-upload-alt"></i>
-          <span>Upload Alliance Logo</span>
-        </a>
+      <div class="alliances-toolbar">
+        <a href="alliance-upload.html" class="btn primary">Upload Alliance Logo or Banner</a>
       </div>
 
-      <p class="privacy-note">
-        Alliance submissions are reviewed privately before appearing publicly on the website.
+      <div class="alliances-showcase freestyle-alliances" id="alliancesGrid"></div>
+
+      <p class="privacy-note alliance-note-live">
+        Alliance uploads are displayed publicly on the website after submission. Please ensure that submitted logos and banners are appropriate for public viewing.
       </p>
     </div>
   </section>
@@ -660,7 +642,7 @@
         }
       }
 
-      async function loadAllianceUploads() {
+           async function loadAllianceUploads() {
         const grid = document.getElementById("alliancesGrid");
         if (!grid) return;
 
@@ -669,15 +651,40 @@
           const data = await res.json();
           const items = Array.isArray(data) ? data : data.items;
 
+          grid.innerHTML = "";
+
+          const uploadCard = document.createElement("a");
+          uploadCard.href = "alliance-upload.html";
+          uploadCard.className = "alliance-upload-tile freestyle-upload-tile";
+          uploadCard.innerHTML = `
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Upload Alliance</span>
+          `;
+          grid.appendChild(uploadCard);
+
           if (!items || !items.length) {
+            const empty = document.createElement("div");
+            empty.className = "alliance-empty-state";
+            empty.innerHTML = `
+              <div class="alliance-empty-inner">
+                <i class="fa-solid fa-image"></i>
+                <p>No alliance logos yet. Be the first to upload your alliance banner or logo.</p>
+              </div>
+            `;
+            grid.appendChild(empty);
             return;
           }
 
-          items.slice(0, 8).forEach(item => {
+          items.slice(0, 12).forEach((item, index) => {
             const tile = document.createElement("div");
-            tile.className = "alliance-logo-tile";
+            const shapeClass = ["shape-wide", "shape-badge", "shape-square", "shape-wide", "shape-round"][index % 5];
+            const tiltClass = ["tilt-left", "tilt-right", "tilt-none"][index % 3];
+
+            tile.className = `alliance-logo-tile freestyle-tile ${shapeClass} ${tiltClass}`;
             tile.innerHTML = `
-              <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+              <div class="alliance-image-wrap">
+                <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+              </div>
               <div class="alliance-logo-name">${item.allianceName || ""}</div>
               <div class="alliance-logo-location">${item.location || ""}</div>
             `;
@@ -685,6 +692,14 @@
           });
         } catch (err) {
           console.error("Alliance homepage load error:", err);
+          grid.innerHTML = `
+            <div class="alliance-empty-state">
+              <div class="alliance-empty-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <p>Failed to load alliance logos.</p>
+              </div>
+            </div>
+          `;
         }
       }
 
@@ -731,8 +746,7 @@
 
       loadAnnouncements();
       loadAllianceUploads();
-      loadMediaPreview();
-    });
+     });
   </script>
 </body>
 </html>
