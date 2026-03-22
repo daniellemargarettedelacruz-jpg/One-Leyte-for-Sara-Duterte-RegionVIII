@@ -1,288 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Announcements | One Leyte</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcements | One Leyte</title>
 
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 
-<style>
+  <style>
+    .page-header{
+      text-align:center;
+      padding:70px 20px 40px 20px;
+      background:#08110c;
+      color:white;
+    }
 
-.page-header{
-text-align:center;
-padding:70px 20px 40px 20px;
-background:#08110c;
-color:white;
-}
+    .page-header h1{
+      font-size:34px;
+      margin-bottom:10px;
+    }
 
-.page-header h1{
-font-size:34px;
-margin-bottom:10px;
-}
+    .page-header p{
+      color:#cfd7d2;
+      max-width:700px;
+      margin:auto;
+    }
 
-.page-header p{
-color:#cfd7d2;
-max-width:700px;
-margin:auto;
-}
+    .announcement-container{
+      padding:60px 20px;
+      background:#f4f4f4;
+      min-height:280px;
+    }
 
-.announcement-container{
-padding:60px 20px;
-background:#f4f4f4;
-}
+    .announcement-grid{
+      max-width:1100px;
+      margin:auto;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
 
-.announcement-grid{
-max-width:1100px;
-margin:auto;
-display:flex;
-flex-direction:column;
-gap:20px;
-}
+    .announcement-card{
+      display:flex;
+      gap:20px;
+      background:white;
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.08);
+      border-left:4px solid #0a6b3f;
+      align-items:flex-start;
+    }
 
-/* LANDSCAPE CARD */
+    .announcement-image{
+      width:240px;
+      height:160px;
+      border-radius:10px;
+      object-fit:cover;
+      flex-shrink:0;
+      background:#e7ece8;
+    }
 
-.announcement-card{
-display:flex;
-gap:20px;
-background:white;
-border-radius:12px;
-padding:20px;
-box-shadow:0 6px 16px rgba(0,0,0,0.08);
-border-left:4px solid #0a6b3f;
-align-items:flex-start;
-}
+    .announcement-body{
+      flex:1;
+    }
 
-.announcement-image{
-width:240px;
-height:160px;
-border-radius:10px;
-object-fit:cover;
-}
+    .announcement-title{
+      font-size:22px;
+      font-weight:700;
+      color:#0a6b3f;
+      margin-bottom:6px;
+    }
 
-.announcement-body{
-flex:1;
-}
+    .announcement-meta{
+      font-size:13px;
+      color:#777;
+      margin-bottom:10px;
+    }
 
-.announcement-title{
-font-size:22px;
-font-weight:700;
-color:#0a6b3f;
-margin-bottom:6px;
-}
+    .announcement-summary{
+      font-size:14px;
+      margin-bottom:12px;
+      font-weight:600;
+      color:#1e1e1e;
+      line-height:1.6;
+    }
 
-.announcement-meta{
-font-size:13px;
-color:#777;
-margin-bottom:10px;
-}
+    .empty-message{
+      text-align:center;
+      background:#ffffff;
+      padding:24px;
+      border-radius:12px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.06);
+      color:#555;
+    }
 
-.announcement-summary{
-font-size:14px;
-margin-bottom:12px;
-font-weight:600;
-}
+    .read-btn{
+      background:#0a6b3f;
+      color:white;
+      border:none;
+      padding:8px 16px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+    }
 
-.read-btn{
-background:#0a6b3f;
-color:white;
-border:none;
-padding:8px 16px;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
-}
+    .read-btn:hover{
+      background:#084f2e;
+    }
 
-.read-btn:hover{
-background:#084f2e;
-}
+    #announcementPopup{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.75);
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+      box-sizing:border-box;
+    }
 
-/* POPUP */
+    .popup-box{
+      background:rgba(255,255,255,0.94);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      max-width:700px;
+      width:90%;
+      border-radius:12px;
+      padding:25px;
+      max-height:80vh;
+      overflow:auto;
+      box-shadow:0 20px 40px rgba(0,0,0,0.35);
+      border:1px solid rgba(255,255,255,0.4);
+      color:#1f1f1f;
+    }
 
-#announcementPopup{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.75);
-align-items:center;
-justify-content:center;
-z-index:9999;
-padding:20px;
-box-sizing:border-box;
-}
+    .popup-box h2{
+      margin:0 0 10px 0;
+      font-size:30px;
+      font-weight:800;
+      color:#0a6b3f;
+      line-height:1.25;
+    }
 
-.popup-box{
-background:rgba(255,255,255,0.92);
-backdrop-filter: blur(8px);
--webkit-backdrop-filter: blur(8px);
-max-width:700px;
-width:90%;
-border-radius:12px;
-padding:25px;
-max-height:80vh;
-overflow:auto;
-box-shadow:0 20px 40px rgba(0,0,0,0.35);
-border:1px solid rgba(255,255,255,0.4);
-color:#1f1f1f;
-}
+    #popupMeta{
+      color:#555 !important;
+      font-size:14px !important;
+      margin-bottom:18px;
+      line-height:1.5;
+    }
 
-.popup-box h2{
-margin:0 0 10px 0;
-font-size:30px;
-font-weight:800;
-color:#0a6b3f;
-line-height:1.25;
-}
+    #popupContent{
+      color:#222 !important;
+      font-size:16px;
+      line-height:1.8;
+      white-space:pre-wrap;
+    }
 
-#popupMeta{
-color:#555 !important;
-font-size:14px !important;
-margin-bottom:18px;
-line-height:1.5;
-}
+    .popup-close{
+      margin-top:20px;
+      padding:10px 18px;
+      cursor:pointer;
+      background:#0a6b3f;
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+    }
 
-#popupContent{
-color:#222 !important;
-font-size:16px;
-line-height:1.8;
-white-space:pre-wrap;
-}
+    .popup-close:hover{
+      background:#084f2e;
+    }
 
-.popup-close{
-margin-top:20px;
-padding:10px 18px;
-cursor:pointer;
-background:#0a6b3f;
-color:#fff;
-border:none;
-border-radius:8px;
-font-weight:600;
-}
+    @media (max-width: 800px){
+      .announcement-card{
+        flex-direction:column;
+      }
 
-.popup-close:hover{
-background:#084f2e;
-}
-
-</style>
-
+      .announcement-image{
+        width:100%;
+        height:220px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<section class="page-header">
-<h1>Announcements</h1>
-<p>
-Updates and important notices for members of One Leyte for Sara Duterte Region VIII.
-All announcements are reviewed before being displayed publicly.
-</p>
-</section>
+  <section class="page-header">
+    <h1>Announcements</h1>
+    <p>
+      Updates and important notices for members of One Leyte for Sara Duterte Region VIII.
+    </p>
+  </section>
 
-<section class="announcement-container">
-<div class="announcement-grid" id="announcementList">
-<div class="empty-message">Loading announcements...</div>
-</div>
-</section>
+  <section class="announcement-container">
+    <div class="announcement-grid" id="announcementList">
+      <div class="empty-message">Loading announcements...</div>
+    </div>
+  </section>
 
-<!-- POPUP -->
+  <div id="announcementPopup">
+    <div class="popup-box">
+      <h2 id="popupTitle"></h2>
+      <p id="popupMeta"></p>
+      <div id="popupContent"></div>
+      <button class="popup-close" onclick="closePopup()">Close</button>
+    </div>
+  </div>
 
-<div id="announcementPopup">
-<div class="popup-box">
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
 
-<h2 id="popupTitle"></h2>
-<p id="popupMeta" style="color:#666;font-size:13px;"></p>
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
-<div id="popupContent" style="margin-top:15px;line-height:1.6;"></div>
+    function safeText(value) {
+      return String(value || "").trim();
+    }
 
-<button class="popup-close" onclick="closePopup()">Close</button>
+    function buildMeta(datePosted, category, fullName) {
+      const parts = [];
+      if (datePosted) parts.push(datePosted);
+      if (category) parts.push(category);
+      if (fullName) parts.push(fullName);
+      return parts.join(" • ");
+    }
 
-</div>
-</div>
+    async function loadAnnouncements() {
+      const container = document.getElementById("announcementList");
+      container.innerHTML = '<div class="empty-message">Loading announcements...</div>';
 
-<script>
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
 
-const api = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+        container.innerHTML = "";
 
-fetch(api)
-.then(res => res.json())
-.then(data => {
+        if (!data.success) {
+          container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
+          console.error("Announcements API error:", data);
+          return;
+        }
 
-const container = document.getElementById("announcementList");
-container.innerHTML = "";
+        if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
+          container.innerHTML = '<div class="empty-message">No announcements available yet.</div>';
+          return;
+        }
 
-if(!data.items || data.items.length === 0){
-container.innerHTML = '<div class="empty-message">No announcements available yet.</div>';
-return;
-}
+        data.items.forEach(item => {
+          const title = safeText(item.Title);
+          const category = safeText(item.Category);
+          const datePosted = safeText(item.DatePosted);
+          const summary = safeText(item.Summary);
+          const content = safeText(item.Content);
+          const imageURL = safeText(item.ImageURL);
+          const fullName = safeText(item.FullName);
 
-data.items.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "announcement-card";
 
-const card = document.createElement("div");
-card.className = "announcement-card";
+          card.innerHTML = `
+            ${imageURL ? `<img class="announcement-image" src="${escapeHtml(imageURL)}" alt="${escapeHtml(title)}">` : ``}
+            <div class="announcement-body">
+              <div class="announcement-title">${escapeHtml(title || "Untitled Announcement")}</div>
+              <div class="announcement-meta">${escapeHtml(buildMeta(datePosted, category, fullName))}</div>
+              ${summary ? `<div class="announcement-summary">${escapeHtml(summary)}</div>` : ``}
+              <button class="read-btn" type="button">Read Full Announcement</button>
+            </div>
+          `;
 
-const title = item.Title || "";
-const category = item.Category || "";
-const datePosted = item.DatePosted || "";
-const summary = item.Summary || "";
-const content = item.Content || "";
-const imageURL = item.ImageURL || "";
+          const btn = card.querySelector(".read-btn");
+          btn.addEventListener("click", function () {
+            openPopup(
+              title || "Untitled Announcement",
+              buildMeta(datePosted, category, fullName),
+              content || summary || "No content available."
+            );
+          });
 
-card.innerHTML = `
+          container.appendChild(card);
+        });
 
-${imageURL ? `<img class="announcement-image" src="${imageURL}" alt="${title}">` : ``}
+      } catch (error) {
+        container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
+        console.error("Announcements fetch failed:", error);
+      }
+    }
 
-<div class="announcement-body">
+    function openPopup(title, meta, content) {
+      document.getElementById("popupTitle").innerText = title;
+      document.getElementById("popupMeta").innerText = meta;
+      document.getElementById("popupContent").innerText = content;
+      document.getElementById("announcementPopup").style.display = "flex";
+    }
 
-<div class="announcement-title">${title}</div>
+    function closePopup() {
+      document.getElementById("announcementPopup").style.display = "none";
+    }
 
-<div class="announcement-meta">
-${datePosted}${category ? ` • ${category}` : ``}
-</div>
+    document.getElementById("announcementPopup").addEventListener("click", function(e) {
+      if (e.target.id === "announcementPopup") {
+        closePopup();
+      }
+    });
 
-${summary ? `<div class="announcement-summary">${summary}</div>` : ``}
-
-<button class="read-btn"
-onclick="openPopup(
-\`${title}\`,
-\`${datePosted} • ${category}\`,
-\`${content}\`
-)">
-Read Full Announcement
-</button>
-
-</div>
-`;
-
-container.appendChild(card);
-
-});
-
-})
-.catch(error => {
-const container = document.getElementById("announcementList");
-container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
-console.error(error);
-});
-
-/* POPUP FUNCTIONS */
-
-function openPopup(title, meta, content){
-
-document.getElementById("popupTitle").innerText = title;
-document.getElementById("popupMeta").innerText = meta;
-document.getElementById("popupContent").innerText = content;
-
-document.getElementById("announcementPopup").style.display = "flex";
-
-}
-
-function closePopup(){
-
-document.getElementById("announcementPopup").style.display = "none";
-
-}
-
-</script>
+    loadAnnouncements();
+  </script>
 
 </body>
 </html>
