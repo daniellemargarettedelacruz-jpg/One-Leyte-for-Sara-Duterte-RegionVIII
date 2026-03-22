@@ -3,352 +3,440 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Announcements | One Leyte</title>
-
+  <title>Admin Announcements | One Leyte for Sara Duterte</title>
   <link rel="stylesheet" href="style.css" />
 
   <style>
-    .page-header{
-      text-align:center;
-      padding:70px 20px 40px 20px;
-      background:#08110c;
-      color:white;
-      position:relative;
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #102118;
     }
 
-    .admin-access-wrap{
-      position:absolute;
-      top:20px;
-      right:20px;
+    .admin-page {
+      min-height: 100vh;
+      padding: 40px 16px;
     }
 
-    .admin-access-btn{
-      display:inline-block;
-      padding:10px 16px;
-      background:#0a6b3f;
-      color:#fff;
-      text-decoration:none;
-      border-radius:8px;
-      font-size:14px;
-      font-weight:600;
-      box-shadow:0 4px 10px rgba(0,0,0,0.18);
-      transition:0.2s ease;
+    .admin-wrap {
+      max-width: 850px;
+      margin: 0 auto;
     }
 
-    .admin-access-btn:hover{
-      background:#084f2e;
+    .admin-card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 20px;
     }
 
-    .page-header h1{
-      font-size:34px;
-      margin-bottom:10px;
+    h1, h2 {
+      margin-top: 0;
+      color: #123524;
     }
 
-    .page-header p{
-      color:#cfd7d2;
-      max-width:700px;
-      margin:auto;
+    .admin-note {
+      background: #eef7f1;
+      border-left: 4px solid #1f6b45;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .announcement-container{
-      padding:60px 20px;
-      background:#f4f4f4;
-      min-height:280px;
+    .form-group {
+      margin-bottom: 16px;
     }
 
-    .announcement-grid{
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      flex-direction:column;
-      gap:20px;
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #123524;
     }
 
-    .announcement-card{
-      display:flex;
-      gap:20px;
-      background:white;
-      border-radius:12px;
-      padding:20px;
-      box-shadow:0 6px 16px rgba(0,0,0,0.08);
-      border-left:4px solid #0a6b3f;
-      align-items:flex-start;
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cfd8dc;
+      border-radius: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #fff;
     }
 
-    .announcement-image{
-      width:240px;
-      height:160px;
-      border-radius:10px;
-      object-fit:cover;
-      flex-shrink:0;
-      background:#e7ece8;
+    textarea {
+      min-height: 130px;
+      resize: vertical;
     }
 
-    .announcement-body{
-      flex:1;
+    .btn {
+      display: inline-block;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
     }
 
-    .announcement-title{
-      font-size:22px;
-      font-weight:700;
-      color:#0a6b3f;
-      margin-bottom:6px;
+    .btn-primary {
+      background: #1f6b45;
+      color: #fff;
     }
 
-    .announcement-meta{
-      font-size:13px;
-      color:#777;
-      margin-bottom:10px;
+    .btn-primary:hover {
+      background: #174f34;
     }
 
-    .announcement-summary{
-      font-size:14px;
-      margin-bottom:12px;
-      font-weight:600;
-      color:#1e1e1e;
-      line-height:1.6;
+    .btn-secondary {
+      background: #dfe8e3;
+      color: #123524;
     }
 
-    .empty-message{
-      text-align:center;
-      background:#ffffff;
-      padding:24px;
-      border-radius:12px;
-      box-shadow:0 6px 16px rgba(0,0,0,0.06);
-      color:#555;
+    .btn-secondary:hover {
+      background: #cfdad3;
     }
 
-    .read-btn{
-      background:#0a6b3f;
-      color:white;
-      border:none;
-      padding:8px 16px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
-    .read-btn:hover{
-      background:#084f2e;
+    .hidden {
+      display: none !important;
     }
 
-    #announcementPopup{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.75);
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      padding:20px;
-      box-sizing:border-box;
+    .status-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+      line-height: 1.5;
     }
 
-    .popup-box{
-      background:rgba(255,255,255,0.94);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      max-width:700px;
-      width:90%;
-      border-radius:12px;
-      padding:25px;
-      max-height:80vh;
-      overflow:auto;
-      box-shadow:0 20px 40px rgba(0,0,0,0.35);
-      border:1px solid rgba(255,255,255,0.4);
-      color:#1f1f1f;
+    .status-success {
+      display: block;
+      background: #edf9f0;
+      color: #17643d;
+      border: 1px solid #b9e2c4;
     }
 
-    .popup-box h2{
-      margin:0 0 10px 0;
-      font-size:30px;
-      font-weight:800;
-      color:#0a6b3f;
-      line-height:1.25;
+    .status-error {
+      display: block;
+      background: #fff1f0;
+      color: #b42318;
+      border: 1px solid #f3b7b2;
     }
 
-    #popupMeta{
-      color:#555 !important;
-      font-size:14px !important;
-      margin-bottom:18px;
-      line-height:1.5;
+    .small-text {
+      font-size: 13px;
+      color: #4b5b52;
+      margin-top: 6px;
     }
 
-    #popupContent{
-      color:#222 !important;
-      font-size:16px;
-      line-height:1.8;
-      white-space:pre-wrap;
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
 
-    .popup-close{
-      margin-top:20px;
-      padding:10px 18px;
-      cursor:pointer;
-      background:#0a6b3f;
-      color:#fff;
-      border:none;
-      border-radius:8px;
-      font-weight:600;
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #1f6b45;
+      text-decoration: none;
+      font-weight: 600;
     }
 
-    .popup-close:hover{
-      background:#084f2e;
+    .back-link:hover {
+      text-decoration: underline;
     }
 
-    @media (max-width: 800px){
-      .announcement-card{
-        flex-direction:column;
+    @media (max-width: 700px) {
+      .row-2 {
+        grid-template-columns: 1fr;
       }
 
-      .announcement-image{
-        width:100%;
-        height:220px;
-      }
-
-      .admin-access-wrap{
-        position:static;
-        margin-bottom:18px;
-      }
-
-      .page-header{
-        padding-top:30px;
+      .admin-card {
+        padding: 18px;
       }
     }
   </style>
 </head>
 <body>
+  <div class="admin-page">
+    <div class="admin-wrap">
 
-  <section class="page-header">
-    <div class="admin-access-wrap">
-      <a class="admin-access-btn" href="admin-announcements.html">Admin Access</a>
-    </div>
+      <a href="announcements.html" class="back-link">← Back to Announcements</a>
 
-    <h1>Announcements</h1>
-    <p>
-      Updates and important notices for members of One Leyte for Sara Duterte Region VIII.
-    </p>
-  </section>
+      <div class="admin-card">
+        <h1>Announcements Admin</h1>
+        <div class="admin-note">
+          This page is for admin posting only. Enter the admin password to unlock the announcement form. Successful posts go directly to the live announcements sheet.
+        </div>
+      </div>
 
-  <section class="announcement-container">
-    <div class="announcement-grid" id="announcementList">
-      <div class="empty-message">Loading announcements...</div>
-    </div>
-  </section>
+      <!-- LOGIN CARD -->
+      <div class="admin-card" id="loginCard">
+        <h2>Admin Login</h2>
 
-  <div id="announcementPopup">
-    <div class="popup-box">
-      <h2 id="popupTitle"></h2>
-      <p id="popupMeta"></p>
-      <div id="popupContent"></div>
-      <button class="popup-close" onclick="closePopup()">Close</button>
+        <div class="form-group">
+          <label for="adminPassword">Admin Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter admin password" />
+        </div>
+
+        <button class="btn btn-primary" id="loginBtn" type="button">Login</button>
+
+        <div id="loginStatus" class="status-box"></div>
+      </div>
+
+      <!-- FORM CARD -->
+      <div class="admin-card hidden" id="formCard">
+        <h2>Post New Announcement</h2>
+
+        <div class="top-actions">
+          <button class="btn btn-secondary" id="logoutBtn" type="button">Logout</button>
+        </div>
+
+        <form id="announcementForm">
+          <div class="row-2">
+            <div class="form-group">
+              <label for="fullName">Posted By</label>
+              <input type="text" id="fullName" placeholder="Admin name" value="Admin" />
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" required>
+                <option value="">Select category</option>
+                <option value="General">General</option>
+                <option value="Event">Event</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Campaign">Campaign</option>
+                <option value="Advisory">Advisory</option>
+                <option value="Update">Update</option>
+                <option value="Official Notice">Official Notice</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" placeholder="Enter announcement title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="summary">Summary</label>
+            <textarea id="summary" placeholder="Short summary for public preview" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="content">Full Content</label>
+            <textarea id="content" placeholder="Write full announcement content here" required></textarea>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="imageURL">Image URL</label>
+              <input type="text" id="imageURL" placeholder="https://..." />
+              <div class="small-text">Optional. Leave blank if no image.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="displayOrder">Display Order</label>
+              <input type="number" id="displayOrder" placeholder="Optional number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="isFeatured">Featured?</label>
+            <select id="isFeatured">
+              <option value="FALSE">No</option>
+              <option value="TRUE">Yes</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="submitBtn">Post Announcement</button>
+        </form>
+
+        <div id="submitStatus" class="status-box"></div>
+      </div>
+
     </div>
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
-    function escapeHtml(value) {
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+    const loginCard = document.getElementById("loginCard");
+    const formCard = document.getElementById("formCard");
+    const adminPassword = document.getElementById("adminPassword");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginStatus = document.getElementById("loginStatus");
+    const submitStatus = document.getElementById("submitStatus");
+    const announcementForm = document.getElementById("announcementForm");
+
+    function showStatus(el, message, type) {
+      el.className = "status-box";
+      if (type === "success") {
+        el.classList.add("status-success");
+      } else {
+        el.classList.add("status-error");
+      }
+      el.textContent = message;
     }
 
-    function safeText(value) {
-      return String(value || "").trim();
+    function clearStatus(el) {
+      el.className = "status-box";
+      el.textContent = "";
     }
 
-    function buildMeta(datePosted, category, fullName) {
-      const parts = [];
-      if (datePosted) parts.push(datePosted);
-      if (category) parts.push(category);
-      if (fullName) parts.push(fullName);
-      return parts.join(" • ");
-    }
-
-    async function loadAnnouncements() {
-      const container = document.getElementById("announcementList");
-      container.innerHTML = '<div class="empty-message">Loading announcements...</div>';
-
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-
-        container.innerHTML = "";
-
-        if (!data.success) {
-          container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
-          console.error("Announcements API error:", data);
-          return;
-        }
-
-        if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
-          container.innerHTML = '<div class="empty-message">No announcements available yet.</div>';
-          return;
-        }
-
-        data.items.forEach(item => {
-          const title = safeText(item.Title);
-          const category = safeText(item.Category);
-          const datePosted = safeText(item.DatePosted);
-          const summary = safeText(item.Summary);
-          const content = safeText(item.Content);
-          const imageURL = safeText(item.ImageURL);
-          const fullName = safeText(item.FullName);
-
-          const card = document.createElement("div");
-          card.className = "announcement-card";
-
-          card.innerHTML = `
-            ${imageURL ? `<img class="announcement-image" src="${escapeHtml(imageURL)}" alt="${escapeHtml(title)}">` : ``}
-            <div class="announcement-body">
-              <div class="announcement-title">${escapeHtml(title || "Untitled Announcement")}</div>
-              <div class="announcement-meta">${escapeHtml(buildMeta(datePosted, category, fullName))}</div>
-              ${summary ? `<div class="announcement-summary">${escapeHtml(summary)}</div>` : ``}
-              <button class="read-btn" type="button">Read Full Announcement</button>
-            </div>
-          `;
-
-          const btn = card.querySelector(".read-btn");
-          btn.addEventListener("click", function () {
-            openPopup(
-              title || "Untitled Announcement",
-              buildMeta(datePosted, category, fullName),
-              content || summary || "No content available."
-            );
-          });
-
-          container.appendChild(card);
-        });
-
-      } catch (error) {
-        container.innerHTML = '<div class="empty-message">Unable to load announcements right now.</div>';
-        console.error("Announcements fetch failed:", error);
+    function setLoggedInState(isLoggedIn) {
+      if (isLoggedIn) {
+        loginCard.classList.add("hidden");
+        formCard.classList.remove("hidden");
+      } else {
+        loginCard.classList.remove("hidden");
+        formCard.classList.add("hidden");
       }
     }
 
-    function openPopup(title, meta, content) {
-      document.getElementById("popupTitle").innerText = title;
-      document.getElementById("popupMeta").innerText = meta;
-      document.getElementById("popupContent").innerText = content;
-      document.getElementById("announcementPopup").style.display = "flex";
+    async function postToScript(payload) {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await response.text();
+
+      try {
+        return JSON.parse(text);
+      } catch (err) {
+        console.error("Non-JSON response from Apps Script:", text);
+        throw new Error("Invalid server response.");
+      }
     }
 
-    function closePopup() {
-      document.getElementById("announcementPopup").style.display = "none";
-    }
+    loginBtn.addEventListener("click", async function () {
+      clearStatus(loginStatus);
+      clearStatus(submitStatus);
 
-    document.getElementById("announcementPopup").addEventListener("click", function(e) {
-      if (e.target.id === "announcementPopup") {
-        closePopup();
+      const password = adminPassword.value.trim();
+
+      if (!password) {
+        showStatus(loginStatus, "Please enter the admin password.", "error");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging in...";
+
+      try {
+        const data = await postToScript({
+          action: "adminlogin",
+          password: password
+        });
+
+        if (data.success) {
+          sessionStorage.setItem("announcementsAdminPassword", password);
+          setLoggedInState(true);
+          showStatus(loginStatus, "Login successful.", "success");
+        } else {
+          showStatus(loginStatus, data.message || "Login failed.", "error");
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus(loginStatus, "Unable to connect to Apps Script.", "error");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
       }
     });
 
-    loadAnnouncements();
-  </script>
+    logoutBtn.addEventListener("click", function () {
+      sessionStorage.removeItem("announcementsAdminPassword");
+      adminPassword.value = "";
+      announcementForm.reset();
+      clearStatus(loginStatus);
+      clearStatus(submitStatus);
+      setLoggedInState(false);
+      document.getElementById("fullName").value = "Admin";
+      document.getElementById("isFeatured").value = "FALSE";
+    });
 
+    announcementForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearStatus(submitStatus);
+
+      const savedPassword = sessionStorage.getItem("announcementsAdminPassword") || "";
+
+      if (!savedPassword) {
+        showStatus(submitStatus, "Session expired. Please log in again.", "error");
+        setLoggedInState(false);
+        return;
+      }
+
+      const payload = {
+        action: "submitannouncementadmin",
+        password: savedPassword,
+        fullName: document.getElementById("fullName").value.trim(),
+        title: document.getElementById("title").value.trim(),
+        category: document.getElementById("category").value.trim(),
+        summary: document.getElementById("summary").value.trim(),
+        content: document.getElementById("content").value.trim(),
+        imageURL: document.getElementById("imageURL").value.trim(),
+        displayOrder: document.getElementById("displayOrder").value.trim(),
+        isFeatured: document.getElementById("isFeatured").value.trim()
+      };
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Posting...";
+
+      try {
+        const data = await postToScript(payload);
+
+        if (data.success) {
+          showStatus(
+            submitStatus,
+            "Announcement posted successfully. ID: " + (data.announcementId || ""),
+            "success"
+          );
+          announcementForm.reset();
+          document.getElementById("fullName").value = "Admin";
+          document.getElementById("isFeatured").value = "FALSE";
+        } else {
+          showStatus(submitStatus, data.message || "Posting failed.", "error");
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus(submitStatus, "Unable to submit announcement.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Post Announcement";
+      }
+    });
+
+    (function initPage() {
+      const savedPassword = sessionStorage.getItem("announcementsAdminPassword");
+      setLoggedInState(!!savedPassword);
+    })();
+  </script>
 </body>
 </html>
