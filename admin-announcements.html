@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Announcements | One Leyte for Sara Duterte</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #102118;
+    }
+
+    .admin-page {
+      min-height: 100vh;
+      padding: 40px 16px;
+    }
+
+    .admin-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    h1, h2 {
+      margin-top: 0;
+      color: #123524;
+    }
+
+    .admin-note {
+      background: #eef7f1;
+      border-left: 4px solid #1f6b45;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #123524;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cfd8dc;
+      border-radius: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn {
+      display: inline-block;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: #1f6b45;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #174f34;
+    }
+
+    .btn-secondary {
+      background: #dfe8e3;
+      color: #123524;
+    }
+
+    .btn-secondary:hover {
+      background: #cfdad3;
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .status-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status-success {
+      display: block;
+      background: #edf9f0;
+      color: #17643d;
+      border: 1px solid #b9e2c4;
+    }
+
+    .status-error {
+      display: block;
+      background: #fff1f0;
+      color: #b42318;
+      border: 1px solid #f3b7b2;
+    }
+
+    .small-text {
+      font-size: 13px;
+      color: #4b5b52;
+      margin-top: 6px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .row-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-page">
+    <div class="admin-wrap">
+
+      <div class="admin-card">
+        <h1>Announcements Admin</h1>
+        <div class="admin-note">
+          This page is for admin posting only. Public visitors should read from <strong>announcements.html</strong>.
+        </div>
+      </div>
+
+      <!-- LOGIN CARD -->
+      <div class="admin-card" id="loginCard">
+        <h2>Admin Login</h2>
+
+        <div class="form-group">
+          <label for="adminPassword">Admin Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter admin password" />
+        </div>
+
+        <button class="btn btn-primary" id="loginBtn">Login</button>
+
+        <div id="loginStatus" class="status-box"></div>
+      </div>
+
+      <!-- FORM CARD -->
+      <div class="admin-card hidden" id="formCard">
+        <h2>Post New Announcement</h2>
+
+        <div class="top-actions">
+          <button class="btn btn-secondary" id="logoutBtn" type="button">Logout</button>
+        </div>
+
+        <form id="announcementForm">
+          <div class="row-2">
+            <div class="form-group">
+              <label for="fullName">Posted By</label>
+              <input type="text" id="fullName" placeholder="Admin name" value="Admin" />
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" required>
+                <option value="">Select category</option>
+                <option value="General">General</option>
+                <option value="Event">Event</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Campaign">Campaign</option>
+                <option value="Advisory">Advisory</option>
+                <option value="Update">Update</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" placeholder="Enter announcement title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="summary">Summary</label>
+            <textarea id="summary" placeholder="Short summary for public preview" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="content">Full Content</label>
+            <textarea id="content" placeholder="Write full announcement content here" required></textarea>
+          </div>
+
+          <div class="row-2">
+            <div class="form-group">
+              <label for="imageURL">Image URL</label>
+              <input type="text" id="imageURL" placeholder="https://..." />
+              <div class="small-text">Optional. Leave blank if no image.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="displayOrder">Display Order</label>
+              <input type="number" id="displayOrder" placeholder="Optional number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="isFeatured">Featured?</label>
+            <select id="isFeatured">
+              <option value="FALSE">No</option>
+              <option value="TRUE">Yes</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="submitBtn">Post Announcement</button>
+        </form>
+
+        <div id="submitStatus" class="status-box"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    const loginCard = document.getElementById("loginCard");
+    const formCard = document.getElementById("formCard");
+
+    const adminPassword = document.getElementById("adminPassword");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const loginStatus = document.getElementById("loginStatus");
+    const submitStatus = document.getElementById("submitStatus");
+
+    const announcementForm = document.getElementById("announcementForm");
+
+    function showStatus(el, message, type) {
+      el.className = "status-box";
+      if (type === "success") {
+        el.classList.add("status-success");
+      } else {
+        el.classList.add("status-error");
+      }
+      el.textContent = message;
+    }
+
+    function clearStatus(el) {
+      el.className = "status-box";
+      el.textContent = "";
+    }
+
+    function setLoggedInState(isLoggedIn) {
+      if (isLoggedIn) {
+        loginCard.classList.add("hidden");
+        formCard.classList.remove("hidden");
+      } else {
+        loginCard.classList.remove("hidden");
+        formCard.classList.add("hidden");
+      }
+    }
+
+    loginBtn.addEventListener("click", async function () {
+      clearStatus(loginStatus);
+
+      const password = adminPassword.value.trim();
+
+      if (!password) {
+        showStatus(loginStatus, "Please enter the admin password.", "error");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Logging in...";
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            action: "adminlogin",
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          sessionStorage.setItem("announcementsAdminPassword", password);
+          setLoggedInState(true);
+          showStatus(loginStatus, "Login successful.", "success");
+        } else {
+          showStatus(loginStatus, data.message || "Login failed.", "error");
+        }
+      } catch (err) {
+        showStatus(loginStatus, "Unable to connect to Apps Script.", "error");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
+      }
+    });
+
+    logoutBtn.addEventListener("click", function () {
+      sessionStorage.removeItem("announcementsAdminPassword");
+      adminPassword.value = "";
+      announcementForm.reset();
+      clearStatus(submitStatus);
+      setLoggedInState(false);
+    });
+
+    announcementForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearStatus(submitStatus);
+
+      const savedPassword = sessionStorage.getItem("announcementsAdminPassword") || "";
+
+      if (!savedPassword) {
+        showStatus(submitStatus, "Session expired. Please log in again.", "error");
+        setLoggedInState(false);
+        return;
+      }
+
+      const payload = {
+        action: "submitannouncementadmin",
+        password: savedPassword,
+        fullName: document.getElementById("fullName").value.trim(),
+        title: document.getElementById("title").value.trim(),
+        category: document.getElementById("category").value.trim(),
+        summary: document.getElementById("summary").value.trim(),
+        content: document.getElementById("content").value.trim(),
+        imageURL: document.getElementById("imageURL").value.trim(),
+        displayOrder: document.getElementById("displayOrder").value.trim(),
+        isFeatured: document.getElementById("isFeatured").value.trim()
+      };
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Posting...";
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showStatus(submitStatus, "Announcement posted successfully. ID: " + (data.announcementId || ""), "success");
+          announcementForm.reset();
+          document.getElementById("fullName").value = "Admin";
+          document.getElementById("isFeatured").value = "FALSE";
+        } else {
+          showStatus(submitStatus, data.message || "Posting failed.", "error");
+        }
+      } catch (err) {
+        showStatus(submitStatus, "Unable to submit announcement.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Post Announcement";
+      }
+    });
+
+    (function initPage() {
+      const savedPassword = sessionStorage.getItem("announcementsAdminPassword");
+      if (savedPassword) {
+        setLoggedInState(true);
+      } else {
+        setLoggedInState(false);
+      }
+    })();
+  </script>
+</body>
+</html>
