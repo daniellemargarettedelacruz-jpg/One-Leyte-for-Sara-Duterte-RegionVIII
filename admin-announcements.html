@@ -166,11 +166,10 @@
       <div class="admin-card">
         <h1>Announcements Admin</h1>
         <div class="admin-note">
-          This page is for admin posting only. Public visitors should read from <strong>announcements.html</strong>.
+          This page is for admin posting only. Posts here go directly to the live announcements sheet after successful password login.
         </div>
       </div>
 
-      <!-- LOGIN CARD -->
       <div class="admin-card" id="loginCard">
         <h2>Admin Login</h2>
 
@@ -179,12 +178,10 @@
           <input type="password" id="adminPassword" placeholder="Enter admin password" />
         </div>
 
-        <button class="btn btn-primary" id="loginBtn">Login</button>
-
+        <button class="btn btn-primary" id="loginBtn" type="button">Login</button>
         <div id="loginStatus" class="status-box"></div>
       </div>
 
-      <!-- FORM CARD -->
       <div class="admin-card hidden" id="formCard">
         <h2>Post New Announcement</h2>
 
@@ -209,6 +206,7 @@
                 <option value="Campaign">Campaign</option>
                 <option value="Advisory">Advisory</option>
                 <option value="Update">Update</option>
+                <option value="Official Notice">Official Notice</option>
               </select>
             </div>
           </div>
@@ -259,18 +257,15 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec";
 
     const loginCard = document.getElementById("loginCard");
     const formCard = document.getElementById("formCard");
-
     const adminPassword = document.getElementById("adminPassword");
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-
     const loginStatus = document.getElementById("loginStatus");
     const submitStatus = document.getElementById("submitStatus");
-
     const announcementForm = document.getElementById("announcementForm");
 
     function showStatus(el, message, type) {
@@ -302,7 +297,6 @@
       clearStatus(loginStatus);
 
       const password = adminPassword.value.trim();
-
       if (!password) {
         showStatus(loginStatus, "Please enter the admin password.", "error");
         return;
@@ -333,6 +327,7 @@
           showStatus(loginStatus, data.message || "Login failed.", "error");
         }
       } catch (err) {
+        console.error(err);
         showStatus(loginStatus, "Unable to connect to Apps Script.", "error");
       } finally {
         loginBtn.disabled = false;
@@ -344,8 +339,11 @@
       sessionStorage.removeItem("announcementsAdminPassword");
       adminPassword.value = "";
       announcementForm.reset();
+      clearStatus(loginStatus);
       clearStatus(submitStatus);
       setLoggedInState(false);
+      document.getElementById("fullName").value = "Admin";
+      document.getElementById("isFeatured").value = "FALSE";
     });
 
     announcementForm.addEventListener("submit", async function (e) {
@@ -353,7 +351,6 @@
       clearStatus(submitStatus);
 
       const savedPassword = sessionStorage.getItem("announcementsAdminPassword") || "";
-
       if (!savedPassword) {
         showStatus(submitStatus, "Session expired. Please log in again.", "error");
         setLoggedInState(false);
@@ -389,7 +386,11 @@
         const data = await response.json();
 
         if (data.success) {
-          showStatus(submitStatus, "Announcement posted successfully. ID: " + (data.announcementId || ""), "success");
+          showStatus(
+            submitStatus,
+            "Announcement posted successfully. ID: " + (data.announcementId || ""),
+            "success"
+          );
           announcementForm.reset();
           document.getElementById("fullName").value = "Admin";
           document.getElementById("isFeatured").value = "FALSE";
@@ -397,6 +398,7 @@
           showStatus(submitStatus, data.message || "Posting failed.", "error");
         }
       } catch (err) {
+        console.error(err);
         showStatus(submitStatus, "Unable to submit announcement.", "error");
       } finally {
         submitBtn.disabled = false;
@@ -406,11 +408,7 @@
 
     (function initPage() {
       const savedPassword = sessionStorage.getItem("announcementsAdminPassword");
-      if (savedPassword) {
-        setLoggedInState(true);
-      } else {
-        setLoggedInState(false);
-      }
+      setLoggedInState(!!savedPassword);
     })();
   </script>
 </body>
