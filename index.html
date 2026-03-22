@@ -721,7 +721,42 @@
         }
       }
 
-      loadAnnouncements();
+     async function loadAnnouncementHighlight() {
+  try {
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbzu4Xq8qr-paVOe8SE8V7FRDiZp-opYnDpcVWuGS755DskMklEj-YMQ8BI05cauIIfz/exec?action=announcements"
+    );
+
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    const item = data.featured || data.latest;
+    if (!item) return;
+
+    const card = document.getElementById("announcementHighlightCard");
+
+    document.getElementById("highlightTitle").textContent = item.Title || "";
+    document.getElementById("highlightSummary").textContent = item.Summary || "";
+    document.getElementById("highlightCategory").textContent = item.Category || "";
+
+    const img = document.getElementById("highlightImage");
+
+    if (item.ImageURL) {
+      img.src = item.ImageURL;
+      img.style.display = "block";
+    } else {
+      img.style.display = "none";
+    }
+
+    card.classList.remove("hidden");
+
+  } catch (err) {
+    console.error("Highlight load error:", err);
+  }
+}
+
+loadAnnouncementHighlight();
       loadAllianceUploads();
      });
   </script>
