@@ -510,6 +510,19 @@
     </div>
   </section>
 
+  <section class="alliances-section">
+  <div class="container">
+
+    <div class="section-header">
+      <h2>Regional Alliances</h2>
+      <p>United regions supporting the movement across Region VIII</p>
+    </div>
+
+    <div id="alliancesGrid" class="alliances-grid"></div>
+
+  </div>
+</section>
+  
   <footer class="site-footer">
     <div class="site-footer-inner">
 
@@ -768,7 +781,8 @@
         console.error("Highlight load error:", err);
       }
     }
-
+document.addEventListener("DOMContentLoaded", function () {
+  loadAllianceUploads();
     loadAnnouncements();
     loadAnnouncementHighlight();
     loadAllianceUploads();
