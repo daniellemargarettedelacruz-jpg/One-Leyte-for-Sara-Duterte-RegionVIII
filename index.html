@@ -535,92 +535,51 @@
   </footer>
 
 
-     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
+    <script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
 
-      const cards = document.querySelectorAll(".community-card");
-      cards.forEach((card) => {
-        const icon = card.querySelector(".magnetic-icon");
+  async function loadHomepageAnnouncements() {
+    const wrap = document.getElementById("homepageAnnouncementsWrap");
+    if (!wrap) return;
 
-        card.addEventListener("mousemove", (e) => {
-          if (window.innerWidth <= 768 || !icon) return;
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+      const data = await res.json();
 
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
+      wrap.innerHTML = "";
 
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
+      const items = data.items || [];
+      if (!items.length) {
+        wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
+        return;
+      }
 
-          const moveX = (x - centerX) / 18;
-          const moveY = (y - centerY) / 18;
+      const item = data.featured || data.latest || items[0];
+      const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
 
-          icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-        });
-
-        card.addEventListener("mouseleave", () => {
-          if (icon) icon.style.transform = "translate(0px, 0px) scale(1)";
-        });
-      });
-
-      const sectorCapsules = document.querySelectorAll(".sector-capsule");
-      sectorCapsules.forEach((capsule) => {
-        capsule.addEventListener("click", function (e) {
-          e.preventDefault();
-          const destination = this.getAttribute("href");
-          this.classList.add("sector-capsule-active");
-
-          setTimeout(() => {
-            window.location.href = destination;
-            this.classList.remove("sector-capsule-active");
-          }, 180);
-        });
-      });
-
-<script>
- async function loadHomepageAnnouncements() {
-  const wrap = document.getElementById("homepageAnnouncementsWrap");
-  if (!wrap) return;
-
-  try {
-    const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-    const data = await res.json();
-
-    wrap.innerHTML = "";
-
-    const items = data.items || [];
-    if (!items.length) {
-      wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
-      return;
-    }
-
-    const item = data.featured || data.latest || items[0];
-    const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
-
-    const card = document.createElement("div");
-    card.className = `homepage-announcement-card ${hasImage ? "with-image" : "no-image"}`;
-    card.innerHTML = `
-      ${hasImage ? `
-        <div class="homepage-announcement-image-wrap">
-          <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}" onerror="this.parentElement.style.display='none'">
+      const card = document.createElement("div");
+      card.className = `homepage-announcement-card ${hasImage ? "with-image" : "no-image"}`;
+      card.innerHTML = `
+        ${hasImage ? `
+          <div class="homepage-announcement-image-wrap">
+            <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}" onerror="this.parentElement.style.display='none'">
+          </div>
+        ` : ""}
+        <div class="homepage-announcement-content">
+          <div class="homepage-announcement-category">${item.Category || ""}</div>
+          <h3>${item.Title || ""}</h3>
+          <p>${item.Summary || ""}</p>
+          <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
         </div>
-      ` : ""}
-      <div class="homepage-announcement-content">
-        <div class="homepage-announcement-category">${item.Category || ""}</div>
-        <h3>${item.Title || ""}</h3>
-        <p>${item.Summary || ""}</p>
-        <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
-      </div>
-    `;
-    wrap.appendChild(card);
+      `;
+      wrap.appendChild(card);
 
-  } catch (err) {
-    console.error("Homepage announcements load error:", err);
-    wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
+    } catch (err) {
+      console.error("Homepage announcements load error:", err);
+      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
+    }
   }
-}
-                              
+
   async function loadHomepageFreedomWall() {
     const wrap = document.getElementById("homepageFreedomWallWrap");
     if (!wrap) return;
@@ -665,44 +624,84 @@
     }
   }
 
-      async function loadHomepageAlliances() {
-        const grid = document.getElementById("homepageAlliancesGrid");
-        if (!grid) return;
+  async function loadHomepageAlliances() {
+    const grid = document.getElementById("homepageAlliancesGrid");
+    if (!grid) return;
 
-        try {
-          const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-          const data = await res.json();
-          const items = data.items || [];
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+      const data = await res.json();
+      const items = data.items || [];
 
-          grid.innerHTML = "";
+      grid.innerHTML = "";
 
-          if (!items.length) {
-            grid.innerHTML = `<div class="homepage-empty-state">No alliance logos or banners available yet.</div>`;
-            return;
-          }
-
-          items.forEach((item) => {
-            const card = document.createElement("div");
-            card.className = "homepage-alliance-card";
-            card.innerHTML = `
-              <div class="homepage-alliance-image-wrap">
-                <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance"}" onerror="this.style.display='none'">
-              </div>
-              <div class="homepage-alliance-name">${item.allianceName || ""}</div>
-              <div class="homepage-alliance-location">${item.location || ""}</div>
-            `;
-            grid.appendChild(card);
-          });
-        } catch (err) {
-          console.error("Homepage alliances load error:", err);
-          grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliance logos and banners.</div>`;
-        }
+      if (!items.length) {
+        grid.innerHTML = `<div class="homepage-empty-state">No alliance logos or banners available yet.</div>`;
+        return;
       }
 
-      loadHomepageAnnouncements();
-      loadHomepageFreedomWall();
-      loadHomepageAlliances();
+      items.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "homepage-alliance-card";
+        card.innerHTML = `
+          <div class="homepage-alliance-image-wrap">
+            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance"}" onerror="this.style.display='none'">
+          </div>
+          <div class="homepage-alliance-name">${item.allianceName || ""}</div>
+          <div class="homepage-alliance-location">${item.location || ""}</div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error("Homepage alliances load error:", err);
+      grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliance logos and banners.</div>`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const cards = document.querySelectorAll(".community-card");
+    cards.forEach((card) => {
+      const icon = card.querySelector(".magnetic-icon");
+
+      card.addEventListener("mousemove", (e) => {
+        if (window.innerWidth <= 768 || !icon) return;
+
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const moveX = (x - centerX) / 18;
+        const moveY = (y - centerY) / 18;
+
+        icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (icon) icon.style.transform = "translate(0px, 0px) scale(1)";
+      });
     });
-  </script>
+
+    const sectorCapsules = document.querySelectorAll(".sector-capsule");
+    sectorCapsules.forEach((capsule) => {
+      capsule.addEventListener("click", function (e) {
+        e.preventDefault();
+        const destination = this.getAttribute("href");
+        this.classList.add("sector-capsule-active");
+
+        setTimeout(() => {
+          window.location.href = destination;
+          this.classList.remove("sector-capsule-active");
+        }, 180);
+      });
+    });
+
+    loadHomepageAnnouncements();
+    loadHomepageFreedomWall();
+    loadHomepageAlliances();
+  });
+</script>
 </body>
 </html>
