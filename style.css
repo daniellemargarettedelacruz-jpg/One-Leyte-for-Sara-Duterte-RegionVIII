@@ -1437,3 +1437,183 @@ body{
     grid-template-columns: 1fr;
   }
 }
+
+.homepage-announcements-section,
+.homepage-freedom-wall-section,
+.homepage-alliances-section {
+  padding: 54px 20px;
+}
+
+.homepage-announcements-section {
+  background: #f7f5ef;
+}
+
+.homepage-freedom-wall-section {
+  background: #f4f7f5;
+}
+
+.homepage-alliances-section {
+  background: #f7f8f6;
+}
+
+.homepage-section-action {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.homepage-empty-state {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: #5f6b64;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.homepage-announcement-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.homepage-announcement-image-wrap {
+  min-height: 220px;
+  background: #f1f3f2;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homepage-announcement-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.homepage-announcement-category {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0a6b3f;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.homepage-announcement-content h3 {
+  margin: 0 0 10px;
+  color: #102118;
+}
+
+.homepage-announcement-content p {
+  margin: 0 0 12px;
+  color: #4f5b54;
+  line-height: 1.7;
+}
+
+.homepage-inline-link {
+  font-weight: 700;
+  text-decoration: none;
+  color: #0a6b3f;
+}
+
+.homepage-freedom-wall-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.homepage-freedom-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.homepage-freedom-image-wrap {
+  height: 180px;
+  background: #eef2ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.homepage-freedom-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.homepage-freedom-content {
+  padding: 14px;
+}
+
+.homepage-freedom-name {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #102118;
+}
+
+.homepage-freedom-content p {
+  margin: 0;
+  color: #4f5b54;
+  line-height: 1.6;
+}
+
+.homepage-alliances-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 20px;
+}
+
+.homepage-alliance-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.homepage-alliance-image-wrap {
+  height: 170px;
+  background: #f1f3f2;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.homepage-alliance-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.homepage-alliance-name {
+  font-weight: 700;
+  color: #102118;
+  margin-bottom: 4px;
+}
+
+.homepage-alliance-location {
+  font-size: 13px;
+  color: #617066;
+}
+
+@media (max-width: 768px) {
+  .homepage-announcement-card {
+    grid-template-columns: 1fr;
+  }
+
+  .homepage-announcement-image-wrap {
+    min-height: 180px;
+  }
+}
