@@ -1671,3 +1671,11 @@ body{
     grid-template-columns: 1fr;
   }
 }
+
+.homepage-announcement-card.no-image {
+  display: block;
+}
+
+.homepage-announcement-card.no-image .homepage-announcement-content {
+  padding-left: 0;
+}
