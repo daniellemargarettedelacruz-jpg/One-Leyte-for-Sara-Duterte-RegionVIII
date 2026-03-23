@@ -578,114 +578,89 @@
         });
       });
 
-      function getAnnouncements_() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ANNOUNCEMENTS");
+<script>
+  async function loadHomepageAnnouncements() {
+    const wrap = document.getElementById("homepageAnnouncementsWrap");
+    if (!wrap) return;
 
-  if (!sheet) {
-    return {
-      success: false,
-      message: "ANNOUNCEMENTS sheet not found.",
-      items: [],
-      featured: null,
-      latest: null
-    };
-  }
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+      const data = await res.json();
 
-  const lastRow = sheet.getLastRow();
-  const lastCol = sheet.getLastColumn();
+      wrap.innerHTML = "";
 
-  if (lastRow < 2) {
-    return {
-      success: true,
-      items: [],
-      featured: null,
-      latest: null
-    };
-  }
-
-  const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
-  const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
-
-  const items = values
-    .map(row => {
-      const obj = {};
-      headers.forEach((header, i) => {
-        obj[String(header).trim()] = row[i];
-      });
-      return obj;
-    })
-    .filter(item => {
-      const status = String(item.Status || item.ApprovalStatus || "").toLowerCase().trim();
-
-      if (!status) return true;
-
-      return status === "approved" || status === "posted" || status === "publish" || status === "published";
-    })
-    .map(item => ({
-      AnnouncementID: item.AnnouncementID || item.ID || "",
-      Title: item.Title || "",
-      Summary: item.Summary || item.Message || item.Content || "",
-      Content: item.Content || item.Message || item.Summary || "",
-      Category: item.Category || "",
-      ImageURL: item.ImageURL || item.Image || item.PhotoURL || "",
-      DatePosted: item.DatePosted || item.Timestamp || item.Date || "",
-      DisplayOrder: Number(item.DisplayOrder || 999999)
-    }))
-    .sort((a, b) => {
-      const aOrder = Number(a.DisplayOrder || 999999);
-      const bOrder = Number(b.DisplayOrder || 999999);
-      return aOrder - bOrder;
-    });
-
-  return {
-    success: true,
-    items: items,
-    featured: items.length ? items[0] : null,
-    latest: items.length ? items[0] : null
-  };
-}
-      async function loadHomepageFreedomWall() {
-        const wrap = document.getElementById("homepageFreedomWallWrap");
-        if (!wrap) return;
-
-        try {
-          const res = await fetch(`${WEB_APP_URL}?action=freedomwallfeed`);
-          const data = await res.json();
-
-          wrap.innerHTML = "";
-
-          const items = data.items || data.posts || [];
-          if (!items.length) {
-            wrap.innerHTML = `<div class="homepage-empty-state">No Freedom Wall posts yet.</div>`;
-            return;
-          }
-
-          items.slice(0, 3).forEach((item) => {
-            const imageUrl =
-              item.Photo1URL ||
-              item.photo1URL ||
-              item.ImageURL ||
-              item.imageUrl ||
-              "";
-
-            const card = document.createElement("div");
-            card.className = "homepage-freedom-card";
-            card.innerHTML = `
-              <div class="homepage-freedom-image-wrap">
-                ${imageUrl ? `<img src="${imageUrl}" alt="Freedom Wall Post" onerror="this.style.display='none'">` : ""}
-              </div>
-              <div class="homepage-freedom-content">
-                <div class="homepage-freedom-name">${item.FullName || item.fullName || item.Name || "Supporter"}</div>
-                <p>${item.Message || item.Caption || item.message || item.caption || ""}</p>
-              </div>
-            `;
-            wrap.appendChild(card);
-          });
-        } catch (err) {
-          console.error("Homepage Freedom Wall load error:", err);
-          wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
-        }
+      const items = data.items || [];
+      if (!items.length) {
+        wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
+        return;
       }
+
+      const item = data.featured || data.latest || items[0];
+
+      const card = document.createElement("div");
+      card.className = "homepage-announcement-card";
+      card.innerHTML = `
+        <div class="homepage-announcement-image-wrap">
+          <img src="${item.ImageURL || ""}" alt="${item.Title || "Announcement"}" onerror="this.style.display='none'">
+        </div>
+        <div class="homepage-announcement-content">
+          <div class="homepage-announcement-category">${item.Category || ""}</div>
+          <h3>${item.Title || ""}</h3>
+          <p>${item.Summary || ""}</p>
+          <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
+        </div>
+      `;
+      wrap.appendChild(card);
+
+    } catch (err) {
+      console.error("Homepage announcements load error:", err);
+      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
+    }
+  }
+
+  async function loadHomepageFreedomWall() {
+    const wrap = document.getElementById("homepageFreedomWallWrap");
+    if (!wrap) return;
+
+    try {
+      const res = await fetch(`${WEB_APP_URL}?action=freedomwallfeed`);
+      const data = await res.json();
+
+      wrap.innerHTML = "";
+
+      const items = data.items || data.posts || [];
+      if (!items.length) {
+        wrap.innerHTML = `<div class="homepage-empty-state">No Freedom Wall posts yet.</div>`;
+        return;
+      }
+
+      items.slice(0, 3).forEach((item) => {
+        const imageUrl =
+          item.Photo1URL ||
+          item.photo1URL ||
+          item.ImageURL ||
+          item.imageUrl ||
+          "";
+
+        const card = document.createElement("div");
+        card.className = "homepage-freedom-card";
+        card.innerHTML = `
+          <div class="homepage-freedom-image-wrap">
+            ${imageUrl ? `<img src="${imageUrl}" alt="Freedom Wall Post" onerror="this.style.display='none'">` : ""}
+          </div>
+          <div class="homepage-freedom-content">
+            <div class="homepage-freedom-name">${item.FullName || item.fullName || item.Name || "Supporter"}</div>
+            <p>${item.Message || item.Caption || item.message || item.caption || ""}</p>
+          </div>
+        `;
+        wrap.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("Homepage Freedom Wall load error:", err);
+      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
+    }
+  }
 
       async function loadHomepageAlliances() {
         const grid = document.getElementById("homepageAlliancesGrid");
