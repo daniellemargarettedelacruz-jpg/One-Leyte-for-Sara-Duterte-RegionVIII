@@ -570,7 +570,8 @@
     async function loadAnnouncements() {
       try {
         const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-        const data = await res.json();
+        const raw = await res.json();
+        const data = raw.result || raw;
 
         if (data.latest && data.latest.Title) {
           const banner = document.getElementById("latestBanner");
@@ -726,7 +727,8 @@
     async function loadAnnouncementHighlight() {
       try {
         const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-        const data = await res.json();
+       const raw = await res.json();
+       const data = raw.result || raw;
 
         if (!data.success) return;
 
