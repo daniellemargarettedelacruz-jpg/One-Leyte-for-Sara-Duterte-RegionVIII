@@ -579,45 +579,48 @@
       });
 
 <script>
-  async function loadHomepageAnnouncements() {
-    const wrap = document.getElementById("homepageAnnouncementsWrap");
-    if (!wrap) return;
+ async function loadHomepageAnnouncements() {
+  const wrap = document.getElementById("homepageAnnouncementsWrap");
+  if (!wrap) return;
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-      const data = await res.json();
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+    const data = await res.json();
 
-      wrap.innerHTML = "";
+    wrap.innerHTML = "";
 
-      const items = data.items || [];
-      if (!items.length) {
-        wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
-        return;
-      }
-
-      const item = data.featured || data.latest || items[0];
-
-      const card = document.createElement("div");
-      card.className = "homepage-announcement-card";
-      card.innerHTML = `
-        <div class="homepage-announcement-image-wrap">
-          <img src="${item.ImageURL || ""}" alt="${item.Title || "Announcement"}" onerror="this.style.display='none'">
-        </div>
-        <div class="homepage-announcement-content">
-          <div class="homepage-announcement-category">${item.Category || ""}</div>
-          <h3>${item.Title || ""}</h3>
-          <p>${item.Summary || ""}</p>
-          <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
-        </div>
-      `;
-      wrap.appendChild(card);
-
-    } catch (err) {
-      console.error("Homepage announcements load error:", err);
-      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
+    const items = data.items || [];
+    if (!items.length) {
+      wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
+      return;
     }
-  }
 
+    const item = data.featured || data.latest || items[0];
+    const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
+
+    const card = document.createElement("div");
+    card.className = `homepage-announcement-card ${hasImage ? "with-image" : "no-image"}`;
+    card.innerHTML = `
+      ${hasImage ? `
+        <div class="homepage-announcement-image-wrap">
+          <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}" onerror="this.parentElement.style.display='none'">
+        </div>
+      ` : ""}
+      <div class="homepage-announcement-content">
+        <div class="homepage-announcement-category">${item.Category || ""}</div>
+        <h3>${item.Title || ""}</h3>
+        <p>${item.Summary || ""}</p>
+        <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
+      </div>
+    `;
+    wrap.appendChild(card);
+
+  } catch (err) {
+    console.error("Homepage announcements load error:", err);
+    wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
+  }
+}
+                              
   async function loadHomepageFreedomWall() {
     const wrap = document.getElementById("homepageFreedomWallWrap");
     if (!wrap) return;
