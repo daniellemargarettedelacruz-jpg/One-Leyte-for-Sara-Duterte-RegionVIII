@@ -102,21 +102,19 @@
     <p>Post messages and upload photos from your device.</p>
   </a>
 
-  <!-- ALLIANCES -->
-  <a href="regional-alliances.html" class="community-mini-card alliances">
-    <div class="mini-icon">
-      <i class="fa-solid fa-images"></i>
+ <!-- HOMEPAGE REGIONAL ALLIANCES -->
+<section class="homepage-alliances-section">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Regional Alliances</h2>
+      <p>Alliance logos and banners across Region VIII.</p>
     </div>
-    <h3>Alliances</h3>
-    <p>View logos and banners across Region VIII.</p>
-  </a>
 
-</div>
-
-<p class="community-member-note">
-  Important: Please take note of your Member ID and keep it saved. It will be used for posting and member activities.
-</p>
-  </section>
+    <div id="homepageAlliancesGrid" class="homepage-alliances-grid">
+      <div class="homepage-empty-state">Loading alliance logos and banners...</div>
+    </div>
+  </div>
+</section>
   
     <!-- HOMEPAGE ANNOUNCEMENTS -->
   <section class="homepage-announcements-section">
@@ -620,39 +618,44 @@
     }
   }
 
-  async function loadHomepageAlliances() {
-    const grid = document.getElementById("homepageAlliancesGrid");
-    if (!grid) return;
+ async function loadHomepageAlliances() {
+  const grid = document.getElementById("homepageAlliancesGrid");
+  if (!grid) return;
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=alliancesconst res = await fetch(`${WEB_APP_URL}?action=alliance`);`);
-      const data = await res.json();
-      const items = data.items || [];
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+    const data = await res.json();
+    const items = data.items || [];
 
-      grid.innerHTML = "";
+    grid.innerHTML = "";
 
-      if (!items.length) {
-        grid.innerHTML = `<div class="homepage-empty-state">No alliance logos or banners available yet.</div>`;
-        return;
-      }
-
-      items.forEach((item) => {
-        const card = document.createElement("div");
-        card.className = "homepage-alliance-card";
-        card.innerHTML = `
-          <div class="homepage-alliance-image-wrap">
-            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance"}" onerror="this.style.display='none'">
-          </div>
-          <div class="homepage-alliance-name">${item.allianceName || ""}</div>
-          <div class="homepage-alliance-location">${item.location || ""}</div>
-        `;
-        grid.appendChild(card);
-      });
-    } catch (err) {
-      console.error("Homepage alliances load error:", err);
-      grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliance logos and banners.</div>`;
+    if (!items.length) {
+      grid.innerHTML = `<div class="homepage-empty-state">No alliance logos or banners available yet.</div>`;
+      return;
     }
+
+    items.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "homepage-alliance-card";
+
+      card.innerHTML = `
+        <div class="homepage-alliance-image-wrap">
+          <img src="${item.fileUrl || ""}" 
+               alt="${item.allianceName || "Alliance"}"
+               onerror="this.style.display='none'">
+        </div>
+        <div class="homepage-alliance-name">${item.allianceName || ""}</div>
+        <div class="homepage-alliance-location">${item.location || ""}</div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error("Homepage alliances load error:", err);
+    grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliance logos and banners.</div>`;
   }
+}
 
   document.addEventListener("DOMContentLoaded", function () {
     const cards = document.querySelectorAll(".community-card");
