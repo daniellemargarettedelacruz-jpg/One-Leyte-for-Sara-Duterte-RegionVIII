@@ -29,6 +29,7 @@ body{
   line-height:1.6;
   color:var(--cream);
   background:var(--green-dark);
+  overflow-x:hidden;
 }
 
 img{
@@ -37,9 +38,11 @@ img{
 }
 
 .container{
-  width:90%;
+  width:100%;
   max-width:1150px;
   margin:0 auto;
+  padding-left:20px;
+  padding-right:20px;
 }
 
 .narrow{
@@ -111,6 +114,8 @@ img{
 
 .hero-content{
   max-width:900px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .hero-logo{
@@ -205,18 +210,27 @@ img{
   font-size:32px;
   margin-bottom:10px;
   color:var(--green-deep);
+  text-align:center;
 }
 
 .section-heading p{
   max-width:720px;
-  margin:auto;
+  margin-left:auto;
+  margin-right:auto;
   color:#555;
+  text-align:center;
 }
 
 /* COMMUNITY FEATURES */
 .community-features{
   padding:84px 20px;
   background:var(--cream);
+  width:100%;
+}
+
+.community-features .container{
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .community-features-heading h2{
@@ -229,9 +243,11 @@ img{
 
 .community-mini-grid{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(3, minmax(0, 1fr));
   gap:18px;
-  margin-top:26px;
+  margin:26px auto 0;
+  max-width:980px;
+  align-items:stretch;
 }
 
 .community-mini-card{
@@ -302,6 +318,7 @@ img{
 .homepage-freedom-wall-section,
 .homepage-alliances-section{
   padding:54px 20px;
+  width:100%;
 }
 
 .homepage-announcements-section{
@@ -314,6 +331,13 @@ img{
 
 .homepage-alliances-section{
   background:#f7f8f6;
+}
+
+.homepage-announcements-section .container,
+.homepage-freedom-wall-section .container,
+.homepage-alliances-section .container{
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .homepage-section-action{
@@ -331,6 +355,11 @@ img{
 }
 
 /* HOMEPAGE ANNOUNCEMENT */
+.homepage-announcements-wrap{
+  max-width:980px;
+  margin:0 auto;
+}
+
 .homepage-announcement-card{
   display:grid;
   grid-template-columns:320px 1fr;
@@ -339,6 +368,8 @@ img{
   border-radius:18px;
   padding:18px;
   box-shadow:var(--card-shadow);
+  max-width:980px;
+  margin:0 auto;
 }
 
 .homepage-announcement-card.no-image{
@@ -392,6 +423,8 @@ img{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
   gap:18px;
+  max-width:980px;
+  margin:0 auto;
 }
 
 .homepage-freedom-card{
@@ -437,6 +470,9 @@ img{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
   gap:20px;
+  max-width:980px;
+  margin:0 auto;
+  align-items:stretch;
 }
 
 .homepage-alliance-card{
@@ -446,6 +482,8 @@ img{
   text-align:center;
   box-shadow:var(--card-shadow);
   transition:transform .25s ease, box-shadow .25s ease;
+  margin:0 auto;
+  width:100%;
 }
 
 .homepage-alliance-card:hover{
@@ -487,6 +525,12 @@ img{
 .sectoral-section{
   padding:80px 20px;
   background:var(--green-dark);
+  width:100%;
+}
+
+.sectoral-section .container{
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .sectoral-section .section-heading h2{
@@ -495,6 +539,12 @@ img{
 
 .sectoral-section .section-heading p{
   color:#c9d4ce;
+}
+
+.sector-grid,
+.premium-sector-grid{
+  max-width:1100px;
+  margin:0 auto;
 }
 
 .privacy-note{
@@ -511,11 +561,18 @@ img{
 .principles,
 .why-join{
   padding:78px 20px;
+  width:100%;
 }
 
 .about{
   background:var(--cream);
   color:var(--text);
+  text-align:center;
+}
+
+.about .container{
+  margin-left:auto;
+  margin-right:auto;
   text-align:center;
 }
 
@@ -536,6 +593,12 @@ img{
   text-align:center;
 }
 
+.history .container{
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+
 .history h2{
   color:var(--gold);
   font-size:2.2rem;
@@ -550,6 +613,12 @@ img{
 .unity-ribbon-section{
   padding:90px 20px 70px;
   background:var(--green-dark);
+  width:100%;
+}
+
+.unity-ribbon-section .container{
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .unity-ribbon{
@@ -578,6 +647,12 @@ img{
   text-align:center;
 }
 
+.why-join .container{
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+
 .why-join h2{
   font-size:2.3rem;
   margin-bottom:18px;
@@ -588,6 +663,8 @@ img{
   display:grid;
   grid-template-columns:repeat(3, minmax(0, 1fr));
   gap:24px;
+  max-width:980px;
+  margin:24px auto 0;
 }
 
 .why-card{
@@ -612,6 +689,12 @@ img{
 .principles{
   background:var(--cream);
   color:var(--text);
+  text-align:center;
+}
+
+.principles .container{
+  margin-left:auto;
+  margin-right:auto;
   text-align:center;
 }
 
@@ -655,6 +738,8 @@ img{
   width:100%;
   max-width:900px;
   text-align:center;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .footer-copyright{
@@ -827,7 +912,28 @@ img{
   }
 
   .community-mini-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:12px;
+  }
+
+  .community-mini-card{
+    padding:16px 12px;
+  }
+
+  .community-mini-card h3{
+    font-size:0.95rem;
+  }
+
+  .community-mini-card p{
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .mini-icon{
+    width:42px;
+    height:42px;
+    font-size:16px;
+    margin:0 auto 8px;
   }
 
   .homepage-announcement-card{
@@ -887,4 +993,3 @@ img{
     font-size:15px;
   }
 }
-
