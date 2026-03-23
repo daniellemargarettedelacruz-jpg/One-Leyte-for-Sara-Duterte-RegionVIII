@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alliance Upload | One Leyte for Sara Duterte</title>
+  <title>Alliance Entry Portal | One Leyte for Sara Duterte</title>
 
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -141,6 +141,15 @@
       font-size:15px;
     }
 
+    .custom-file-btn:hover{
+      background:#085332;
+    }
+
+    .custom-file-btn:disabled{
+      opacity:0.7;
+      cursor:not-allowed;
+    }
+
     .custom-file-name{
       color:#4f5b54;
       font-size:15px;
@@ -267,10 +276,10 @@
       <div class="alliance-card">
 
         <div class="alliance-header">
-          <h1>Alliance Upload</h1>
+          <h1>Alliance Entry Portal</h1>
           <p>
-            Submit your alliance logo image for the Regional Alliances section of the website.
-            ApSubmitted alliance entries are displayed directly on the live website after upload.proved alliance entries are displayed on the live website.
+            Submit an alliance logo or banner image for the Regional Alliances section of the website.
+            Submitted alliance entries are displayed directly on the live website after upload.
           </p>
         </div>
 
@@ -344,13 +353,13 @@
           </div>
 
           <div class="form-group">
-            <label for="logoFile">Upload Logo Image Here</label>
+            <label for="logoFile">Upload Logo or Banner Image</label>
 
             <div class="file-upload-box">
               <div class="custom-file-wrap">
                 <button type="button" class="custom-file-btn" id="pickLogoBtn">
                   <i class="fas fa-image"></i>
-                  Choose logo image
+                  Choose image
                 </button>
 
                 <span class="custom-file-name" id="logoFileName">No file chosen</span>
@@ -366,12 +375,13 @@
             </div>
 
             <div class="field-note">
-              Upload 1 logo image only. Accepted: PNG, JPG, JPEG, WEBP.
+              Upload 1 image only. Accepted formats: PNG, JPG, JPEG, WEBP.
             </div>
           </div>
 
           <div class="privacy-box">
-            Submitted information is kept private in the system. Public display may show only the alliance name, image, location, and submitted caption or description.
+            Submitted information is kept in the system. Public display may show only the alliance name,
+            image, location, and submitted caption or description.
           </div>
 
           <div class="button-row">
@@ -418,41 +428,63 @@
     });
 
     fileInput.addEventListener("change", function () {
-      logoFileName.textContent = this.files && this.files[0] ? this.files[0].name : "No file chosen";
+      logoFileName.textContent = this.files && this.files[0]
+        ? this.files[0].name
+        : "No file chosen";
+
+      successMessage.style.display = "none";
+      errorMessage.style.display = "none";
     });
 
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
 
       if (isSubmitting) return;
-      isSubmitting = true;
 
       successMessage.style.display = "none";
       errorMessage.style.display = "none";
 
+      const allianceName = document.getElementById("allianceName").value.trim();
+      const municipality = document.getElementById("municipality").value.trim();
+      const uploaderName = document.getElementById("uploaderName").value.trim();
+      const contactInfo = document.getElementById("contactInfo").value.trim();
+      const caption = document.getElementById("caption").value.trim();
+      const description = document.getElementById("description").value.trim();
       const file = fileInput.files[0];
 
-      if (!file) {
-        errorMessage.textContent = "Please select a logo image.";
+      if (!allianceName || !municipality || !uploaderName) {
+        errorMessage.textContent = "Please complete all required fields.";
         errorMessage.style.display = "block";
-        isSubmitting = false;
         return;
       }
 
+      if (!file) {
+        errorMessage.textContent = "Please select a logo or banner image.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+      if (!allowedTypes.includes(file.type)) {
+        errorMessage.textContent = "Invalid file type. Please upload PNG, JPG, JPEG, or WEBP only.";
+        errorMessage.style.display = "block";
+        return;
+      }
+
+      isSubmitting = true;
       submitBtn.disabled = true;
-      submitBtn.style.opacity = "0.7";
 
       try {
         const base64 = await readFileAsBase64(file);
 
         const payload = new URLSearchParams();
         payload.append("action", "allianceupload");
-        payload.append("allianceName", document.getElementById("allianceName").value.trim());
-        payload.append("municipality", document.getElementById("municipality").value.trim());
-        payload.append("uploaderName", document.getElementById("uploaderName").value.trim());
-        payload.append("contactInfo", document.getElementById("contactInfo").value.trim());
-        payload.append("caption", document.getElementById("caption").value.trim());
-        payload.append("description", document.getElementById("description").value.trim());
+        payload.append("allianceName", allianceName);
+        payload.append("municipality", municipality);
+        payload.append("uploaderName", uploaderName);
+        payload.append("contactInfo", contactInfo);
+        payload.append("caption", caption);
+        payload.append("description", description);
         payload.append("fileName", file.name);
         payload.append("mimeType", file.type);
         payload.append("fileData", base64);
@@ -472,11 +504,12 @@
         }
 
         if (data.success) {
+          successMessage.textContent = data.message || "Alliance upload submitted successfully and is now live.";
           successMessage.style.display = "block";
           form.reset();
           logoFileName.textContent = "No file chosen";
         } else {
-          errorMessage.textContent = "Upload failed: " + (data.message || "Unknown error");
+          errorMessage.textContent = data.message || "Upload failed. Please try again.";
           errorMessage.style.display = "block";
         }
       } catch (err) {
@@ -485,7 +518,6 @@
         errorMessage.style.display = "block";
       } finally {
         submitBtn.disabled = false;
-        submitBtn.style.opacity = "1";
         isSubmitting = false;
       }
     });
