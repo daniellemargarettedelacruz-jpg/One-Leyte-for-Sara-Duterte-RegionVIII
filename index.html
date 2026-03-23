@@ -524,279 +524,254 @@
     </div>
   </footer>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
 
-      const cards = document.querySelectorAll('.community-card');
-      cards.forEach((card) => {
-        const icon = card.querySelector('.magnetic-icon');
+    const cards = document.querySelectorAll(".community-card");
+    cards.forEach((card) => {
+      const icon = card.querySelector(".magnetic-icon");
 
-        card.addEventListener('mousemove', (e) => {
-          if (window.innerWidth <= 768 || !icon) return;
+      card.addEventListener("mousemove", (e) => {
+        if (window.innerWidth <= 768 || !icon) return;
 
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
 
-          const moveX = (x - centerX) / 18;
-          const moveY = (y - centerY) / 18;
+        const moveX = (x - centerX) / 18;
+        const moveY = (y - centerY) / 18;
 
-          icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-          if (icon) icon.style.transform = 'translate(0px, 0px) scale(1)';
-        });
+        icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
       });
 
-      const sectorCapsules = document.querySelectorAll('.sector-capsule');
-      sectorCapsules.forEach((capsule) => {
-        capsule.addEventListener('click', function (e) {
-          e.preventDefault();
-          const destination = this.getAttribute('href');
-          this.classList.add('sector-capsule-active');
-
-          setTimeout(() => {
-            window.location.href = destination;
-            this.classList.remove('sector-capsule-active');
-          }, 180);
-        });
+      card.addEventListener("mouseleave", () => {
+        if (icon) icon.style.transform = "translate(0px, 0px) scale(1)";
       });
+    });
 
-async function loadAnnouncements() {
+    const sectorCapsules = document.querySelectorAll(".sector-capsule");
+    sectorCapsules.forEach((capsule) => {
+      capsule.addEventListener("click", function (e) {
+        e.preventDefault();
+        const destination = this.getAttribute("href");
+        this.classList.add("sector-capsule-active");
 
-  try {
-    const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-    const data = await res.json();
+        setTimeout(() => {
+          window.location.href = destination;
+          this.classList.remove("sector-capsule-active");
+        }, 180);
+      });
+    });
 
-    if (data.latest && data.latest.Title) {
-      const banner = document.getElementById("latestBanner");
-      if (banner) {
-        banner.style.display = "block";
-        banner.innerHTML = `📢 Latest Announcement: <a href="announcements.html">${data.latest.Title}</a>`;
+    async function loadAnnouncements() {
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+        const data = await res.json();
+
+        if (data.latest && data.latest.Title) {
+          const banner = document.getElementById("latestBanner");
+          if (banner) {
+            banner.style.display = "block";
+            banner.innerHTML = `📢 Latest Announcement: <a href="announcements.html">${data.latest.Title}</a>`;
+          }
+        }
+
+        if (data.featured && data.featured.Title) {
+          const featuredSection = document.getElementById("featuredAnnouncementSection");
+          const featuredCard = document.getElementById("featuredAnnouncementCard");
+
+          if (featuredSection && featuredCard) {
+            featuredSection.style.display = "block";
+            featuredCard.innerHTML = `
+              <div class="featured-announcement-label">Featured Announcement</div>
+              <div class="featured-announcement-title">${data.featured.Title || ""}</div>
+              <div class="featured-announcement-meta">
+                ${(data.featured["Date Posted"] || data.featured.DatePosted || "")}${data.featured.Category ? ` • ${data.featured.Category}` : ""}
+              </div>
+              <div class="featured-announcement-summary">${data.featured.Summary || ""}</div>
+              <a class="featured-announcement-btn" href="announcements.html">Read Full Announcement</a>
+            `;
+          }
+        }
+
+        const sliderTrack = document.getElementById("announcementSliderTrack");
+        if (!sliderTrack) return;
+
+        sliderTrack.innerHTML = "";
+
+        if (!data.items || !data.items.length) {
+          sliderTrack.innerHTML = `<div class="announcement-slider-empty">No announcements available yet.</div>`;
+          return;
+        }
+
+        data.items.slice(0, 6).forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "announcement-slide-card";
+          card.innerHTML = `
+            <div class="announcement-slide-title">${item.Title || ""}</div>
+            <div class="announcement-slide-meta">
+              ${(item["Date Posted"] || item.DatePosted || "")}${item.Category ? ` • ${item.Category}` : ""}
+            </div>
+            <div class="announcement-slide-summary">${item.Summary || ""}</div>
+          `;
+          sliderTrack.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Announcement homepage load error:", err);
+
+        const sliderTrack = document.getElementById("announcementSliderTrack");
+        if (sliderTrack) {
+          sliderTrack.innerHTML = `<div class="announcement-slider-empty">Failed to load announcements.</div>`;
+        }
       }
     }
 
-    if (data.featured && data.featured.Title) {
-      const featuredSection = document.getElementById("featuredAnnouncementSection");
-      const featuredCard = document.getElementById("featuredAnnouncementCard");
+    async function loadAllianceUploads() {
+      const grid = document.getElementById("alliancesGrid");
+      if (!grid) return;
 
-      if (featuredSection && featuredCard) {
-        featuredSection.style.display = "block";
-        featuredCard.innerHTML = `
-          <div class="featured-announcement-label">Featured Announcement</div>
-          <div class="featured-announcement-title">${data.featured.Title || ""}</div>
-          <div class="featured-announcement-meta">
-            ${(data.featured["Date Posted"] || data.featured.DatePosted || "")}${data.featured.Category ? ` • ${data.featured.Category}` : ""}
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : data.items;
+
+        grid.innerHTML = "";
+
+        if (!items || !items.length) {
+          const empty = document.createElement("div");
+          empty.className = "alliance-empty-state";
+          empty.innerHTML = `
+            <div class="alliance-empty-inner">
+              <i class="fa-solid fa-image"></i>
+              <p>No alliance logos yet. Be the first to upload your alliance banner or logo.</p>
+            </div>
+          `;
+          grid.appendChild(empty);
+          return;
+        }
+
+        items.slice(0, 12).forEach((item, index) => {
+          const tile = document.createElement("div");
+          const shapeClass = ["shape-wide", "shape-badge", "shape-square", "shape-wide", "shape-round"][index % 5];
+          const tiltClass = ["tilt-left", "tilt-right", "tilt-none"][index % 3];
+
+          tile.className = `alliance-logo-tile freestyle-tile ${shapeClass} ${tiltClass}`;
+          tile.innerHTML = `
+            <div class="alliance-image-wrap">
+              <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
+            </div>
+            <div class="alliance-logo-name">${item.allianceName || ""}</div>
+            <div class="alliance-logo-location">${item.location || ""}</div>
+          `;
+          grid.appendChild(tile);
+        });
+      } catch (err) {
+        console.error("Alliance homepage load error:", err);
+        grid.innerHTML = `
+          <div class="alliance-empty-state">
+            <div class="alliance-empty-inner">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <p>Failed to load alliance logos.</p>
+            </div>
           </div>
-          <div class="featured-announcement-summary">${data.featured.Summary || ""}</div>
-          <a class="featured-announcement-btn" href="announcements.html">Read Full Announcement</a>
         `;
       }
     }
 
-    // ✅ FIXED LINE (THIS WAS MISSING)
-    const sliderTrack = document.getElementById("announcementSliderTrack");
+    async function loadMediaPreview() {
+      const grid = document.getElementById("mediaPreviewGrid");
+      if (!grid) return;
 
-    if (!sliderTrack) return;
-    sliderTrack.innerHTML = "";
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=mediaposts`);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : data.items;
 
-    if (!data.items || !data.items.length) {
-      sliderTrack.innerHTML = `<div class="announcement-slider-empty">No announcements available yet.</div>`;
-      return;
-    }
-
-    data.items.slice(0, 6).forEach(item => {
-      const card = document.createElement("div");
-      card.className = "announcement-slide-card";
-      card.innerHTML = `
-        <div class="announcement-slide-title">${item.Title || ""}</div>
-        <div class="announcement-slide-meta">
-          ${(item["Date Posted"] || item.DatePosted || "")}${item.Category ? ` • ${item.Category}` : ""}
-        </div>
-        <div class="announcement-slide-summary">${item.Summary || ""}</div>
-      `;
-      sliderTrack.appendChild(card);
-    });
-
-  } catch (err) {
-    console.error("Announcement homepage load error:", err);
-
-    const sliderTrack = document.getElementById("announcementSliderTrack"); // safe fallback
-
-    if (sliderTrack) {
-      sliderTrack.innerHTML = `<div class="announcement-slider-empty">Failed to load announcements.</div>`;
-    }
-  }
-}
-          
-const sliderTrack = document.getElementById("announcementSliderTrack");
-          if (!sliderTrack) return;
-          sliderTrack.innerHTML = "";
-
-          if (!data.items || !data.items.length) {
-            sliderTrack.innerHTML = `<div class="announcement-slider-empty">No announcements available yet.</div>`;
-            return;
-          }
-
-          data.items.slice(0, 6).forEach(item => {
-            const card = document.createElement("div");
-            card.className = "announcement-slide-card";
-            card.innerHTML = `
-              <div class="announcement-slide-title">${item.Title || ""}</div>
-              <div class="announcement-slide-meta">
-                ${(item["Date Posted"] || item.DatePosted || "")}${item.Category ? ` • ${item.Category}` : ""}
-              </div>
-              <div class="announcement-slide-summary">${item.Summary || ""}</div>
-            `;
-            sliderTrack.appendChild(card);
-          });
-        } catch (err) {
-          console.error("Announcement homepage load error:", err);
-          if (sliderTrack) {
-            sliderTrack.innerHTML = `<div class="announcement-slider-empty">Failed to load announcements.</div>`;
-          }
+        if (!items || !items.length) {
+          grid.innerHTML = `<div class="announcement-slider-empty">No community media yet.</div>`;
+          return;
         }
-      }
 
-           async function loadAllianceUploads() {
-        const grid = document.getElementById("alliancesGrid");
-        if (!grid) return;
+        grid.innerHTML = "";
 
-        try {
-          const res = await fetch(`${WEB_APP_URL}?action=alliances`);
-          const data = await res.json();
-          const items = Array.isArray(data) ? data : data.items;
+        items.slice(0, 3).forEach((item) => {
+          const img =
+            item.Photo1URL ||
+            item.Photo2URL ||
+            item.Photo3URL ||
+            item.VideoThumbnailURL ||
+            item.VideoThumb ||
+            "";
 
-          grid.innerHTML = "";
-          
+          const caption = item.Caption || "";
 
-          if (!items || !items.length) {
-            const empty = document.createElement("div");
-            empty.className = "alliance-empty-state";
-            empty.innerHTML = `
-              <div class="alliance-empty-inner">
-                <i class="fa-solid fa-image"></i>
-                <p>No alliance logos yet. Be the first to upload your alliance banner or logo.</p>
-              </div>
-            `;
-            grid.appendChild(empty);
-            return;
-          }
-
-          items.slice(0, 12).forEach((item, index) => {
-            const tile = document.createElement("div");
-            const shapeClass = ["shape-wide", "shape-badge", "shape-square", "shape-wide", "shape-round"][index % 5];
-            const tiltClass = ["tilt-left", "tilt-right", "tilt-none"][index % 3];
-
-            tile.className = `alliance-logo-tile freestyle-tile ${shapeClass} ${tiltClass}`;
-            tile.innerHTML = `
-              <div class="alliance-image-wrap">
-                <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance Logo"}">
-              </div>
-              <div class="alliance-logo-name">${item.allianceName || ""}</div>
-              <div class="alliance-logo-location">${item.location || ""}</div>
-            `;
-            grid.appendChild(tile);
-          });
-        } catch (err) {
-          console.error("Alliance homepage load error:", err);
-          grid.innerHTML = `
-            <div class="alliance-empty-state">
-              <div class="alliance-empty-inner">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <p>Failed to load alliance logos.</p>
-              </div>
-            </div>
+          const card = document.createElement("div");
+          card.className = "media-preview-card";
+          card.innerHTML = `
+            <img src="${img}" class="media-preview-img" alt="Community Media">
+            <div class="media-preview-caption">${caption}</div>
           `;
-        }
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Media preview load error:", err);
+        grid.innerHTML = `<div class="announcement-slider-empty">Failed to load community media.</div>`;
       }
-
-      async function loadMediaPreview() {
-        const grid = document.getElementById("mediaPreviewGrid");
-        if (!grid) return;
-
-        try {
-          const res = await fetch(`${WEB_APP_URL}?action=mediaposts`);
-          const data = await res.json();
-          const items = Array.isArray(data) ? data : data.items;
-
-          if (!items || !items.length) {
-            grid.innerHTML = `<div class="announcement-slider-empty">No community media yet.</div>`;
-            return;
-          }
-
-          grid.innerHTML = "";
-
-          items.slice(0, 3).forEach(item => {
-            const img =
-              item.Photo1URL ||
-              item.Photo2URL ||
-              item.Photo3URL ||
-              item.VideoThumbnailURL ||
-              item.VideoThumb ||
-              "";
-
-            const caption = item.Caption || "";
-
-            const card = document.createElement("div");
-            card.className = "media-preview-card";
-            card.innerHTML = `
-              <img src="${img}" class="media-preview-img" alt="Community Media">
-              <div class="media-preview-caption">${caption}</div>
-            `;
-            grid.appendChild(card);
-          });
-        } catch (err) {
-          console.error("Media preview load error:", err);
-          grid.innerHTML = `<div class="announcement-slider-empty">Failed to load community media.</div>`;
-        }
-      }
-
-async function loadAnnouncementHighlight() {
-  try {
-    const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-    const data = await res.json();
-
-    if (!data.success) return;
-
-    const item = data.featured || data.latest;
-    if (!item) return;
-
-    const card = document.getElementById("announcementHighlightCard");
-    const title = document.getElementById("highlightTitle");
-    const summary = document.getElementById("highlightSummary");
-    const category = document.getElementById("highlightCategory");
-    const img = document.getElementById("highlightImage");
-
-    if (!card || !title || !summary || !category || !img) return;
-
-    title.textContent = item.Title || "";
-    summary.textContent = item.Summary || "";
-    category.textContent = item.Category || "";
-
-    if (item.ImageURL) {
-      img.src = item.ImageURL;
-      img.style.display = "block";
-    } else {
-      img.style.display = "none";
     }
 
-    card.classList.remove("hidden");
-  } catch (err) {
-    console.error("Highlight load error:", err);
-  }
-}
-      
-loadAnnouncements();
-loadAnnouncementHighlight();
-loadAllianceUploads();
-loadMediaPreview();
-     });
-  </script>
+    async function loadAnnouncementHighlight() {
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+        const data = await res.json();
+
+        if (!data.success) return;
+
+        const item = data.featured || data.latest;
+        if (!item) return;
+
+        const card = document.getElementById("announcementHighlightCard");
+        const title = document.getElementById("highlightTitle");
+        const summary = document.getElementById("highlightSummary");
+        const category = document.getElementById("highlightCategory");
+        const img = document.getElementById("highlightImage");
+        const imageWrap = document.querySelector(".highlight-image-wrap");
+
+        if (!card || !title || !summary || !category || !img) return;
+
+        title.textContent = item.Title || "";
+        summary.textContent = item.Summary || "";
+        category.textContent = item.Category || "";
+
+        if (item.ImageURL && String(item.ImageURL).trim() !== "") {
+          img.src = item.ImageURL;
+          img.style.display = "block";
+
+          img.onerror = function () {
+            img.removeAttribute("src");
+            img.style.display = "none";
+            if (imageWrap) imageWrap.style.display = "none";
+          };
+        } else {
+          img.removeAttribute("src");
+          img.style.display = "none";
+          if (imageWrap) imageWrap.style.display = "none";
+        }
+
+        card.classList.remove("hidden");
+      } catch (err) {
+        console.error("Highlight load error:", err);
+      }
+    }
+
+    loadAnnouncements();
+    loadAnnouncementHighlight();
+    loadAllianceUploads();
+    loadMediaPreview();
+  });
+</script>
 </body>
 </html>
