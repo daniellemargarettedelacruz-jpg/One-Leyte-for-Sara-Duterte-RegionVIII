@@ -129,11 +129,7 @@
       <div id="homepageAnnouncementsWrap" class="homepage-announcements-wrap">
         <div class="homepage-empty-state">Loading announcements...</div>
       </div>
-
-      <div class="homepage-section-action">
-        <a href="announcements.html" class="btn secondary">View All Announcements</a>
-      </div>
-    </div>
+      
   </section>
   
   <!-- SECTORAL REPRESENTATION -->
@@ -629,7 +625,7 @@
     if (!grid) return;
 
     try {
-      const res = await fetch(`${WEB_APP_URL}?action=alliances`);
+      const res = await fetch(`${WEB_APP_URL}?action=alliancesconst res = await fetch(`${WEB_APP_URL}?action=alliance`);`);
       const data = await res.json();
       const items = data.items || [];
 
