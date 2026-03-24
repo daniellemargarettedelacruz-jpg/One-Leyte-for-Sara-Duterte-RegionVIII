@@ -241,23 +241,26 @@ img{
   color:#4f5d54;
 }
 
-@media (max-width: 768px) {
-  .community-mini-grid {
-    display: grid !important;
-
-   .community-mini-grid{
-  grid-template-columns:1fr;
+.community-mini-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
   gap:18px;
-  justify-items:center;
-}
-    
-.community-mini-card{
-  width:100%;
-  max-width:320px;
-  min-height:auto;
-  padding:26px 20px 24px;
+  margin:26px auto 0;
+  max-width:980px;
+  align-items:stretch;
 }
 
+.community-mini-card{
+  display:block;
+  background:#ffffff;
+  border-radius:18px;
+  padding:22px;
+  text-decoration:none;
+  color:var(--green-deep);
+  box-shadow:var(--card-shadow);
+  transition:all 0.25s ease;
+  text-align:center;
+}
 
 .community-mini-card:hover{
   transform:translateY(-6px);
@@ -265,20 +268,27 @@ img{
 }
 
 .community-mini-card h3{
-  font-size:1.9rem;
-  line-height:1.28;
+  margin-bottom:8px;
+  color:var(--green-deep);
+  font-size:1.08rem;
 }
 
 .community-mini-card p{
-  font-size:1.05rem;
-  line-height:1.7;
+  color:#4f5b54;
+  font-size:14px;
+  line-height:1.6;
 }
 
 .mini-icon{
   width:56px;
   height:56px;
+  margin:0 auto 12px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-size:22px;
-  margin:0 auto 14px;
+  color:#fff;
 }
 
 .community-mini-card.announcements .mini-icon{
@@ -303,7 +313,6 @@ img{
   font-weight:600;
 }
 
-    
 /* HOMEPAGE CONTENT SECTIONS */
 .homepage-announcements-section,
 .homepage-freedom-wall-section,
@@ -984,4 +993,3 @@ img{
     font-size:15px;
   }
 }
-
