@@ -1196,3 +1196,17 @@ img{
     max-width: 220px;
   }
 }
+
+/* ALIGN ACTION BUTTONS WITH VERIFY BUTTON */
+.verify-actions {
+  margin-top: 26px;
+  display: flex;
+  justify-content: flex-start; /* 👈 LEFT ALIGN */
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.verify-actions .btn {
+  min-width: 150px;
+  text-align: center;
+}
