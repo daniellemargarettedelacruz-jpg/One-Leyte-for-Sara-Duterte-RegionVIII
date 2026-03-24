@@ -5,6 +5,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Member Verification - One Leyte for Sara Duterte Region VIII</title>
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .verify-page .container.narrow.card {
+      max-width: 760px;
+    }
+
+    .member-box {
+      margin-bottom: 18px;
+    }
+
+    .verify-form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .verify-form input {
+      width: 100%;
+      max-width: 420px;
+      padding: 14px 16px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .verify-form #verifyBtn {
+      border: none;
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .verify-result {
+      margin-top: 18px;
+    }
+
+    .verify-note {
+      margin-top: 24px;
+    }
+
+    .verify-actions {
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .verify-actions .btn {
+      min-width: 150px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .verify-form {
+        align-items: center;
+      }
+
+      .verify-form input {
+        max-width: 100%;
+      }
+
+      .verify-form #verifyBtn {
+        width: 100%;
+        max-width: 220px;
+      }
+
+      .verify-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .verify-actions .btn {
+        width: 100%;
+        max-width: 220px;
+      }
+    }
+  </style>
 </head>
 <body>
   <section class="verify-page">
@@ -20,35 +100,31 @@
         <p><strong>Member ID:</strong> <span id="memberIdDisplay">No Member ID Found</span></p>
       </div>
 
-      <div style="margin-top:18px;">
+      <div class="verify-form">
         <input
           type="text"
           id="memberIdInput"
           placeholder="Enter Member ID"
-          style="width:100%;max-width:420px;padding:12px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px;"
         />
-      </div>
 
-      <div style="margin-top:16px;">
         <button
           type="button"
           id="verifyBtn"
           class="btn secondary"
-          style="border:none;cursor:pointer;"
         >
           Verify Member
         </button>
       </div>
 
-      <div id="verifyResult" style="margin-top:18px;"></div>
+      <div id="verifyResult" class="verify-result"></div>
 
-      <p class="note">
+      <p class="note verify-note">
         If this page was opened through a valid QR code, the Member ID above
         corresponds to a registered record in the One Leyte for Sara Duterte
         Region VIII membership system.
       </p>
 
-      <div class="cta-group">
+      <div class="verify-actions">
         <a class="btn secondary" href="claim-id.html">Claim My ID</a>
         <a class="btn secondary" href="index.html">Back to Home</a>
       </div>
