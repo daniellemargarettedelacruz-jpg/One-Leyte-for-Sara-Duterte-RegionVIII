@@ -1210,3 +1210,17 @@ img{
   min-width: 150px;
   text-align: center;
 }
+
+.verify-form {
+  align-items: flex-start;
+}
+
+.verify-actions {
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .verify-actions {
+    justify-content: center; /* mobile = center */
+  }
+}
