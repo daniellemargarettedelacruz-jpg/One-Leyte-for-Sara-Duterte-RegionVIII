@@ -241,21 +241,23 @@ img{
   color:#4f5d54;
 }
 
-{@media (max-width: 768px) {
+@media (max-width: 768px) {
   .community-mini-grid {
     display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 18px !important;
-    justify-items: center !important;
-  }
 
-  .community-mini-card {
-    width: 100% !important;
-    max-width: 320px !important;
-    min-height: auto !important;
-    padding: 26px 20px 24px !important;
-  }
+   .community-mini-grid{
+  grid-template-columns:1fr;
+  gap:18px;
+  justify-items:center;
 }
+    
+.community-mini-card{
+  width:100%;
+  max-width:320px;
+  min-height:auto;
+  padding:26px 20px 24px;
+}
+
 
 .community-mini-card:hover{
   transform:translateY(-6px);
@@ -263,27 +265,20 @@ img{
 }
 
 .community-mini-card h3{
-  margin-bottom:8px;
-  color:var(--green-deep);
-  font-size:1.08rem;
+  font-size:1.9rem;
+  line-height:1.28;
 }
 
 .community-mini-card p{
-  color:#4f5b54;
-  font-size:14px;
-  line-height:1.6;
+  font-size:1.05rem;
+  line-height:1.7;
 }
 
 .mini-icon{
   width:56px;
   height:56px;
-  margin:0 auto 12px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   font-size:22px;
-  color:#fff;
+  margin:0 auto 14px;
 }
 
 .community-mini-card.announcements .mini-icon{
@@ -308,6 +303,7 @@ img{
   font-weight:600;
 }
 
+    
 /* HOMEPAGE CONTENT SECTIONS */
 .homepage-announcements-section,
 .homepage-freedom-wall-section,
