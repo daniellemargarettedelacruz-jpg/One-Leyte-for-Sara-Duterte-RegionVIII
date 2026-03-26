@@ -462,142 +462,97 @@ img{
   line-height:1.6;
 }
 
-/* HOMEPAGE ALLIANCES */
-.homepage-alliances-section{
-  padding:54px 20px;
-  background:#f7f8f6;
-  width:100%;
-}
-
-.homepage-alliances-section .container{
-  margin-left:auto;
-  margin-right:auto;
-}
-
-.homepage-alliances-board-wrap{
-  display:flex;
-  justify-content:center;
-}
+/* =========================================
+   HOMEPAGE ALLIANCES
+   7 PER ROW + MAX SIZE + FREESTYLE LOOK
+========================================= */
 
 .homepage-alliances-board{
   width:100%;
-  max-width:1080px;
-  margin:0 auto;
+  max-width:1120px;
   background:#ffffff;
   border:3px solid #102118;
   border-radius:18px;
-  padding:22px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.08);
+  padding:18px;
+  box-shadow:0 6px 18px rgba(16,33,24,0.08);
 }
 
-.homepage-alliances-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
-  gap:16px;
-  align-items:stretch;
-}
-
-.homepage-alliance-card{
-  background:#ffffff;
+.homepage-alliances-board-inner{
   border:1.5px solid #102118;
   border-radius:14px;
-  padding:12px 10px;
+  padding:18px;
+  background:#fbfbf8;
+}
+
+/* 🔥 EXACTLY 7 LOGOS PER ROW */
+.homepage-alliances-grid{
+  display:grid;
+  grid-template-columns:repeat(7, 1fr); /* 👈 LOCK TO 7 */
+  gap:14px;
+  align-items:center;
+  justify-items:center;
+}
+
+/* CLEAN ITEM */
+.homepage-alliance-card{
+  background:transparent;
+  border:none;
+  padding:6px;
   text-align:center;
-  min-height:170px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
-  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  box-shadow:none;
   width:100%;
 }
 
-.homepage-alliance-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 16px rgba(16,33,24,0.08);
-  border-color:#0a6b3f;
-}
-
+/* CENTER IMAGE */
 .homepage-alliance-image-wrap{
-  height:90px;
-  background:#ffffff;
-  border-radius:10px;
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
-  margin-bottom:10px;
+  height:auto;
 }
 
+/* 🔥 MAX SIZE ONLY (FREESTYLE EFFECT) */
 .homepage-alliance-image-wrap img{
-  max-width:100%;
-  max-height:82px;
   width:auto;
   height:auto;
+
+  max-width:120px;   /* 👈 CONTROL SIZE */
+  max-height:70px;   /* 👈 CONTROL SIZE */
+
   object-fit:contain;
-  object-position:center;
 }
 
+/* OPTIONAL TEXT (SMALL) */
 .homepage-alliance-name{
-  font-weight:700;
-  color:var(--green-deep);
-  margin-bottom:4px;
-  font-size:0.96rem;
-  line-height:1.35;
+  font-size:0.75rem;
+  font-weight:600;
+  color:#102118;
+  margin-top:4px;
 }
 
 .homepage-alliance-location{
-  font-size:12px;
-  color:#617066;
-  line-height:1.4;
+  font-size:10px;
+  color:#667066;
 }
 
-.homepage-alliances-grid .homepage-empty-state{
-  grid-column:1 / -1;
-  background:#fcfcfa;
-  border:1.5px dashed #b8c0ba;
-  border-radius:14px;
-  padding:24px;
-  text-align:center;
-  color:var(--muted);
-  box-shadow:none;
+/* MOBILE RESPONSIVE */
+@media (max-width:1024px){
+  .homepage-alliances-grid{
+    grid-template-columns:repeat(5, 1fr);
+  }
 }
 
 @media (max-width:768px){
   .homepage-alliances-grid{
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-    gap:12px;
-  }
-
-  .homepage-alliance-card{
-    min-height:155px;
-    padding:10px 8px;
-  }
-
-  .homepage-alliance-image-wrap{
-    height:76px;
-  }
-
-  .homepage-alliance-image-wrap img{
-    max-height:68px;
+    grid-template-columns:repeat(3, 1fr);
   }
 }
 
-@media (max-width:640px){
-  .homepage-alliances-board{
-    padding:16px;
-    border-radius:14px;
-  }
-
-  .homepage-alliance-name{
-    font-size:0.88rem;
-  }
-
-  .homepage-alliance-location{
-    font-size:11px;
+@media (max-width:480px){
+  .homepage-alliances-grid{
+    grid-template-columns:repeat(2, 1fr);
   }
 }
-
-
 
 
 /* SECTORAL */
