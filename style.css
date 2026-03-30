@@ -1151,3 +1151,75 @@ img{
     grid-template-columns:1fr;
   }
 }
+
+/* PURPOSE + STORY + EASTERN VISAYAS UNITED */
+.purpose-story-section{
+  padding:52px 20px;
+  background:#f7f5ef;
+}
+
+.purpose-story-grid{
+  max-width:1100px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:0.95fr 1.05fr;
+  gap:22px;
+  align-items:start;
+}
+
+.purpose-story-left{
+  display:grid;
+  gap:22px;
+}
+
+.purpose-story-card{
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.08);
+}
+
+.purpose-card{
+  background:#ffffff;
+  color:var(--text);
+}
+
+.unity-card{
+  background:linear-gradient(180deg, #183325 0%, #102118 100%);
+  color:#edf2ee;
+}
+
+.story-card{
+  background:#ffffff;
+  color:var(--text);
+  height:100%;
+}
+
+.purpose-story-card h2{
+  margin:0 0 14px;
+  font-size:1.7rem;
+}
+
+.purpose-card h2,
+.story-card h2{
+  color:var(--green-deep);
+}
+
+.unity-card h2{
+  color:var(--gold);
+}
+
+.purpose-story-card p{
+  margin:0 0 12px;
+  line-height:1.7;
+  font-size:0.96rem;
+}
+
+.unity-card p{
+  color:#d8ddd7;
+}
+
+@media (max-width: 900px){
+  .purpose-story-grid{
+    grid-template-columns:1fr;
+  }
+}
