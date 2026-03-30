@@ -1,1 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media Gallery | One Leyte</title>
+  <link rel="stylesheet" href="style.css" />
 
+  <style>
+    .gallery-hero{
+      background: linear-gradient(rgba(8,17,12,0.82), rgba(8,17,12,0.72)),
+                  url("assets/images/banner-main.jpg") center center / cover no-repeat;
+      color:#fff;
+      text-align:center;
+      padding:80px 20px 60px;
+    }
+
+    .gallery-hero h1{
+      font-size:42px;
+      margin-bottom:12px;
+    }
+
+    .gallery-hero p{
+      max-width:760px;
+      margin:0 auto;
+      color:#e7ece8;
+      line-height:1.7;
+    }
+
+    .gallery-wrap{
+      background:#eef1ed;
+      padding:50px 20px 70px;
+    }
+
+    .gallery-container{
+      max-width:1150px;
+      margin:0 auto;
+    }
+
+    .gallery-status{
+      text-align:center;
+      color:#555;
+      margin-bottom:20px;
+      font-weight:600;
+    }
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:22px;
+    }
+
+    .gallery-card{
+      background:#fff;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      border:1px solid rgba(10,107,63,0.08);
+    }
+
+    .gallery-media{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:6px;
+      padding:12px;
+      background:#f5f7f5;
+    }
+
+    .gallery-media.single{
+      grid-template-columns:1fr;
+    }
+
+    .gallery-thumb{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:10px;
+      background:#dde5df;
+      display:block;
+      cursor:pointer;
+    }
+
+    .gallery-body{
+      padding:18px;
+    }
+
+    .gallery-title{
+      font-size:20px;
+      color:#0a6b3f;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .gallery-meta{
+      font-size:13px;
+      color:#666;
+      margin-bottom:10px;
+    }
+
+    .gallery-caption{
+      color:#333;
+      line-height:1.7;
+      white-space:pre-wrap;
+    }
+
+    .empty-state{
+      text-align:center;
+      color:#666;
+      background:#fff;
+      border-radius:16px;
+      padding:40px 20px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.05);
+    }
+
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    .lightbox.open{
+      display:flex;
+    }
+
+    .lightbox img,
+    .lightbox video{
+      max-width:95vw;
+      max-height:90vh;
+      border-radius:12px;
+      background:#000;
+    }
+
+    .lightbox-close{
+      position:absolute;
+      top:18px;
+      right:18px;
+      background:#fff;
+      color:#111;
+      border:none;
+      border-radius:999px;
+      width:42px;
+      height:42px;
+      font-size:20px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    @media (max-width: 640px){
+      .gallery-hero h1{
+        font-size:32px;
+      }
+
+      .gallery-media{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .gallery-thumb{
+        height:140px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="gallery-hero">
+    <h1>One Leyte in Action</h1>
+    <p>
+      A visual gallery of moments, activities, updates, and movement highlights shared through the platform.
+    </p>
+  </section>
+
+  <section class="gallery-wrap">
+    <div class="gallery-container">
+      <div id="galleryStatus" class="gallery-status">Loading gallery...</div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </div>
+  </section>
+
+  <div id="lightbox" class="lightbox">
+    <button id="lightboxClose" class="lightbox-close">&times;</button>
+    <div id="lightboxContent"></div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
+    const GALLERY_API = WEB_APP_URL + "?action=mediagallery";
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return String(value);
+      return date.toLocaleString();
+    }
+
+    function parsePipeList(value) {
+      return String(value || "")
+        .split("|")
+        .map(v => v.trim())
+        .filter(Boolean);
+    }
+
+    function buildMediaHTML(urls, types) {
+      if (!urls.length) return "";
+
+      const mediaClass = urls.length === 1 ? "gallery-media single" : "gallery-media";
+
+      return `
+        <div class="${mediaClass}">
+          ${urls.slice(0, 4).map((url, index) => {
+            const type = (types[index] || "").toLowerCase();
+            const safeUrl = escapeHtml(url);
+
+            if (type.includes("video")) {
+              return `
+                <video class="gallery-thumb" controls onclick="event.stopPropagation()">
+                  <source src="${safeUrl}">
+                </video>
+              `;
+            }
+
+            return `<img class="gallery-thumb" src="${safeUrl}" alt="Gallery media" onclick="openLightboxImage('${safeUrl}')">`;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function renderCard(item) {
+      const title = item.Title || item.title || "Gallery Update";
+      const caption = item.Caption || item.caption || "";
+      const fullName = item.FullName || item.fullName || "Admin";
+      const timestamp = item.Timestamp || item.timestamp || "";
+      const mediaUrls = parsePipeList(item.MediaURLs || item.mediaUrls || "");
+      const mediaTypes = parsePipeList(item.MediaTypes || item.mediaTypes || "");
+
+      return `
+        <article class="gallery-card">
+          ${buildMediaHTML(mediaUrls, mediaTypes)}
+          <div class="gallery-body">
+            <div class="gallery-title">${escapeHtml(title)}</div>
+            <div class="gallery-meta">${escapeHtml(fullName)} ${timestamp ? "• " + escapeHtml(formatDate(timestamp)) : ""}</div>
+            <div class="gallery-caption">${escapeHtml(caption)}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadGallery() {
+      const status = document.getElementById("galleryStatus");
+      const grid = document.getElementById("galleryGrid");
+
+      status.textContent = "Loading gallery...";
+      grid.innerHTML = "";
+
+      try {
+        const res = await fetch(GALLERY_API);
+        const data = await res.json();
+
+        if (!data.success) {
+          status.textContent = data.message || "Failed to load gallery.";
+          grid.innerHTML = `<div class="empty-state">Unable to load gallery right now.</div>`;
+          return;
+        }
+
+        const items = data.items || [];
+
+        if (!items.length) {
+          status.textContent = "No gallery posts yet.";
+          grid.innerHTML = `<div class="empty-state">No gallery posts yet.</div>`;
+          return;
+        }
+
+        status.textContent = "Gallery loaded.";
+        grid.innerHTML = items.map(renderCard).join("");
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Error loading gallery.";
+        grid.innerHTML = `<div class="empty-state">Unable to load gallery right now.</div>`;
+      }
+    }
+
+    function openLightboxImage(url) {
+      const lightbox = document.getElementById("lightbox");
+      const content = document.getElementById("lightboxContent");
+      content.innerHTML = `<img src="${url}" alt="Preview">`;
+      lightbox.classList.add("open");
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById("lightbox");
+      const content = document.getElementById("lightboxContent");
+      lightbox.classList.remove("open");
+      content.innerHTML = "";
+    }
+
+    document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox").addEventListener("click", function(e) {
+      if (e.target.id === "lightbox") closeLightbox();
+    });
+
+    loadGallery();
+  </script>
+
+</body>
+</html>
