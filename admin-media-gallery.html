@@ -71,8 +71,7 @@
     }
 
     .form-group input,
-    .form-group textarea,
-    .form-group select{
+    .form-group textarea{
       width:100%;
       box-sizing:border-box;
       padding:12px 14px;
@@ -95,10 +94,31 @@
       line-height:1.6;
     }
 
+    .section-note{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      background:#fff4f4;
+      border:1px solid #f1caca;
+      color:#5a1f1f;
+      padding:12px 16px;
+      border-radius:10px;
+      margin:10px 0 20px;
+      font-size:0.92rem;
+    }
+
+    .section-note i{
+      color:#c0392b;
+      margin-top:2px;
+    }
+
+    .section-note p{
+      margin:0;
+      color:inherit;
+    }
+
     .media-row{
-      display:grid;
-      grid-template-columns:2fr 1fr;
-      gap:12px;
+      display:block;
       margin-bottom:12px;
     }
 
@@ -185,10 +205,6 @@
       .admin-hero h1{
         font-size:30px;
       }
-
-      .media-row{
-        grid-template-columns:1fr;
-      }
     }
   </style>
 </head>
@@ -197,7 +213,7 @@
   <section class="admin-hero">
     <h1>Admin Media Gallery</h1>
     <p>
-      Create gallery posts for One Leyte in Action without touching the Freedom Wall system.
+      Upload gallery posts directly from your device for One Leyte in Action.
     </p>
   </section>
 
@@ -205,9 +221,16 @@
     <div class="admin-card">
       <h2>Create Gallery Post</h2>
       <p>
-        Version 1 uses media links so the gallery system is already usable now.
-        Later we can upgrade this into a true uploader.
+        Upload photos and one short video without needing links.
       </p>
+
+      <div class="section-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <p>
+          Admin Posting Only: Upload up to 5 photos and 1 short video directly from your device.
+          For best results, keep the video under 3 minutes and below 25MB.
+        </p>
+      </div>
 
       <div class="form-group">
         <label for="adminPassword">Admin Password</label>
@@ -230,48 +253,27 @@
       </div>
 
       <div class="form-group">
-        <label>Media Items</label>
+        <label>Upload Photos</label>
 
-        <div class="media-row">
-          <input type="text" class="media-url" placeholder="Paste image or video URL">
-          <select class="media-type">
-            <option value="image/jpeg">Image</option>
-            <option value="video/mp4">Video</option>
-          </select>
-        </div>
-
-        <div class="media-row">
-          <input type="text" class="media-url" placeholder="Paste image or video URL">
-          <select class="media-type">
-            <option value="image/jpeg">Image</option>
-            <option value="video/mp4">Video</option>
-          </select>
-        </div>
-
-        <div class="media-row">
-          <input type="text" class="media-url" placeholder="Paste image or video URL">
-          <select class="media-type">
-            <option value="image/jpeg">Image</option>
-            <option value="video/mp4">Video</option>
-          </select>
-        </div>
-
-        <div class="media-row">
-          <input type="text" class="media-url" placeholder="Paste image or video URL">
-          <select class="media-type">
-            <option value="image/jpeg">Image</option>
-            <option value="video/mp4">Video</option>
-          </select>
-        </div>
+        <div class="media-row"><input type="file" class="photo-file" accept="image/*"></div>
+        <div class="media-row"><input type="file" class="photo-file" accept="image/*"></div>
+        <div class="media-row"><input type="file" class="photo-file" accept="image/*"></div>
+        <div class="media-row"><input type="file" class="photo-file" accept="image/*"></div>
+        <div class="media-row"><input type="file" class="photo-file" accept="image/*"></div>
 
         <div class="field-note">
-          Leave unused rows blank. First media URL will also be used as thumbnail if thumbnail is empty.
+          Upload up to 5 photos. The first uploaded photo will be used as the thumbnail.
         </div>
       </div>
 
       <div class="form-group">
-        <label for="thumbnailUrl">Thumbnail URL (optional)</label>
-        <input type="text" id="thumbnailUrl" placeholder="Optional separate thumbnail URL">
+        <label>Upload Video (optional)</label>
+        <div class="media-row">
+          <input type="file" id="videoFile" accept="video/*">
+        </div>
+        <div class="field-note">
+          Optional: Upload 1 short video only. Maximum file size: 25MB.
+        </div>
       </div>
 
       <div class="btn-row">
@@ -280,31 +282,14 @@
       </div>
 
       <div id="statusBox" class="status-box"></div>
-
       <div id="mediaPreview" class="media-preview"></div>
     </div>
   </section>
 
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
-
-    function getMediaRows() {
-      const urlEls = document.querySelectorAll(".media-url");
-      const typeEls = document.querySelectorAll(".media-type");
-
-      const items = [];
-
-      for (let i = 0; i < urlEls.length; i++) {
-        const url = urlEls[i].value.trim();
-        const type = typeEls[i].value.trim();
-
-        if (url) {
-          items.push({ url, type });
-        }
-      }
-
-      return items;
-    }
+    const VIDEO_MAX_MB = 25;
+    const VIDEO_MAX_BYTES = VIDEO_MAX_MB * 1024 * 1024;
 
     function setStatus(message, isGood) {
       const box = document.getElementById("statusBox");
@@ -312,37 +297,93 @@
       box.className = "status-box " + (isGood ? "status-good" : "status-bad");
     }
 
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function getPhotoFiles() {
+      const inputs = document.querySelectorAll(".photo-file");
+      const files = [];
+
+      inputs.forEach(input => {
+        if (input.files && input.files[0]) {
+          files.push(input.files[0]);
+        }
+      });
+
+      return files;
+    }
+
+    function getVideoFile() {
+      const input = document.getElementById("videoFile");
+      return (input.files && input.files[0]) ? input.files[0] : null;
+    }
+
+    function validateVideoFile(videoFile) {
+      if (!videoFile) return { ok: true };
+
+      if (videoFile.size > VIDEO_MAX_BYTES) {
+        return {
+          ok: false,
+          message: "Video is too large. Maximum allowed size is 25MB."
+        };
+      }
+
+      return { ok: true };
+    }
+
     function previewMedia() {
       const preview = document.getElementById("mediaPreview");
-      const items = getMediaRows();
+      const photoFiles = getPhotoFiles();
+      const videoFile = getVideoFile();
 
       preview.innerHTML = "";
 
-      if (!items.length) {
-        setStatus("Please add at least one media URL to preview.", false);
+      if (!photoFiles.length && !videoFile) {
+        setStatus("Please select at least one photo or one video to preview.", false);
         return;
       }
 
-      items.forEach(item => {
+      photoFiles.forEach(file => {
         const div = document.createElement("div");
         div.className = "media-preview-item";
 
-        if (item.type.toLowerCase().includes("video")) {
-          div.innerHTML = `
-            <video controls>
-              <source src="${item.url}">
-            </video>
-            <div class="media-preview-label">${item.url}</div>
-          `;
-        } else {
-          div.innerHTML = `
-            <img src="${item.url}" alt="Preview">
-            <div class="media-preview-label">${item.url}</div>
-          `;
-        }
+        const objectUrl = URL.createObjectURL(file);
+
+        div.innerHTML = `
+          <img src="${objectUrl}" alt="Preview">
+          <div class="media-preview-label">${file.name}</div>
+        `;
 
         preview.appendChild(div);
       });
+
+      if (videoFile) {
+        const check = validateVideoFile(videoFile);
+        if (!check.ok) {
+          setStatus(check.message, false);
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "media-preview-item";
+
+        const objectUrl = URL.createObjectURL(videoFile);
+
+        div.innerHTML = `
+          <video controls>
+            <source src="${objectUrl}" type="${videoFile.type || 'video/mp4'}">
+          </video>
+          <div class="media-preview-label">${videoFile.name}</div>
+        `;
+
+        preview.appendChild(div);
+      }
 
       setStatus("Preview loaded.", true);
     }
@@ -352,9 +393,9 @@
       const fullName = document.getElementById("fullName").value.trim() || "Admin";
       const title = document.getElementById("title").value.trim();
       const caption = document.getElementById("caption").value.trim();
-      const thumbnailUrlInput = document.getElementById("thumbnailUrl").value.trim();
 
-      const items = getMediaRows();
+      const photoFiles = getPhotoFiles();
+      const videoFile = getVideoFile();
       const submitBtn = document.getElementById("submitBtn");
 
       if (!adminPassword) {
@@ -372,20 +413,44 @@
         return;
       }
 
-      if (!items.length) {
-        setStatus("Please add at least one media URL.", false);
+      if (!photoFiles.length && !videoFile) {
+        setStatus("Please upload at least one photo or one video.", false);
         return;
       }
 
-      const mediaUrls = items.map(item => item.url).join("|");
-      const mediaTypes = items.map(item => item.type).join("|");
-      const thumbnailUrl = thumbnailUrlInput || items[0].url;
+      const videoCheck = validateVideoFile(videoFile);
+      if (!videoCheck.ok) {
+        setStatus(videoCheck.message, false);
+        return;
+      }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = "Publishing...";
-      setStatus("Publishing gallery post...", true);
+      submitBtn.textContent = "Uploading...";
+      setStatus("Uploading gallery post...", true);
 
       try {
+        const preparedPhotos = [];
+
+        for (const file of photoFiles) {
+          const base64 = await readFileAsBase64(file);
+          preparedPhotos.push({
+            fileName: file.name,
+            mimeType: file.type || "image/jpeg",
+            data: base64
+          });
+        }
+
+        let preparedVideo = null;
+
+        if (videoFile) {
+          const videoBase64 = await readFileAsBase64(videoFile);
+          preparedVideo = {
+            fileName: videoFile.name,
+            mimeType: videoFile.type || "video/mp4",
+            data: videoBase64
+          };
+        }
+
         const response = await fetch(WEB_APP_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -395,9 +460,8 @@
             fullName: fullName,
             title: title,
             caption: caption,
-            mediaUrls: mediaUrls,
-            mediaTypes: mediaTypes,
-            thumbnailUrl: thumbnailUrl,
+            photos: preparedPhotos,
+            video: preparedVideo,
             status: "Published"
           })
         });
@@ -405,19 +469,18 @@
         const result = await response.json();
 
         if (result.success) {
-          setStatus("Gallery post published successfully.", true);
+          setStatus("Gallery post uploaded and published successfully.", true);
           document.getElementById("title").value = "";
           document.getElementById("caption").value = "";
-          document.getElementById("thumbnailUrl").value = "";
-          document.querySelectorAll(".media-url").forEach(el => el.value = "");
-          document.querySelectorAll(".media-type").forEach(el => el.value = "image/jpeg");
+          document.querySelectorAll(".photo-file").forEach(el => el.value = "");
+          document.getElementById("videoFile").value = "";
           document.getElementById("mediaPreview").innerHTML = "";
         } else {
           setStatus(result.message || "Failed to publish gallery post.", false);
         }
       } catch (err) {
         console.error(err);
-        setStatus("Error publishing gallery post.", false);
+        setStatus("Error uploading gallery post.", false);
       }
 
       submitBtn.disabled = false;
