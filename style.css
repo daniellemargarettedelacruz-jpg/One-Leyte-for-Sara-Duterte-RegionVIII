@@ -630,12 +630,13 @@ img{
   line-height:1.7;
 }
 
-/* PURPOSE + STORY SECTION */
+/* PURPOSE + STORY (LIGHT BALANCED SECTION) */
 .purpose-story-section{
-  background:#061c13;
-  color:#ffffff;
+  background:#f7f5ef; /* cream / light */
+  color:#1a1a1a;
   padding:70px 20px;
-  border-top:22px solid #f7f5ef;
+  border-top:18px solid #061c13; /* dark separator above */
+  border-bottom:18px solid #061c13; /* dark separator below */
 }
 
 .purpose-story-grid{
@@ -643,7 +644,7 @@ img{
   margin:0 auto;
   display:grid;
   grid-template-columns:0.95fr 1.05fr;
-  gap:22px;
+  gap:24px;
   align-items:start;
 }
 
@@ -652,35 +653,44 @@ img{
   gap:22px;
 }
 
+/* CARDS */
 .purpose-story-card{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(212,175,55,0.15);
+  background:#ffffff;
   border-radius:18px;
-  padding:22px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.18);
-  color:#ffffff;
+  padding:24px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.08);
 }
 
-.purpose-card,
-.unity-card,
-.story-card{
-  background:rgba(255,255,255,0.05);
-  color:#ffffff;
-}
-
+/* HEADINGS */
 .purpose-story-card h2{
   margin:0 0 14px;
-  font-size:1.7rem;
-  color:var(--gold);
+  font-size:1.6rem;
+  color:#0f2e22; /* deep green */
 }
 
+/* TEXT */
 .purpose-story-card p{
   margin:0 0 12px;
   line-height:1.7;
   font-size:0.96rem;
+  color:#333;
+}
+
+/* SPECIAL: EASTERN VISAYAS CARD */
+.unity-card{
+  background:linear-gradient(180deg, #183325 0%, #102118 100%);
+  color:#edf2ee;
+}
+
+.unity-card h2{
+  color:#d4af37;
+}
+
+.unity-card p{
   color:#d7ddd8;
 }
 
+/* MOBILE */
 @media (max-width:900px){
   .purpose-story-grid{
     grid-template-columns:1fr;
