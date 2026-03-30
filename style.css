@@ -379,7 +379,7 @@ img{
     border-radius:14px;
   }
 }
-/* HOMEPAGE ANNOUNCEMENT */
+
 /* =========================
    HOMEPAGE ANNOUNCEMENTS
 ========================= */
@@ -1101,4 +1101,53 @@ img{
 /* Fix long text overflow */
 .homepage-freedom-content{
   word-break:break-word;
+}
+
+/* =========================
+   WHY JOIN - CORE PRINCIPLES GRID
+========================= */
+
+.why-principles-wrap{
+  margin-top:30px;
+}
+
+.why-principles-title{
+  color:var(--gold);
+  margin-bottom:16px;
+  font-size:1.3rem;
+}
+
+.why-principles-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  max-width:980px;
+  margin:0 auto;
+}
+
+/* Make principle cards same style as why-card but smaller */
+.why-principles-grid .why-card{
+  padding:16px;
+  text-align:center;
+}
+
+.why-principles-grid .why-card h3{
+  font-size:0.95rem;
+  margin:0;
+}
+
+@media (max-width:768px){
+  .why-grid{
+    grid-template-columns:1fr;
+  }
+
+  .why-principles-grid{
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+
+@media (max-width:480px){
+  .why-principles-grid{
+    grid-template-columns:1fr;
+  }
 }
