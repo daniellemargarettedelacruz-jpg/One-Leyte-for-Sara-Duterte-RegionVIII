@@ -457,7 +457,7 @@
     </div>
   </section>
 
-  <!-- WHY JOIN -->
+   <!-- WHY JOIN + CORE PRINCIPLES -->
   <section class="why-join">
     <div class="container">
 
@@ -482,23 +482,18 @@
 
       </div>
 
-    </div>
-  </section>
+      <div class="why-principles-wrap">
+        <h3 class="why-principles-title">Core Principles</h3>
 
-  <!-- PRINCIPLES -->
-  <section class="principles">
-    <div class="container narrow">
-
-      <h2>Core Principles</h2>
-
-      <ul class="principles-list">
-        <li>Voluntary Participation</li>
-        <li>Ibalik ang Tapang at Malasakit</li>
-        <li>Unity and Bayanihan</li>
-        <li>Community Leadership</li>
-        <li>Service to the Nation</li>
-        <li>Protecting the Next Generation</li>
-      </ul>
+        <ul class="why-principles-grid">
+          <li>Voluntary Participation</li>
+          <li>Ibalik ang Tapang at Malasakit</li>
+          <li>Unity and Bayanihan</li>
+          <li>Community Leadership</li>
+          <li>Service to the Nation</li>
+          <li>Protecting the Next Generation</li>
+        </ul>
+      </div>
 
     </div>
   </section>
@@ -612,34 +607,60 @@ async function loadHomepageFreedomWall() {
 
     wrap.innerHTML = "";
 
-    const items = data.items || data.posts || [];
+    const items = (data.items || data.posts || []).sort((a, b) => {
+      return new Date(b.Timestamp || b.Date || 0) - new Date(a.Timestamp || a.Date || 0);
+    });
+
     if (!items.length) {
       wrap.innerHTML = `<div class="homepage-empty-state">No Freedom Wall posts yet.</div>`;
       return;
     }
 
-    items.slice(0, 3).forEach(item => {
-      const imageUrl = item.Photo1URL || item.ImageURL || "";
+    items.slice(0, 4).forEach((item) => {
+      const imageUrl =
+        item.Photo1URL ||
+        item.photo1URL ||
+        item.ImageURL ||
+        item.imageUrl ||
+        item.PhotoURL ||
+        item.photoUrl ||
+        "";
 
-      wrap.innerHTML += `
-        <div class="homepage-freedom-card">
-          <div class="homepage-freedom-image-wrap">
-            ${imageUrl ? `<img src="${imageUrl}">` : ""}
-          </div>
-          <div class="homepage-freedom-content">
-            <div class="homepage-freedom-name">${item.FullName || "Supporter"}</div>
-            <p>${item.Message || ""}</p>
-          </div>
+      const fullName =
+        item.FullName ||
+        item.fullName ||
+        item.Name ||
+        item.name ||
+        "Supporter";
+
+      const message =
+        item.Message ||
+        item.message ||
+        item.Caption ||
+        item.caption ||
+        item.PostText ||
+        item.postText ||
+        "";
+
+      const card = document.createElement("div");
+      card.className = "homepage-freedom-card";
+      card.innerHTML = `
+        <div class="homepage-freedom-image-wrap">
+          ${imageUrl ? `<img src="${imageUrl}" alt="Freedom Wall Post" onerror="this.style.display='none'">` : ""}
+        </div>
+        <div class="homepage-freedom-content">
+          <div class="homepage-freedom-name">${fullName}</div>
+          <p>${message}</p>
         </div>
       `;
+      wrap.appendChild(card);
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Homepage Freedom Wall load error:", err);
     wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
   }
 }
-
 /* ================= ALLIANCES ================= */
 async function loadHomepageAlliances() {
   const grid = document.getElementById("homepageAlliancesGrid");
@@ -651,11 +672,9 @@ async function loadHomepageAlliances() {
 
     grid.innerHTML = "";
 
-    const items = data.items || [];
-    if (!items.length) {
-      grid.innerHTML = `<div class="homepage-empty-state">No alliance logos yet.</div>`;
-      return;
-    }
+  const items = (data.items || []).sort((a, b) => {
+  return new Date(b.Timestamp || b.Date || 0) - new Date(a.Timestamp || a.Date || 0);
+});
 
     items.forEach(item => {
       grid.innerHTML += `
