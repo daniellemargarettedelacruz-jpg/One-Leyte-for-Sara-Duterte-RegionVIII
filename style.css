@@ -1153,9 +1153,9 @@ img{
 }
 
 /* PURPOSE + STORY + EASTERN VISAYAS UNITED */
-.purpose-story-section{
-  padding:52px 20px;
-  background:#f7f5ef;
+.purpose-story-section {
+  background: #061c13; /* same as your dark green */
+  color: #ffffff;
 }
 
 .purpose-story-grid{
@@ -1172,10 +1172,10 @@ img{
   gap:22px;
 }
 
-.purpose-story-card{
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.08);
+.purpose-story-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,175,55,0.15);
+  color: #ffffff;
 }
 
 .purpose-card{
