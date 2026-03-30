@@ -1068,3 +1068,37 @@ img{
     font-size:15px;
   }
 }
+
+/* =========================================
+   HOMEPAGE FREEDOM WALL POLISH
+========================================= */
+
+.homepage-freedom-wall-wrap{
+  margin-top:10px;
+}
+
+/* Better card spacing */
+.homepage-freedom-card{
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect (desktop only feel) */
+.homepage-freedom-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+}
+
+/* Cleaner image area */
+.homepage-freedom-image-wrap{
+  background:#f3f5f4;
+}
+
+/* Improve text readability */
+.homepage-freedom-content p{
+  font-size:0.92rem;
+}
+
+/* Fix long text overflow */
+.homepage-freedom-content{
+  word-break:break-word;
+}
