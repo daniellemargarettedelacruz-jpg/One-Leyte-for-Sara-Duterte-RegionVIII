@@ -522,6 +522,26 @@
     </div>
   </div>
 </section>
+
+  <!-- ONE LEYTE IN ACTION -->
+<section class="homepage-gallery-section">
+  <div class="container">
+    <div class="section-heading homepage-gallery-heading">
+      <h2>One Leyte in Action</h2>
+      <p>
+        A visual gallery of moments, activities, updates, and movement highlights shared through the platform.
+      </p>
+    </div>
+
+    <div id="homepageGalleryGrid" class="homepage-gallery-grid">
+      <div class="homepage-gallery-loading">Loading gallery...</div>
+    </div>
+
+    <div class="homepage-gallery-action">
+      <a href="media-gallery.html" class="homepage-gallery-btn">View Full Gallery</a>
+    </div>
+  </div>
+</section>
   
   <footer class="site-footer">
     <div class="site-footer-inner">
@@ -537,35 +557,34 @@
     </div>
   </footer>
 
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
 
-    <script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
+/* ================= ANNOUNCEMENTS ================= */
+async function loadHomepageAnnouncements() {
+  const wrap = document.getElementById("homepageAnnouncementsWrap");
+  if (!wrap) return;
 
-  async function loadHomepageAnnouncements() {
-    const wrap = document.getElementById("homepageAnnouncementsWrap");
-    if (!wrap) return;
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=announcements`);
+    const data = await res.json();
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=announcements`);
-      const data = await res.json();
+    wrap.innerHTML = "";
 
-      wrap.innerHTML = "";
+    const items = data.items || [];
+    if (!items.length) {
+      wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
+      return;
+    }
 
-      const items = data.items || [];
-      if (!items.length) {
-        wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
-        return;
-      }
+    const item = data.featured || data.latest || items[0];
+    const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
 
-      const item = data.featured || data.latest || items[0];
-      const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
-
-      const card = document.createElement("div");
-      card.className = `homepage-announcement-card ${hasImage ? "with-image" : "no-image"}`;
-      card.innerHTML = `
+    wrap.innerHTML = `
+      <div class="homepage-announcement-card ${hasImage ? "with-image" : "no-image"}">
         ${hasImage ? `
           <div class="homepage-announcement-image-wrap">
-            <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}" onerror="this.parentElement.style.display='none'">
+            <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}">
           </div>
         ` : ""}
         <div class="homepage-announcement-content">
@@ -574,142 +593,135 @@
           <p>${item.Summary || ""}</p>
           <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
         </div>
-      `;
-      wrap.appendChild(card);
-
-    } catch (err) {
-      console.error("Homepage announcements load error:", err);
-      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
-    }
+      </div>
+    `;
+  } catch (err) {
+    console.error(err);
+    wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
   }
+}
 
-  async function loadHomepageFreedomWall() {
-    const wrap = document.getElementById("homepageFreedomWallWrap");
-    if (!wrap) return;
+/* ================= FREEDOM WALL ================= */
+async function loadHomepageFreedomWall() {
+  const wrap = document.getElementById("homepageFreedomWallWrap");
+  if (!wrap) return;
 
-    try {
-      const res = await fetch(`${WEB_APP_URL}?action=freedomwallfeed`);
-      const data = await res.json();
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=freedomwallfeed`);
+    const data = await res.json();
 
-      wrap.innerHTML = "";
+    wrap.innerHTML = "";
 
-      const items = data.items || data.posts || [];
-      if (!items.length) {
-        wrap.innerHTML = `<div class="homepage-empty-state">No Freedom Wall posts yet.</div>`;
-        return;
-      }
+    const items = data.items || data.posts || [];
+    if (!items.length) {
+      wrap.innerHTML = `<div class="homepage-empty-state">No Freedom Wall posts yet.</div>`;
+      return;
+    }
 
-      items.slice(0, 3).forEach((item) => {
-        const imageUrl =
-          item.Photo1URL ||
-          item.photo1URL ||
-          item.ImageURL ||
-          item.imageUrl ||
-          "";
+    items.slice(0, 3).forEach(item => {
+      const imageUrl = item.Photo1URL || item.ImageURL || "";
 
-        const card = document.createElement("div");
-        card.className = "homepage-freedom-card";
-        card.innerHTML = `
+      wrap.innerHTML += `
+        <div class="homepage-freedom-card">
           <div class="homepage-freedom-image-wrap">
-            ${imageUrl ? `<img src="${imageUrl}" alt="Freedom Wall Post" onerror="this.style.display='none'">` : ""}
+            ${imageUrl ? `<img src="${imageUrl}">` : ""}
           </div>
           <div class="homepage-freedom-content">
-            <div class="homepage-freedom-name">${item.FullName || item.fullName || item.Name || "Supporter"}</div>
-            <p>${item.Message || item.Caption || item.message || item.caption || ""}</p>
+            <div class="homepage-freedom-name">${item.FullName || "Supporter"}</div>
+            <p>${item.Message || ""}</p>
           </div>
-        `;
-        wrap.appendChild(card);
-      });
+        </div>
+      `;
+    });
 
-    } catch (err) {
-      console.error("Homepage Freedom Wall load error:", err);
-      wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
-    }
+  } catch (err) {
+    console.error(err);
+    wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
   }
+}
 
- async function loadHomepageAlliances() {
+/* ================= ALLIANCES ================= */
+async function loadHomepageAlliances() {
   const grid = document.getElementById("homepageAlliancesGrid");
   if (!grid) return;
 
   try {
     const res = await fetch(`${WEB_APP_URL}?action=alliances`);
     const data = await res.json();
-    const items = data.items || [];
 
     grid.innerHTML = "";
 
+    const items = data.items || [];
     if (!items.length) {
-      grid.innerHTML = `<div class="homepage-empty-state">No alliance logos or banners available yet.</div>`;
+      grid.innerHTML = `<div class="homepage-empty-state">No alliance logos yet.</div>`;
       return;
     }
 
-    items.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "homepage-alliance-card";
-
-      card.innerHTML = `
-        <div class="homepage-alliance-image-wrap">
-          <img src="${item.fileUrl || ""}" 
-               alt="${item.allianceName || "Alliance"}"
-               onerror="this.style.display='none'">
+    items.forEach(item => {
+      grid.innerHTML += `
+        <div class="homepage-alliance-card">
+          <div class="homepage-alliance-image-wrap">
+            <img src="${item.fileUrl || ""}">
+          </div>
+          <div class="homepage-alliance-name">${item.allianceName || ""}</div>
+          <div class="homepage-alliance-location">${item.location || ""}</div>
         </div>
-        <div class="homepage-alliance-name">${item.allianceName || ""}</div>
-        <div class="homepage-alliance-location">${item.location || ""}</div>
       `;
-
-      grid.appendChild(card);
     });
 
   } catch (err) {
-    console.error("Homepage alliances load error:", err);
-    grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliance logos and banners.</div>`;
+    console.error(err);
+    grid.innerHTML = `<div class="homepage-empty-state">Failed to load alliances.</div>`;
   }
 }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const cards = document.querySelectorAll(".community-card");
-    cards.forEach((card) => {
-      const icon = card.querySelector(".magnetic-icon");
+/* ================= MEDIA GALLERY ================= */
+async function loadHomepageMediaGallery() {
+  const grid = document.getElementById("homepageGalleryGrid");
+  if (!grid) return;
 
-      card.addEventListener("mousemove", (e) => {
-        if (window.innerWidth <= 768 || !icon) return;
+  try {
+    const res = await fetch(`${WEB_APP_URL}?action=mediagallery`);
+    const data = await res.json();
 
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    if (!data.success || !data.items || !data.items.length) {
+      grid.innerHTML = `<div class="homepage-gallery-loading">No gallery posts yet.</div>`;
+      return;
+    }
 
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+    const items = data.items.slice(0, 3);
 
-        const moveX = (x - centerX) / 18;
-        const moveY = (y - centerY) / 18;
+    grid.innerHTML = items.map(item => {
+      const urls = (item.MediaURLs || "").split("|").filter(Boolean);
+      const first = urls[0] || "assets/images/oneleyte-logo.jpg";
 
-        icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-      });
+      return `
+        <div class="homepage-gallery-card">
+          <a href="media-gallery.html">
+            <img src="${first}" class="homepage-gallery-image">
+          </a>
+          <div class="homepage-gallery-content">
+            <h3>${item.Title || ""}</h3>
+            <p>${item.Caption || ""}</p>
+          </div>
+        </div>
+      `;
+    }).join("");
 
-      card.addEventListener("mouseleave", () => {
-        if (icon) icon.style.transform = "translate(0px, 0px) scale(1)";
-      });
-    });
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = `<div class="homepage-gallery-loading">Failed to load gallery.</div>`;
+  }
+}
 
-    const sectorCapsules = document.querySelectorAll(".sector-capsule");
-    sectorCapsules.forEach((capsule) => {
-      capsule.addEventListener("click", function (e) {
-        e.preventDefault();
-        const destination = this.getAttribute("href");
-        this.classList.add("sector-capsule-active");
-
-        setTimeout(() => {
-          window.location.href = destination;
-          this.classList.remove("sector-capsule-active");
-        }, 180);
-      });
-    });
-
-    loadHomepageAnnouncements();
-    loadHomepageFreedomWall();
-    loadHomepageAlliances();
-  });
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", function () {
+  loadHomepageAnnouncements();
+  loadHomepageFreedomWall();
+  loadHomepageAlliances();
+  loadHomepageMediaGallery();
+});
 </script>
+
 </body>
 </html>
