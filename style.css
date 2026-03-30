@@ -37,12 +37,10 @@ img{
   display:block;
 }
 
-.container{
-  width:100%;
-  max-width:1150px;
-  margin:0 auto;
-  padding-left:20px;
-  padding-right:20px;
+.container {
+  max-width: 1200px; /* wider than before */
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .narrow{
@@ -241,13 +239,14 @@ img{
   color:#4f5d54;
 }
 
-.community-mini-grid{
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0, 1fr));
-  gap:18px;
-  margin:26px auto 0;
-  max-width:980px;
-  align-items:stretch;
+.community-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+.community-mini-card {
+  padding: 18px; /* reduce height */
+  border-radius: 14px;
 }
 
 .community-mini-card{
@@ -317,7 +316,7 @@ img{
 .homepage-announcements-section,
 .homepage-freedom-wall-section,
 .homepage-alliances-section{
-  padding:54px 20px;
+  padding:48px 20px;
   width:100%;
 }
 
@@ -329,43 +328,76 @@ img{
   background:#f4f7f5;
 }
 
+.homepage-alliances-section{
+  background:#f7f5ef;
+}
 
 .homepage-announcements-section .container,
 .homepage-freedom-wall-section .container,
 .homepage-alliances-section .container{
+  max-width:1200px;
   margin-left:auto;
   margin-right:auto;
+  padding-left:16px;
+  padding-right:16px;
 }
 
 .homepage-section-action{
   text-align:center;
-  margin-top:24px;
+  margin-top:20px;
 }
 
 .homepage-empty-state{
   background:#ffffff;
   border-radius:16px;
-  padding:24px;
+  padding:22px 18px;
   text-align:center;
   color:var(--muted);
   box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
 
+@media (max-width: 768px){
+  .homepage-announcements-section,
+  .homepage-freedom-wall-section,
+  .homepage-alliances-section{
+    padding:38px 16px;
+  }
+
+  .homepage-announcements-section .container,
+  .homepage-freedom-wall-section .container,
+  .homepage-alliances-section .container{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .homepage-section-action{
+    margin-top:18px;
+  }
+
+  .homepage-empty-state{
+    padding:18px 14px;
+    border-radius:14px;
+  }
+}
 /* HOMEPAGE ANNOUNCEMENT */
+/* =========================
+   HOMEPAGE ANNOUNCEMENTS
+========================= */
+
 .homepage-announcements-wrap{
-  max-width:980px;
+  max-width:1100px;
   margin:0 auto;
 }
 
 .homepage-announcement-card{
   display:grid;
-  grid-template-columns:320px 1fr;
-  gap:20px;
+  grid-template-columns:300px 1fr;
+  gap:18px;
   background:#ffffff;
-  border-radius:18px;
-  padding:18px;
+  border-radius:16px;
+  padding:16px;
   box-shadow:var(--card-shadow);
-  max-width:980px;
+  max-width:1100px;
   margin:0 auto;
 }
 
@@ -374,9 +406,9 @@ img{
 }
 
 .homepage-announcement-image-wrap{
-  min-height:220px;
+  min-height:200px;
   background:#f1f3f2;
-  border-radius:14px;
+  border-radius:12px;
   overflow:hidden;
   display:flex;
   align-items:center;
@@ -386,27 +418,29 @@ img{
 .homepage-announcement-image-wrap img{
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:cover; /* 🔥 better than contain */
 }
 
+/* TEXT */
 .homepage-announcement-category{
-  font-size:13px;
+  font-size:12px;
   font-weight:700;
   color:var(--green);
-  margin-bottom:8px;
+  margin-bottom:6px;
   text-transform:uppercase;
   letter-spacing:0.4px;
 }
 
 .homepage-announcement-content h3{
-  margin:0 0 10px;
+  margin:0 0 8px;
   color:var(--green-deep);
 }
 
 .homepage-announcement-content p{
-  margin:0 0 12px;
+  margin:0 0 10px;
   color:#4f5b54;
-  line-height:1.7;
+  line-height:1.6;
+  font-size:0.95rem;
 }
 
 .homepage-inline-link{
@@ -415,24 +449,28 @@ img{
   color:var(--green);
 }
 
-/* HOMEPAGE FREEDOM WALL */
+
+/* =========================
+   HOMEPAGE FREEDOM WALL
+========================= */
+
 .homepage-freedom-wall-wrap{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-  gap:18px;
-  max-width:980px;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:16px;
+  max-width:1100px;
   margin:0 auto;
 }
 
 .homepage-freedom-card{
   background:#ffffff;
-  border-radius:16px;
+  border-radius:14px;
   overflow:hidden;
   box-shadow:var(--card-shadow);
 }
 
 .homepage-freedom-image-wrap{
-  height:180px;
+  height:170px;
   background:#eef2ef;
   display:flex;
   align-items:center;
@@ -447,84 +485,74 @@ img{
 }
 
 .homepage-freedom-content{
-  padding:14px;
+  padding:12px;
 }
 
 .homepage-freedom-name{
   font-weight:700;
-  margin-bottom:8px;
+  margin-bottom:6px;
   color:var(--green-deep);
 }
 
 .homepage-freedom-content p{
   margin:0;
   color:#4f5b54;
-  line-height:1.6;
+  line-height:1.5;
+  font-size:0.9rem;
 }
 
-/* =========================================
+
+/* =========================
    HOMEPAGE ALLIANCES
-   7 PER ROW + MAX SIZE + FREESTYLE LOOK
-========================================= */
+========================= */
 
 .homepage-alliances-board{
   width:100%;
-  max-width:1120px;
+  max-width:1100px;
   background:#ffffff;
-  border:3px solid #102118;
-  border-radius:18px;
-  padding:18px;
+  border:2px solid #102118;
+  border-radius:16px;
+  padding:16px;
   box-shadow:0 6px 18px rgba(16,33,24,0.08);
+  margin:0 auto;
 }
 
 .homepage-alliances-board-inner{
-  border:1.5px solid #102118;
-  border-radius:14px;
-  padding:18px;
+  border:1px solid #102118;
+  border-radius:12px;
+  padding:14px;
   background:#fbfbf8;
 }
 
-/* 🔥 EXACTLY 7 LOGOS PER ROW */
+/* 🔥 FLEXIBLE GRID (better than fixed 7) */
 .homepage-alliances-grid{
   display:grid;
-  grid-template-columns:repeat(7, 1fr); /* 👈 LOCK TO 7 */
-  gap:14px;
+  grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+  gap:12px;
   align-items:center;
   justify-items:center;
 }
 
-/* CLEAN ITEM */
 .homepage-alliance-card{
-  background:transparent;
-  border:none;
   padding:6px;
   text-align:center;
-  box-shadow:none;
   width:100%;
 }
 
-/* CENTER IMAGE */
 .homepage-alliance-image-wrap{
   display:flex;
   align-items:center;
   justify-content:center;
-  height:auto;
 }
 
-/* 🔥 MAX SIZE ONLY (FREESTYLE EFFECT) */
 .homepage-alliance-image-wrap img{
-  width:auto;
-  height:auto;
-
-  max-width:120px;   /* 👈 CONTROL SIZE */
-  max-height:70px;   /* 👈 CONTROL SIZE */
-
+  max-width:100px;
+  max-height:60px;
   object-fit:contain;
 }
 
-/* OPTIONAL TEXT (SMALL) */
 .homepage-alliance-name{
-  font-size:0.75rem;
+  font-size:0.7rem;
   font-weight:600;
   color:#102118;
   margin-top:4px;
@@ -535,25 +563,38 @@ img{
   color:#667066;
 }
 
-/* MOBILE RESPONSIVE */
-@media (max-width:1024px){
-  .homepage-alliances-grid{
-    grid-template-columns:repeat(5, 1fr);
-  }
-}
+
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
 
 @media (max-width:768px){
+
+  .homepage-announcement-card{
+    grid-template-columns:1fr; /* 🔥 STACK */
+  }
+
+  .homepage-announcement-image-wrap{
+    min-height:180px;
+  }
+
+  .homepage-freedom-wall-wrap{
+    grid-template-columns:1fr;
+  }
+
   .homepage-alliances-grid{
     grid-template-columns:repeat(3, 1fr);
   }
+
 }
 
 @media (max-width:480px){
+
   .homepage-alliances-grid{
     grid-template-columns:repeat(2, 1fr);
   }
-}
 
+}
 
 /* SECTORAL */
 .sectoral-section{
