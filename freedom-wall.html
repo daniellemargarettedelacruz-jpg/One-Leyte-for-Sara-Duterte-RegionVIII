@@ -410,14 +410,20 @@ async function resolveMemberName() {
   memberLookupStatus.classList.add("member-loading");
 
   try {
-    const url = WEB_APP_URL + "?action=getmembername&memberId=" + encodeURIComponent(memberId);
+    const url = WEB_APP_URL + "?action=verifymember&memberId=" + encodeURIComponent(memberId);
     const res = await fetch(url);
     const data = await res.json();
 
     if (data.success) {
-      const fullName = data.fullName || data.name || data.memberName || "";
+      const fullName =
+        data.fullName ||
+        data.name ||
+        data.memberName ||
+        (data.member && data.member.fullName) ||
+        "";
+
       fullNameInput.value = fullName;
-      memberLookupStatus.textContent = "Member found.";
+      memberLookupStatus.textContent = fullName ? "Member found." : "Member verified.";
       memberLookupStatus.className = "lookup-status member-good";
     } else {
       fullNameInput.value = "";
