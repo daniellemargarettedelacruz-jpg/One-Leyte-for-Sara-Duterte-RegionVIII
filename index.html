@@ -898,39 +898,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
  <script>
 document.addEventListener("DOMContentLoaded", function () {
+  const principleButtons = document.querySelectorAll(".principle-toggle");
 
-  const capsules = document.querySelectorAll(".capsule-btn");
+  principleButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const currentCard = this.closest(".principle-capsule");
+      const isActive = currentCard.classList.contains("active");
 
-  capsules.forEach(btn => {
-
-    // CLICK (Desktop + Mobile fallback)
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      const item = this.parentElement;
-
-      document.querySelectorAll(".capsule-item").forEach(i => {
-        if (i !== item) i.classList.remove("active");
+      document.querySelectorAll(".principle-capsule").forEach((card) => {
+        card.classList.remove("active");
       });
 
-      item.classList.toggle("active");
+      if (!isActive) {
+        currentCard.classList.add("active");
+      }
     });
-
-    // TOUCH (Mobile explicit support)
-    btn.addEventListener("touchstart", function (e) {
-      e.preventDefault();
-
-      const item = this.parentElement;
-
-      document.querySelectorAll(".capsule-item").forEach(i => {
-        if (i !== item) i.classList.remove("active");
-      });
-
-      item.classList.toggle("active");
-    });
-
   });
-
 });
 </script>
 </body>
