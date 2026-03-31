@@ -329,7 +329,7 @@ async function postToScript(payload) {
     method: "POST",
     redirect: "follow",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify(payload)
   });
