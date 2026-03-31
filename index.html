@@ -962,5 +962,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+  <script>
+  document.querySelectorAll(".accordion-toggle").forEach((button) => {
+    button.addEventListener("click", function () {
+      const item = this.parentElement;
+      const isActive = item.classList.contains("active");
+
+      document.querySelectorAll(".core-principles-accordion .accordion-item").forEach((accordionItem) => {
+        accordionItem.classList.remove("active");
+        const icon = accordionItem.querySelector(".accordion-icon");
+        if (icon) icon.textContent = "+";
+      });
+
+      if (!isActive) {
+        item.classList.add("active");
+        const activeIcon = item.querySelector(".accordion-icon");
+        if (activeIcon) activeIcon.textContent = "−";
+      }
+    });
+  });
+</script>
 </body>
 </html>
