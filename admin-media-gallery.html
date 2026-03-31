@@ -388,108 +388,113 @@
       setStatus("Preview loaded.", true);
     }
 
-    async function submitGalleryPost() {
-      const adminPassword = document.getElementById("adminPassword").value.trim();
-      const fullName = document.getElementById("fullName").value.trim() || "Admin";
-      const title = document.getElementById("title").value.trim();
-      const caption = document.getElementById("caption").value.trim();
+   async function submitGalleryPost() {
+  const adminPassword = document.getElementById("adminPassword").value.trim();
+  const fullName = document.getElementById("fullName").value.trim() || "Admin";
+  const title = document.getElementById("title").value.trim();
+  const caption = document.getElementById("caption").value.trim();
 
-      const photoFiles = getPhotoFiles();
-      const videoFile = getVideoFile();
-      const submitBtn = document.getElementById("submitBtn");
+  const photoFiles = getPhotoFiles();
+  const videoFile = getVideoFile();
+  const submitBtn = document.getElementById("submitBtn");
 
-      if (!adminPassword) {
-        setStatus("Admin password is required.", false);
-        return;
-      }
+  if (!adminPassword) {
+    setStatus("Admin password is required.", false);
+    return;
+  }
 
-      if (!title) {
-        setStatus("Gallery title is required.", false);
-        return;
-      }
+  if (!title) {
+    setStatus("Gallery title is required.", false);
+    return;
+  }
 
-      if (!caption) {
-        setStatus("Caption is required.", false);
-        return;
-      }
+  if (!caption) {
+    setStatus("Caption is required.", false);
+    return;
+  }
 
-      if (!photoFiles.length && !videoFile) {
-        setStatus("Please upload at least one photo or one video.", false);
-        return;
-      }
+  if (!photoFiles.length && !videoFile) {
+    setStatus("Please upload at least one photo or one video.", false);
+    return;
+  }
 
-      const videoCheck = validateVideoFile(videoFile);
-      if (!videoCheck.ok) {
-        setStatus(videoCheck.message, false);
-        return;
-      }
+  const videoCheck = validateVideoFile(videoFile);
+  if (!videoCheck.ok) {
+    setStatus(videoCheck.message, false);
+    return;
+  }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Uploading...";
-      setStatus("Uploading gallery post...", true);
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Uploading...";
+  setStatus("Uploading gallery post...", true);
 
-      try {
-        const preparedPhotos = [];
+  try {
+    const preparedPhotos = [];
 
-        for (const file of photoFiles) {
-          const base64 = await readFileAsBase64(file);
-          preparedPhotos.push({
-            fileName: file.name,
-            mimeType: file.type || "image/jpeg",
-            data: base64
-          });
-        }
-
-        let preparedVideo = null;
-
-        if (videoFile) {
-          const videoBase64 = await readFileAsBase64(videoFile);
-          preparedVideo = {
-            fileName: videoFile.name,
-            mimeType: videoFile.type || "video/mp4",
-            data: videoBase64
-          };
-        }
-
-        const response = await fetch(WEB_APP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "submitmediagalleryadmin",
-            password: adminPassword,
-            fullName: fullName,
-            title: title,
-            caption: caption,
-            photos: preparedPhotos,
-            video: preparedVideo,
-            status: "Published"
-          })
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          setStatus("Gallery post uploaded and published successfully.", true);
-          document.getElementById("title").value = "";
-          document.getElementById("caption").value = "";
-          document.querySelectorAll(".photo-file").forEach(el => el.value = "");
-          document.getElementById("videoFile").value = "";
-          document.getElementById("mediaPreview").innerHTML = "";
-        } else {
-          setStatus(result.message || "Failed to publish gallery post.", false);
-        }
-      } catch (err) {
-        console.error(err);
-        setStatus("Error uploading gallery post.", false);
-      }
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Publish Gallery Post";
+    for (const file of photoFiles) {
+      const base64 = await readFileAsBase64(file);
+      preparedPhotos.push({
+        fileName: file.name,
+        mimeType: file.type || "image/jpeg",
+        data: base64
+      });
     }
 
-    document.getElementById("previewBtn").addEventListener("click", previewMedia);
-    document.getElementById("submitBtn").addEventListener("click", submitGalleryPost);
-  </script>
+    let preparedVideo = null;
+
+    if (videoFile) {
+      const videoBase64 = await readFileAsBase64(videoFile);
+      preparedVideo = {
+        fileName: videoFile.name,
+        mimeType: videoFile.type || "video/mp4",
+        data: videoBase64
+      };
+    }
+
+    const response = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "submitmediagalleryadmin",
+        password: adminPassword,
+        fullName: fullName,
+        title: title,
+        caption: caption,
+        photos: preparedPhotos,
+        video: preparedVideo,
+        status: "Published"
+      })
+    });
+
+    const rawText = await response.text();
+    console.log("RAW SERVER RESPONSE:", rawText);
+
+    let result;
+    try {
+      result = JSON.parse(rawText);
+    } catch (parseErr) {
+      throw new Error("Server did not return valid JSON: " + rawText);
+    }
+
+    if (result.success) {
+      setStatus("Gallery post uploaded and published successfully.", true);
+      document.getElementById("title").value = "";
+      document.getElementById("caption").value = "";
+      document.querySelectorAll(".photo-file").forEach(el => el.value = "");
+      document.getElementById("videoFile").value = "";
+      document.getElementById("mediaPreview").innerHTML = "";
+    } else {
+      setStatus(result.message || "Failed to publish gallery post.", false);
+    }
+
+  } catch (err) {
+    console.error("GALLERY UPLOAD ERROR:", err);
+    setStatus("Error uploading gallery post: " + err.message, false);
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Publish Gallery Post";
+}
 
 </body>
 </html>
