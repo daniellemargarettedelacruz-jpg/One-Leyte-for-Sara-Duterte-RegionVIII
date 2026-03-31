@@ -688,49 +688,48 @@ async function loadHomepageAnnouncements() {
 
     wrap.innerHTML = "";
 
-    const items = data.items || [];
+    const items = (data.items || []).slice(0, 10);
 
     if (!items.length) {
       wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
       return;
     }
 
-    const item = data.featured || data.latest || items[0];
+    items.forEach((item) => {
+      const imageUrl = String(item.ImageURL || "").trim();
+      const hasImage = imageUrl !== "";
 
-    const imageUrl = (item.ImageURL || "").trim();
-    const hasImage = imageUrl !== "";
+      const title = item.Title || "Announcement";
+      const category = item.Category || "";
+      const summary = item.Summary || "";
 
-    const title = item.Title || "Announcement";
-    const category = item.Category || "";
-    const summary = item.Summary || "";
+      wrap.innerHTML += `
+        <div class="homepage-announcement-card ${hasImage ? "with-image" : "no-image"}">
 
-    wrap.innerHTML = `
-      <div class="homepage-announcement-card ${hasImage ? "with-image" : "no-image"}">
+          ${hasImage ? `
+            <div class="homepage-announcement-image-wrap">
+              <img src="${imageUrl}" alt="${title}" onerror="this.style.display='none'">
+            </div>
+          ` : ""}
 
-        ${hasImage ? `
-          <div class="homepage-announcement-image-wrap">
-            <img src="${imageUrl}" alt="${title}" onerror="this.style.display='none'">
+          <div class="homepage-announcement-content">
+            <div class="homepage-announcement-category">${category}</div>
+            <h3>${title}</h3>
+            <p>${summary}</p>
+            <a href="announcements.html" class="homepage-inline-link">
+              Read full announcement →
+            </a>
           </div>
-        ` : ""}
 
-        <div class="homepage-announcement-content">
-          <div class="homepage-announcement-category">${category}</div>
-          <h3>${title}</h3>
-          <p>${summary}</p>
-          <a href="announcements.html" class="homepage-inline-link">
-            Read full announcement →
-          </a>
         </div>
-
-      </div>
-    `;
+      `;
+    });
 
   } catch (err) {
     console.error("Homepage Announcements load error:", err);
     wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
   }
 }
-
 /* ================= FREEDOM WALL ================= */
 async function loadHomepageFreedomWall() {
   const wrap = document.getElementById("homepageFreedomWallWrap");
