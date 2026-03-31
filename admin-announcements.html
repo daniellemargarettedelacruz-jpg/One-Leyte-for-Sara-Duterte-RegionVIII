@@ -284,9 +284,9 @@
   </div>
 
   <script>
- const SCRIPT_URL ="https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec?action=announcements";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
 
-    const loginCard = document.getElementById("loginCard");
+    const loginCard = document.getElementById("loginCard")
     const formCard = document.getElementById("formCard");
     const adminPassword = document.getElementById("adminPassword");
     const loginBtn = document.getElementById("loginBtn");
@@ -324,25 +324,25 @@
       }
     }
 
-    async function postToScript(payload) {
-      const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        redirect: "follow",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(payload)
-      });
+async function postToScript(payload) {
+  const response = await fetch(SCRIPT_URL, {
+    method: "POST",
+    redirect: "follow",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
 
-      const text = await response.text();
+  const text = await response.text();
 
-      try {
-        return JSON.parse(text);
-      } catch (err) {
-        console.error("Non-JSON response from Apps Script:", text);
-        throw new Error("Invalid server response.");
-      }
-    }
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    console.error("Non-JSON response from Apps Script:", text);
+    throw new Error("Invalid server response.");
+  }
+}
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
