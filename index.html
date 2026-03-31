@@ -119,7 +119,7 @@
   </div>
 </section>
   
-      <!-- HOMEPAGE ANNOUNCEMENTS -->
+ <!-- HOMEPAGE ANNOUNCEMENTS -->
 <section class="homepage-announcements-section">
   <div class="container">
     <div class="section-heading">
@@ -132,8 +132,21 @@
     </div>
 
     <div class="homepage-section-action">
-      <a href="announcements.html" class="btn secondary">View All Announcements</a>
+
+      <a href="announcements.html" class="btn primary-btn">
+        View All Announcements
+      </a>
+
+      <a href="admin-announcements.html" class="btn secondary-btn">
+        Post Announcement (Admin)
+      </a>
+
     </div>
+
+    <p class="section-note">
+      Official updates and public advisories are posted here. Stay informed with the latest announcements.
+    </p>
+
   </div>
 </section>
 
@@ -582,57 +595,38 @@
     </div>
   </section>
 
-   <!-- HOMEPAGE FREEDOM WALL -->
-  <section class="homepage-freedom-wall-section">
-    <div class="container">
-      <div class="section-heading">
-        <h2>Freedom Wall</h2>
-        <p>Messages and photo posts shared by supporters across the movement.</p>
-      </div>
-
-      <div id="homepageFreedomWallWrap" class="homepage-freedom-wall-wrap">
-        <div class="homepage-empty-state">Loading Freedom Wall posts...</div>
-      </div>
-
-  <div class="homepage-section-action">
-
-  <!-- OPEN FREEDOM WALL -->
-  <a href="freedom-wall-social.html" class="btn primary-btn">
-    Open Freedom Wall
-  </a>
-
-  <!-- POST BUTTON -->
-  <a href="freedom-wall-social.html" class="btn secondary-btn">
-    Post Your Message
-  </a>
-
-</div>
-
-<p class="section-note">
-  Share your voice with the community. Posting requires a valid Member ID.
-</p>
-
-  <!-- VIEW ANNOUNCEMENTS -->
-  <a href="announcements.html" class="btn primary-btn">
-    View All Announcements
-  </a>
-
-  <!-- ADMIN POST (OPTIONAL - YOU CAN REMOVE IF NOT NEEDED) -->
-  <a href="admin-announcements.html" class="btn secondary-btn">
-    Post Announcement (Admin)
-  </a>
-
-</div>
-
-<p class="section-note">
-  Official updates and public advisories are posted here. Stay informed with the latest announcements.
-</p>
+<!-- HOMEPAGE FREEDOM WALL -->
+<section class="homepage-freedom-wall-section">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Freedom Wall</h2>
+      <p>Messages and photo posts shared by supporters across the movement.</p>
     </div>
-  </section>
 
-    <!-- HOMEPAGE REGIONAL ALLIANCES -->
+    <div id="homepageFreedomWallWrap" class="homepage-freedom-wall-wrap">
+      <div class="homepage-empty-state">Loading Freedom Wall posts...</div>
+    </div>
+
+    <div class="homepage-section-action">
+      <a href="freedom-wall-social.html" class="btn primary-btn">
+        Open Freedom Wall
+      </a>
+
+      <a href="freedom-wall-social.html" class="btn secondary-btn">
+        Post Your Message
+      </a>
+    </div>
+
+    <p class="section-note">
+      Share your voice with the community. Posting requires a valid Member ID.
+    </p>
+  </div>
+</section>
+
+<!-- HOMEPAGE REGIONAL ALLIANCES -->
 <section class="homepage-alliances-section">
   <div class="container">
+
     <div class="section-heading">
       <h2>Regional Alliances</h2>
       <p>Alliance logos and banners across Region VIII.</p>
@@ -641,28 +635,34 @@
     <div class="homepage-alliances-board-wrap">
       <div class="homepage-alliances-board">
         <div class="homepage-alliances-board-inner">
+
           <div id="homepageAlliancesGrid" class="homepage-alliances-grid">
-            <div class="homepage-empty-state">Loading alliance logos and banners...</div>
-          <div class="homepage-section-action">
+            <div class="homepage-empty-state">
+              Loading alliance logos and banners...
+            </div>
+          </div>
 
-  <!-- VIEW ALLIANCES -->
-  <a href="alliance-entry-portal.html" class="btn primary-btn">
-    Submit Alliance
-  </a>
-
-  <!-- OPTIONAL VIEW PAGE -->
-  <a href="alliance-entry-portal.html" class="btn secondary-btn">
-    Upload Logo / Banner
-  </a>
-
-</div>
-
-<p class="section-note">
-  Alliance groups can submit their logos and banners for homepage display.
-</p>
         </div>
       </div>
     </div>
+
+    <!-- ✅ BUTTONS (CORRECT POSITION) -->
+    <div class="homepage-section-action">
+
+      <a href="alliance-entry-portal.html" class="btn primary-btn">
+        Submit Alliance
+      </a>
+
+      <a href="alliance-entry-portal.html" class="btn secondary-btn">
+        Upload Logo / Banner
+      </a>
+
+    </div>
+
+    <p class="section-note">
+      Alliance groups can submit their logos and banners for homepage display.
+    </p>
+
   </div>
 </section>
 
@@ -695,31 +695,44 @@ async function loadHomepageAnnouncements() {
     wrap.innerHTML = "";
 
     const items = data.items || [];
+
     if (!items.length) {
       wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
       return;
     }
 
     const item = data.featured || data.latest || items[0];
-    const hasImage = item.ImageURL && item.ImageURL.trim() !== "";
+
+    const imageUrl = (item.ImageURL || "").trim();
+    const hasImage = imageUrl !== "";
+
+    const title = item.Title || "Announcement";
+    const category = item.Category || "";
+    const summary = item.Summary || "";
 
     wrap.innerHTML = `
       <div class="homepage-announcement-card ${hasImage ? "with-image" : "no-image"}">
+
         ${hasImage ? `
           <div class="homepage-announcement-image-wrap">
-            <img src="${item.ImageURL}" alt="${item.Title || "Announcement"}">
+            <img src="${imageUrl}" alt="${title}" onerror="this.style.display='none'">
           </div>
         ` : ""}
+
         <div class="homepage-announcement-content">
-          <div class="homepage-announcement-category">${item.Category || ""}</div>
-          <h3>${item.Title || ""}</h3>
-          <p>${item.Summary || ""}</p>
-          <a href="announcements.html" class="homepage-inline-link">Read full announcement →</a>
+          <div class="homepage-announcement-category">${category}</div>
+          <h3>${title}</h3>
+          <p>${summary}</p>
+          <a href="announcements.html" class="homepage-inline-link">
+            Read full announcement →
+          </a>
         </div>
+
       </div>
     `;
+
   } catch (err) {
-    console.error(err);
+    console.error("Homepage Announcements load error:", err);
     wrap.innerHTML = `<div class="homepage-empty-state">Failed to load announcements.</div>`;
   }
 }
@@ -770,6 +783,9 @@ async function loadHomepageFreedomWall() {
         item.postText ||
         "";
 
+      const safeName = fullName || "Supporter";
+      const safeMessage = message || "";
+
       const card = document.createElement("div");
       card.className = "homepage-freedom-card";
       card.innerHTML = `
@@ -777,8 +793,8 @@ async function loadHomepageFreedomWall() {
           ${imageUrl ? `<img src="${imageUrl}" alt="Freedom Wall Post" onerror="this.style.display='none'">` : ""}
         </div>
         <div class="homepage-freedom-content">
-          <div class="homepage-freedom-name">${fullName}</div>
-          <p>${message}</p>
+          <div class="homepage-freedom-name">${safeName}</div>
+          <p>${safeMessage}</p>
         </div>
       `;
       wrap.appendChild(card);
