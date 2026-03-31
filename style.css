@@ -2113,3 +2113,91 @@ img{
   background-color: #0b3d2e;
   color: #ffffff;
 }
+
+/* =========================================================
+   HOMEPAGE SECTION BUTTON LAYOUT FIX
+   Minimal safe layout repair
+========================================================= */
+
+.homepage-section-action,
+.section-action,
+.community-section-action {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.homepage-section-action .btn,
+.section-action .btn,
+.community-section-action .btn,
+.homepage-section-action a,
+.section-action a,
+.community-section-action a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Keeps section bottoms balanced */
+.homepage-announcements-section,
+.homepage-freedom-wall-section,
+.homepage-alliances-section {
+  padding-bottom: 50px;
+}
+
+/* Makes inner content stack cleanly */
+.homepage-announcements-board-wrap,
+.homepage-freedom-wall-board-wrap,
+.homepage-alliances-board-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Prevents buttons from sticking too close to cards/grids */
+.homepage-announcements-board,
+.homepage-freedom-wall-board,
+.homepage-alliances-board {
+  margin-bottom: 0;
+}
+
+/* Optional safe spacing for empty/loading states */
+.homepage-empty-state {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Mobile balance */
+@media (max-width: 768px) {
+  .homepage-section-action,
+  .section-action,
+  .community-section-action {
+    margin-top: 18px;
+  }
+
+  .homepage-section-action .btn,
+  .section-action .btn,
+  .community-section-action .btn,
+  .homepage-section-action a,
+  .section-action a,
+  .community-section-action a {
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .homepage-announcements-section,
+  .homepage-freedom-wall-section,
+  .homepage-alliances-section {
+    padding-bottom: 38px;
+  }
+}
