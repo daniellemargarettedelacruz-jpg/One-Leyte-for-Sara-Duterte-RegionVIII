@@ -202,6 +202,7 @@ img{
 .section-heading{
   text-align:center;
   margin-bottom:28px;
+  margin-bottom: 24px;
 }
 
 .section-heading h2{
@@ -324,9 +325,7 @@ img{
   background:#f7f5ef;
 }
 
-.homepage-freedom-wall-section{
-  background:#f4f7f5;
-}
+margin-top: 20px;
 
 .homepage-alliances-section{
   background:#f7f5ef;
@@ -399,6 +398,7 @@ img{
   box-shadow:var(--card-shadow);
   max-width:980px;
   margin:0 auto;
+  margin-bottom: 18px;
 }
 
 .homepage-announcement-card.no-image{
@@ -456,12 +456,11 @@ img{
 
 .homepage-freedom-wall-wrap{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-  gap:18px;
-  max-width:1100px;
+  grid-template-columns:1fr;
+  gap:16px;
+  max-width:900px;
   margin:0 auto;
 }
-
 .homepage-freedom-card{
   background:#ffffff;
   border-radius:14px;
@@ -891,10 +890,8 @@ img{
     gap:14px;
   }
 
-  .community-mini-card{
-    padding:18px 14px;
-  }
-
+ .community-mini-card{
+  padding:22px 18px;
   .community-mini-card h3{
     font-size:1rem;
   }
@@ -2204,4 +2201,18 @@ img{
   .homepage-alliances-section {
     padding-bottom: 42px;
   }
+}
+
+/* Align One Leyte in Action buttons */
+.homepage-gallery-section .homepage-section-action{
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.homepage-freedom-wall-section{
+  padding: 60px 20px;
+  background: #f7f7f7;
+  margin-top: 20px;
 }
