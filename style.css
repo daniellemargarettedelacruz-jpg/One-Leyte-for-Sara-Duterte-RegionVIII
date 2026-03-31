@@ -1767,3 +1767,112 @@ img{
 .capsule.active .capsule-content {
   max-height: 500px;
 }
+
+/* ========================================
+   FIXED CORE PRINCIPLES CAPSULE REVEAL
+   (OVERRIDES OLD why-card STYLES)
+======================================== */
+.why-principles-wrap{
+  margin-top: 26px;
+}
+
+.why-principles-instruction{
+  margin: 0 0 16px;
+  color: #d7ddd8;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.why-principles-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* OVERRIDE the old pill-card behavior */
+.why-principles-grid .why-card.principle-capsule{
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* The actual clickable capsule */
+.principle-toggle{
+  width: 100%;
+  border: none;
+  background: #ffffff;
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 16px 22px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+
+.principle-toggle:hover{
+  transform: translateY(-2px);
+  background: #f8f8f8;
+}
+
+/* Active capsule */
+.why-card.principle-capsule.active .principle-toggle{
+  background: var(--gold);
+  color: #102118;
+}
+
+/* Hidden content below the capsule */
+.principle-content{
+  display: none;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212,175,55,0.16);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+
+/* Show only when active */
+.why-card.principle-capsule.active .principle-content{
+  display: block;
+}
+
+.principle-content p{
+  color: #ffffff;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin: 0 0 10px;
+  text-align: left;
+}
+
+.principle-content p:last-child{
+  margin-bottom: 0;
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+  .why-principles-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .principle-toggle{
+    font-size: 0.92rem;
+    padding: 14px 16px;
+  }
+
+  .principle-content{
+    padding: 14px 14px 16px;
+  }
+
+  .principle-content p{
+    font-size: 0.9rem;
+  }
+}
