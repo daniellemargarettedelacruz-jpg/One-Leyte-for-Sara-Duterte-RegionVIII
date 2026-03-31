@@ -1592,3 +1592,135 @@ img{
     padding: 12px 14px;
   }
 }
+
+/* ========================================
+   WHY WE STAND / CORE PRINCIPLES
+======================================== */
+.core-principles-section {
+  padding: 70px 20px;
+  background: #f8faf8;
+}
+
+.core-principles-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.core-principles-heading h2 {
+  color: #0b3d2c;
+}
+
+.core-principles-heading p {
+  color: #1f1f1f;
+}
+
+.accordion-instruction {
+  margin-top: 10px;
+  font-size: 0.96rem;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.core-principles-accordion {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #dfe7e2;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+}
+
+.core-principles-accordion .accordion-item + .accordion-item {
+  border-top: 1px solid #e5ebe7;
+}
+
+.accordion-toggle {
+  width: 100%;
+  border: none;
+  background: #ffffff;
+  color: #0b2e22;
+  padding: 20px 22px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 1.03rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.accordion-toggle:hover {
+  background: #f2f7f3;
+}
+
+.accordion-item.active .accordion-toggle {
+  background: #eef6f0;
+}
+
+.accordion-icon {
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  color: #0b5d3b;
+  line-height: 1;
+}
+
+.accordion-panel {
+  display: none;
+  padding: 0 22px 22px;
+  background: #ffffff;
+}
+
+.accordion-item.active .accordion-panel {
+  display: block;
+}
+
+.accordion-panel p {
+  margin: 0 0 14px;
+  color: #000000;
+  line-height: 1.8;
+  font-size: 0.98rem;
+}
+
+.accordion-panel p:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+   MINI CAPSULE DARKER TEXT
+======================================== */
+.community-mini-card h3,
+.community-mini-card h4 {
+  color: #0b2e22;
+}
+
+.community-mini-card p {
+  color: #000000;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .core-principles-section {
+    padding: 56px 16px;
+  }
+
+  .accordion-toggle {
+    padding: 18px 16px;
+    font-size: 0.98rem;
+  }
+
+  .accordion-panel {
+    padding: 0 16px 18px;
+  }
+
+  .accordion-panel p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  .accordion-instruction {
+    font-size: 0.92rem;
+  }
+}
