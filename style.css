@@ -201,7 +201,7 @@ img{
 /* SHARED SECTION HEADING */
 .section-heading{
   text-align:center;
-  margin-bottom:38px;
+  margin-bottom:28px;
 }
 
 .section-heading h2{
@@ -221,7 +221,7 @@ img{
 
 /* COMMUNITY FEATURES */
 .community-features{
-  padding:84px 20px;
+  padding:72px 20px 64px;
   background:var(--cream);
   width:100%;
 }
@@ -391,13 +391,13 @@ img{
 
 .homepage-announcement-card{
   display:grid;
-  grid-template-columns:300px 1fr;
+  grid-template-columns:260px 1fr;
   gap:18px;
   background:#ffffff;
   border-radius:16px;
   padding:16px;
   box-shadow:var(--card-shadow);
-  max-width:1100px;
+  max-width:980px;
   margin:0 auto;
 }
 
@@ -456,8 +456,8 @@ img{
 
 .homepage-freedom-wall-wrap{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:18px;
   max-width:1100px;
   margin:0 auto;
 }
@@ -887,28 +887,28 @@ img{
   }
 
   .community-mini-grid{
-    grid-template-columns:repeat(3, minmax(0, 1fr));
-    gap:12px;
+    grid-template-columns:1fr;
+    gap:14px;
   }
 
   .community-mini-card{
-    padding:16px 12px;
+    padding:18px 14px;
   }
 
   .community-mini-card h3{
-    font-size:0.95rem;
+    font-size:1rem;
   }
 
   .community-mini-card p{
-    font-size:12px;
-    line-height:1.45;
+    font-size:13px;
+    line-height:1.5;
   }
 
   .mini-icon{
-    width:42px;
-    height:42px;
-    font-size:16px;
-    margin:0 auto 8px;
+    width:46px;
+    height:46px;
+    font-size:18px;
+    margin:0 auto 10px;
   }
 
   .homepage-announcement-card{
@@ -1045,13 +1045,14 @@ img{
   transform:translateY(-3px);
 }
 
-@media (max-width:768px){
-  .why-grid{
-    grid-template-columns:1fr;
+  .homepage-alliances-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:12px;
   }
 
-  .why-principles-grid{
-    grid-template-columns:repeat(2, 1fr);
+  .homepage-alliance-image-wrap{
+    height:auto;
+    min-height:70px;
   }
 }
 
@@ -2126,11 +2127,12 @@ img{
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 22px;
   margin-bottom: 0;
   text-align: center;
 }
-
 .homepage-section-action .btn,
 .section-action .btn,
 .community-section-action .btn,
@@ -2183,6 +2185,7 @@ img{
   .section-action,
   .community-section-action {
     margin-top: 18px;
+    gap: 10px;
   }
 
   .homepage-section-action .btn,
@@ -2191,13 +2194,14 @@ img{
   .homepage-section-action a,
   .section-action a,
   .community-section-action a {
-    width: 100%;
-    max-width: 260px;
+    width: auto;
+    min-width: 170px;
+    max-width: 100%;
   }
 
   .homepage-announcements-section,
   .homepage-freedom-wall-section,
   .homepage-alliances-section {
-    padding-bottom: 38px;
+    padding-bottom: 42px;
   }
 }
