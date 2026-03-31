@@ -688,7 +688,7 @@ async function loadHomepageAnnouncements() {
 
     wrap.innerHTML = "";
 
-    const items = (data.items || []).slice(0, 10);
+    const items = (data.items || []).slice(0, 6);
 
     if (!items.length) {
       wrap.innerHTML = `<div class="homepage-empty-state">No announcements available yet.</div>`;
