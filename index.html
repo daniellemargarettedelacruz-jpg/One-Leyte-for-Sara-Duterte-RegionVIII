@@ -632,7 +632,6 @@
 
     </div>
   </footer>
-
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_iBQBrRpni8W1sJVRYDFoMn_MkPNHumyv0JvzBOrXRMQE4Pe1k5GJQM9FE9WP4qN5/exec";
 
@@ -742,6 +741,7 @@ async function loadHomepageFreedomWall() {
     wrap.innerHTML = `<div class="homepage-empty-state">Failed to load Freedom Wall posts.</div>`;
   }
 }
+
 /* ================= ALLIANCES ================= */
 async function loadHomepageAlliances() {
   const grid = document.getElementById("homepageAlliancesGrid");
@@ -753,15 +753,15 @@ async function loadHomepageAlliances() {
 
     grid.innerHTML = "";
 
-  const items = (data.items || []).sort((a, b) => {
-  return new Date(b.Timestamp || b.Date || 0) - new Date(a.Timestamp || a.Date || 0);
-});
+    const items = (data.items || []).sort((a, b) => {
+      return new Date(b.Timestamp || b.Date || 0) - new Date(a.Timestamp || a.Date || 0);
+    });
 
     items.forEach(item => {
       grid.innerHTML += `
         <div class="homepage-alliance-card">
           <div class="homepage-alliance-image-wrap">
-            <img src="${item.fileUrl || ""}">
+            <img src="${item.fileUrl || ""}" alt="${item.allianceName || "Alliance"}">
           </div>
           <div class="homepage-alliance-name">${item.allianceName || ""}</div>
           <div class="homepage-alliance-location">${item.location || ""}</div>
@@ -798,7 +798,7 @@ async function loadHomepageMediaGallery() {
       return `
         <div class="homepage-gallery-card">
           <a href="media-gallery.html">
-            <img src="${first}" class="homepage-gallery-image">
+            <img src="${first}" class="homepage-gallery-image" alt="${item.Title || "Gallery image"}">
           </a>
           <div class="homepage-gallery-content">
             <h3>${item.Title || ""}</h3>
@@ -820,24 +820,8 @@ document.addEventListener("DOMContentLoaded", function () {
   loadHomepageFreedomWall();
   loadHomepageAlliances();
   loadHomepageMediaGallery();
-
-  const principleButtons = document.querySelectorAll(".principle-toggle");
-
-  principleButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const currentCard = this.closest(".principle-capsule");
-      const isActive = currentCard.classList.contains("active");
-
-      document.querySelectorAll(".principle-capsule").forEach((card) => {
-        card.classList.remove("active");
-      });
-
-      if (!isActive) {
-        currentCard.classList.add("active");
-      }
-    });
-  });
 });
 </script>
+
 </body>
 </html>
