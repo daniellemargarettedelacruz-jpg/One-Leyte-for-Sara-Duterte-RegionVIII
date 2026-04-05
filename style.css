@@ -2258,9 +2258,11 @@ margin-top: 20px;
 .guidelines-section h2 {
   text-align: center;
   margin-bottom: 25px;
+  color: #0b3d2e; /* deep green */
 }
 
 .guidelines-section p {
   margin-bottom: 15px;
   line-height: 1.6;
+  color: #0b3d2e; /* deep green */
 }
