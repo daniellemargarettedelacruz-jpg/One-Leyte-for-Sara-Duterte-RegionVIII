@@ -2240,3 +2240,27 @@ margin-top: 20px;
     height:110px;
   }
 }
+
+.guidelines-section {
+  background: #f5f7fb;
+  padding: 50px 20px;
+}
+
+.guidelines-section .container {
+  max-width: 900px;
+  margin: auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.guidelines-section h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.guidelines-section p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
