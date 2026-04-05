@@ -2266,3 +2266,33 @@ margin-top: 20px;
   line-height: 1.6;
   color: #0b3d2e; /* deep green */
 }
+
+/* ========================================
+   GUIDELINES SECTION
+======================================== */
+.guidelines-section {
+  background: #f7f5ef;
+  padding: 60px 20px;
+}
+
+.guidelines-box {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px 28px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  border-left: 6px solid #0a6b3f;
+}
+
+.guidelines-box h2 {
+  color: #0a6b3f;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.guidelines-box p {
+  color: #1a1a1a;
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
